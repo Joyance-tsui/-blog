@@ -320,7 +320,7 @@
 
     <nav>
         <a href="#" onclick="showPage('home')" id="navHome">首页</a>
-        <a href="#" onclick="showPage('contact')" id="navContact">信息</a>
+        <a href="#" onclick="showPage('contact')" id="navContact">更多</a>
     </nav>
 
     <div class="container" id="content">
@@ -365,16 +365,15 @@
             } else if (page === 'contact') {
                 newContent = `
                     <div class="card">
-                    <h2>项目信息</h2>
-                    <p>除这个博客外，我的其他的项目。以下展示的项目中的镜像网站中不要输入你的个人敏感信息，虽然这是我创建的cloudflare workers项目。这些网站大多都是通过cloudflare的免费版workers完成的，所以可能有免费额度用完情况。</p>
-                    <p>- 简单英语维基百科镜像网站：用简单英语写成的百科全书，人人都可以编辑。适合于有一定英语水平的学习者提升阅读水平和词汇积累｜<a href="https://s.joyance.page" class="article-link" target="_blank">前往</a></p>
-                    <p>- 中文维基百科镜像网站：维基百科由千千万万个志愿者共同编写，内容公开可编辑，条目连着条目，信息牵着信息，为的是提供所有领域的知识以飨读者。任何人，只要接入了互联网，都能参与编辑，除了小部分页面因防止破坏而限制了编辑权限。适合于想要查找专业资料，但没有相应网络环境或想要节省流量的人｜<a href="https://w.joyance.page" class="article-link" target="_blank">前往</a></p>
-                    <p>- 原子云模型：尽量全面的模型，模拟前十位化学元素原子云，简洁美观｜<a href="https://atom.joyance.page" class="article-link" target="_blank">前往</a></p>
-                    <p>- 简洁起始页：只有搜索框和设置按钮，给你一个清爽的搜索体验。｜<a href="https://start.joyance.page" class="article-link" target="_blank">前往</a></p>
-                    <p>- 测试网页：可能看到我的最新测试项目｜<a href="https://t.joyance.page" class="article-link" target="_blank">前往</a></p>
+                    <h2>项目</h2>
+                    <p>我的其他的项目（镜像网站中不要输入个人敏感信息</p>
+                    <p>- 简单英语维基百科镜像网站｜<a href="https://s.joyance.page" class="article-link" target="_blank">前往</a></p>
+                    <p>- 中文维基百科镜像网站｜<a href="https://w.joyance.page" class="article-link" target="_blank">前往</a></p>
+                    <p>- 原子云模型｜<a href="https://atom.joyance.page" class="article-link" target="_blank">前往</a></p>
+                    <p>- 起始页：｜<a href="https://start.joyance.page" class="article-link" target="_blank">前往</a></p>
                 </div>
                 <div class="card">
-                    <h2>联系信息</h2>
+                    <h2>联系</h2>
                     <p>邮箱：me@joyance.page <button class="copy-button" onclick="copyToClipboard('me@joyance.page')">复制</button></p>
                     <p>session账号：<button class="copy-button" onclick="copyToClipboard('05e375a6c4dac6fd710ba46c15b07637ca0048d656d8b7a2a4e10c83270655440d')">复制</button></p>
                     <p>推特账号：@Xixiphus_Jiayue <button class="copy-button" onclick="copyToClipboard('@Xixiphus_Jiayue')">复制</button></p>
