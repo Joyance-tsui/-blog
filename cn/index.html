@@ -1,472 +1,520 @@
 <!DOCTYPE html>
 <html lang="zh">
-    | © this is a personal webside, all rights reserved by Joyance, the owner.
+    | © this is a personal webside, all rights reserved by Joyance, the owner.
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Joyance的博客</title>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Roboto', Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #FAFAFA;
-            color: #212121;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        @media (prefers-color-scheme: dark) {
-            body {
-                background-color: #121212;
-                color: #E0E0E0;
-            }
-        }
-        header {
-            background-color: #FFFFFF;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            padding: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: background-color 0.3s;
-        }
-        @media (prefers-color-scheme: dark) {
-            header {
-                background-color: #1E1E1E;
-            }
-        }
-        nav {
-            background-color: #FFFFFF;
-            padding: 8px 16px;
-            transition: background-color 0.3s;
-        }
-        @media (prefers-color-scheme: dark) {
-            nav {
-                background-color: #1E1E1E;
-            }
-        }
-        nav a {
-            color: #212121;
-            text-decoration: none;
-            margin-right: 16px;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-        @media (prefers-color-scheme: dark) {
-            nav a {
-                color: #E0E0E0;
-            }
-        }
-        .container {
-            padding: 16px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .card {
-            background-color: #FFFFFF;
-            border-radius: 2px;
-            padding: 16px;
-            margin-bottom: 16px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-            transition: all 0.3s cubic-bezier(.25,.8,.25,1);
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        .card.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .card:hover {
-            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
-        }
-        @media (prefers-color-scheme: dark) {
-            .card {
-                background-color: #2C2C2C;
-            }
-        }
-        .article {
-            margin-bottom: 16px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid #EEEEEE;
-            transition: border-bottom-color 0.3s;
-        }
-        @media (prefers-color-scheme: dark) {
-            .article {
-                border-bottom-color: #424242;
-            }
-        }
-        button {
-            background-color: #212121;
-            color: #FFFFFF;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 2px;
-            cursor: pointer;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: all 0.3s;
-        }
-        @media (prefers-color-scheme: dark) {
-            button {
-                background-color: #4A4A4A;
-                color: #E0E0E0;
-            }
-        }
-        button:hover {
-            background-color: #FFFFFF;
-            color: #212121;
-            transform: scale(1.05);
-        }
-        @media (prefers-color-scheme: dark) {
-            button:hover {
-                background-color: #E0E0E0;
-                color: #4A4A4A;
-            }
-        }
-        .pinned {
-            border-left: 4px solid #9E9E9E;
-            transition: border-left-color 0.3s;
-        }
-        @media (prefers-color-scheme: dark) {
-            .pinned {
-                border-left: 4px solid #757575;
-            }
-        }
-        .article-preview {
-            white-space: pre-wrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-line-clamp: 4;
-            -webkit-box-orient: vertical;
-        }
-        .article-link {
-            color: #212121;
-            text-decoration: underline;
-            cursor: pointer;
-            transition: color 0.3s;
-        }
-        @media (prefers-color-scheme: dark) {
-            .article-link {
-                color: #E0E0E0;
-            }
-        }
-        .article-info {
-            font-size: 0.9em;
-            color: #757575;
-            margin-top: 8px;
-            transition: color 0.3s;
-        }
-        @media (prefers-color-scheme: dark) {
-            .article-info {
-                color: #BDBDBD;
-            }
-        }
-        .copy-button {
-            margin-left: 10px;
-            padding: 4px 8px;
-            font-size: 12px;
-        }
-        .forwords-button {
-            margin-left: 10px;
-            padding: 4px 8px;
-            font-size: 12px;
-        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joyance的博客</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #FAFAFA;
+            color: #212121;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #121212;
+                color: #E0E0E0;
+            }
+        }
+        header {
+            background-color: #FFFFFF;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+        @media (prefers-color-scheme: dark) {
+            header {
+                background-color: #1E1E1E;
+            }
+        }
+        nav {
+            background-color: #FFFFFF;
+            padding: 8px 16px;
+            transition: background-color 0.3s;
+        }
+        @media (prefers-color-scheme: dark) {
+            nav {
+                background-color: #1E1E1E;
+            }
+        }
+        nav a {
+            color: #212121;
+            text-decoration: none;
+            margin-right: 16px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        @media (prefers-color-scheme: dark) {
+            nav a {
+                color: #E0E0E0;
+            }
+        }
+        .container {
+            padding: 16px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .card {
+            background-color: #FFFFFF;
+            border-radius: 2px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s, transform 0.5s;
+        }
+        .card:hover {
+            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+        }
+        @media (prefers-color-scheme: dark) {
+            .card {
+                background-color: #2C2C2C;
+            }
+        }
+        .article {
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #EEEEEE;
+            transition: border-bottom-color 0.3s;
+        }
+        @media (prefers-color-scheme: dark) {
+            .article {
+                border-bottom-color: #424242;
+            }
+        }
+        button {
+            background-color: #212121;
+            color: #FFFFFF;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+        }
+        @media (prefers-color-scheme: dark) {
+            button {
+                background-color: #4A4A4A;
+                color: #E0E0E0;
+            }
+        }
+        button:hover {
+            background-color: #FFFFFF;
+            color: #212121;
+            transform: scale(1.05);
+        }
+        @media (prefers-color-scheme: dark) {
+            button:hover {
+                background-color: #E0E0E0;
+                color: #4A4A4A;
+            }
+        }
+        .pinned {
+            border-left: 4px solid #9E9E9E;
+            transition: border-left-color 0.3s;
+        }
+        @media (prefers-color-scheme: dark) {
+            .pinned {
+                border-left: 4px solid #757575;
+            }
+        }
+        .article-preview {
+            white-space: pre-wrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+        }
+        .article-link {
+            color: #212121;
+            text-decoration: underline;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        @media (prefers-color-scheme: dark) {
+            .article-link {
+                color: #E0E0E0;
+            }
+        }
+        .article-info {
+            font-size: 0.9em;
+            color: #757575;
+            margin-top: 8px;
+            transition: color 0.3s;
+        }
+        @media (prefers-color-scheme: dark) {
+            .article-info {
+                color: #BDBDBD;
+            }
+        }
+        .copy-button {
+            margin-left: 10px;
+            padding: 4px 8px;
+            font-size: 12px;
+        }
+        .forwords-button {
+            margin-left: 10px;
+            padding: 4px 8px;
+            font-size: 12px;
+        }
 
-        #search-container {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
+        #search-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
 
-        #search-input {
-            padding: 8px 12px;
-            border: 1px solid #BDBDBD;
-            border-radius: 20px;
-            font-size: 14px;
-            width: 200px;
-            transition: all 0.3s;
-        }
+        #search-input {
+            padding: 8px 12px;
+            border: 1px solid #BDBDBD;
+            border-radius: 20px;
+            font-size: 14px;
+            width: 200px;
+            transition: all 0.3s;
+        }
 
-        #search-input:focus {
-            outline: none;
-            border-color: #757575;
-            box-shadow: 0 0 5px rgba(117, 117, 117, 0.5);
-            width: 220px;
-        }
+        #search-input:focus {
+            outline: none;
+            border-color: #757575;
+            box-shadow: 0 0 5px rgba(117, 117, 117, 0.5);
+            width: 220px;
+        }
 
-        #search-results {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background-color: #FFFFFF;
-            border: 1px solid #BDBDBD;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            max-height: 200px;
-            overflow-y: auto;
-            display: none;
-            z-index: 1000;
-        }
+        #search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: #FFFFFF;
+            border: 1px solid #BDBDBD;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+            z-index: 1000;
+        }
 
-        .search-result-item {
-            padding: 8px 12px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
+        .search-result-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
 
-        .search-result-item:hover {
-            background-color: #F5F5F5;
-        }
+        .search-result-item:hover {
+            background-color: #F5F5F5;
+        }
 
-        @media (prefers-color-scheme: dark) {
-            #search-input {
-                background-color: #2C2C2C;
-                color: #E0E0E0;
-                border-color: #757575;
-            }
+        @media (prefers-color-scheme: dark) {
+            #search-input {
+                background-color: #2C2C2C;
+                color: #E0E0E0;
+                border-color: #757575;
+            }
 
-            #search-input:focus {
-                border-color: #BDBDBD;
-                box-shadow: 0 0 5px rgba(189, 189, 189, 0.5);
-            }
+            #search-input:focus {
+                border-color: #BDBDBD;
+                box-shadow: 0 0 5px rgba(189, 189, 189, 0.5);
+            }
 
-            #search-results {
-                background-color: #2C2C2C;
-                border-color: #757575;
-            }
+            #search-results {
+                background-color: #2C2C2C;
+                border-color: #757575;
+            }
 
-            .search-result-item:hover {
-                background-color: #424242;
-            }
-        }
+            .search-result-item:hover {
+                background-color: #424242;
+            }
+        }
 
-        @media (max-width: 768px) {
-            header {
-                flex-direction: column;
-                align-items: flex-start;
-                padding: 12px;
-            }
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 12px;
+            }
 
-            #search-container {
-                width: 100%;
-                margin-top: 12px;
-            }
+            #search-container {
+                width: 100%;
+                margin-top: 12px;
+            }
 
-            #search-input {
-                width: 100%;
-            }
+            #search-input {
+                width: 100%;
+            }
 
-            nav {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: space-between;
-            }
+            nav {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
 
-            nav a {
-                flex: 1 0 auto;
-                text-align: center;
-                padding: 8px 0;
-            }
+            nav a {
+                flex: 1 0 auto;
+                text-align: center;
+                padding: 8px 0;
+            }
 
-            .container {
-                padding: 12px;
-            }
+            .container {
+                padding: 12px;
+            }
 
-            .card {
-                padding: 12px;
-            }
-        }
+            .card {
+                padding: 12px;
+            }
+        }
 
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
 
-        .pulse {
-            animation: pulse 0.5s;
-        }
+        .pulse {
+            animation: pulse 0.5s;
+        }
 
-        .fade-out {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.3s, transform 0.3s;
-        }
+        .fade-out {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s, transform 0.3s;
+        }
 
-        .fade-in {
-            opacity: 1;
-            transform: translateY(0);
-            transition: opacity 0.3s, transform 0.3s;
-        }
-    </style>
+        .fade-in {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+        /* 添加新的动画 */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+    </style>
 </head>
 <body>
-    <header>
-        <h1 id="headerTitle"><a href="https://joyance.page" class="article-link" target="_blank">Joyance</a>的博客</h1>
-        <div id="search-container">
-            <input type="text" id="search-input" placeholder="搜索..." oninput="search()">
-            <div id="search-results"></div>
-        </div>
-    </header>
+    <header>
+        <h1 id="headerTitle"><a href="https://joyance.page" class="article-link" target="_blank">Joyance</a>的博客</h1>
+        <div id="search-container">
+            <input type="text" id="search-input" placeholder="搜索..." oninput="search()">
+            <div id="search-results"></div>
+        </div>
+    </header>
 
-    <nav>
-        <a href="#" onclick="showPage('home')" id="navHome">首页</a>
-        <a href="#" onclick="showPage('contact')" id="navContact">更多</a>
-    </nav>
+    <nav>
+        <a href="#" onclick="showPage('home')" id="navHome">首页</a>
+        <a href="#" onclick="showPage('contact')" id="navContact">更多</a>
+    </nav>
 
-    <div class="container" id="content">
-    </div>
+    <div class="container" id="content">
+    </div>
 
 <script src="https://cdn.jsdelivr.net/npm/pinyin-pro@3.13.2/dist/index.js"></script>
 <script>
-    let articles = [
-        { title: '关于应试教育', content: '应试教育，又称填鸭教育，通常被视为一种以提升学生应试能力为主要目的，且十分看重于背诵、解题等机械化学习方法与考试成绩的教育制度，其课程主要侧重于让学生为标准化考试做好准备。应试教育起源于凯洛夫在总结苏联十月革命后至1930年代教学经验的基础上形成的了课堂教学的一整套模式和规范。', pinned: false, wordCount: 2838, url: 'https://aaah-cn.pages.dev/', mark: '观点' },
-        { title: '不全面信息就是误导', content: '互联网拥有各种虚假的信息，各式的谣言，而这些内容的危害是有目共睹的。但你可能不知道，由完全的事实组成的信息也有机会误导，甚至这样的误导比起虚假信息的误导更严重，造成的影响更大，也更难识别。这就是选择性展示事实，即为哪怕有着与展示的信息同等的信息，但却被有意或无意地删除或忽略。', pinned: false, wordCount: 1865, url: 'https://aaag-cn.pages.dev/', mark: '观点' },
-        { title: '如何保护隐私', content: '隐私权是每个人的基本权利，是我们每个人都可以去正当争取的。相关的详细描述详见[link:之前的文章](https://aaae-cn.pages.dev/)。知道了为什么要保护隐私，要保护那些隐私，相应的，也要了解如何去保护隐私，如何安全的使用互联网，隐私的使用互联网。', pinned: false, wordCount: 996, url: 'https://aaaf-cn.pages.dev/', mark: '方法' },
-        { title: '关于隐私', content: '隐私权，是一个个人或团体隔离自己或有关自己不愿告诉别人或不愿公开的信息或事务，从而得以选择性地表达自己的能力。互联网时代，对于个人隐私的侵犯的手段和成本都产生了变化。在网上，侵犯你的隐私的可分为个体或团体。个体在这个时代的力量被加强了，通过互联网这个开放的平台，每个人都可以将内容与每一个使用互联网的个体分享，这实际上也就给了你', pinned: false, wordCount: 2082, url: 'https://aaae-cn.pages.dev/', mark: '观点' },
-        { title: '《1984》——集权的终极形态', content: '刚读完了反乌托邦小说《1984》，发现这本小说确实值得读原版。其他的解读都会对原版的书籍的内容进行压缩，更甚者扭曲原文的内容。而对于其他的，比如这个小说最经典的英社党的标语，其实本身并不荒谬，而是描述当时背景下党以及其他两国所构建的荒谬的世界的理性，当然，也是一种恐怖的理性。如此，不读原版也会造成对原书意的误解。', pinned: false, wordCount: 6353, url: 'https://aaad-cn.pages.dev/', mark: '读书' },
-        { title: '网约车的垄断租', content: '今天坐网约车回家的路上,网约车司机跟我聊了很多网约车对司机的不公的对待,我也由此产生一些想法。这位司机自称是开了五年出租车,又开了七年网约车(具体数字记不清了,大概就是)\n起因是我打车的地方位于经常堵车的地方,上车后司机就开始抱怨导航一定要导到这条路上,称如果可以灵活一点,如果可以让我往前走点,就可以避开前方的拥堵。对于乘客和司机都有益。但是平台的要求就是要根据导航到达目的地才能接送乘客。否则就会', pinned: false, wordCount: 3000, url: 'https://aaac-cn.pages.dev/', mark: '观点' },
-        { title: '开启我的个人博客', content: '这是我的第一个个人博客,没有买单独的域名,功能也不齐全(换行的显示还不支持),而且文章是直接存在网页前端程序里的(太简陋了),但是目前应该够用了。 \n\n将来的打算是,这个平台作为我发布我文章的地方。微信公众号和知乎我也会同步跟进。', pinned: false, wordCount: 452, url: 'https://aaab-cn.pages.dev/', mark: '介绍' },
-    ];
+    let articles = [
+        { title: '关于应试教育', content: '应试教育，又称填鸭教育，通常被视为一种以提升学生应试能力为主要目的，且十分看重于背诵、解题等机械化学习方法与考试成绩的教育制度，其课程主要侧重于让学生为标准化考试做好准备。应试教育起源于凯洛夫在总结苏联十月革命后至1930年代教学经验的基础上形成的了课堂教学的一整套模式和规范。', pinned: false, wordCount: 2838, url: 'https://aaah-cn.pages.dev/', mark: '观点' },
+        { title: '不全面信息就是误导', content: '互联网拥有各种虚假的信息，各式的谣言，而这些内容的危害是有目共睹的。但你可能不知道，由完全的事实组成的信息也有机会误导，甚至这样的误导比起虚假信息的误导更严重，造成的影响更大，也更难识别。这就是选择性展示事实，即为哪怕有着与展示的信息同等的信息，但却被有意或无意地删除或忽略。', pinned: false, wordCount: 1865, url: 'https://aaag-cn.pages.dev/', mark: '观点' },
+        { title: '如何保护隐私', content: '隐私权是每个人的基本权利，是我们每个人都可以去正当争取的。相关的详细描述详见link:之前的文章。知道了为什么要保护隐私，要保护那些隐私，相应的，也要了解如何去保护隐私，如何安全的使用互联网，隐私的使用互联网。', pinned: false, wordCount: 996, url: 'https://aaaf-cn.pages.dev/', mark: '方法' },
+        { title: '关于隐私', content: '隐私权，是一个个人或团体隔离自己或有关自己不愿告诉别人或不愿公开的信息或事务，从而得以选择性地表达自己的能力。互联网时代，对于个人隐私的侵犯的手段和成本都产生了变化。在网上，侵犯你的隐私的可分为个体或团体。个体在这个时代的力量被加强了，通过互联网这个开放的平台，每个人都可以将内容与每一个使用互联网的个体分享，这实际上也就给了你', pinned: false, wordCount: 2082, url: 'https://aaae-cn.pages.dev/', mark: '观点' },
+        { title: '《1984》——集权的终极形态', content: '刚读完了反乌托邦小说《1984》，发现这本小说确实值得读原版。其他的解读都会对原版的书籍的内容进行压缩，更甚者扭曲原文的内容。而对于其他的，比如这个小说最经典的英社党的标语，其实本身并不荒谬，而是描述当时背景下党以及其他两国所构建的荒谬的世界的理性，当然，也是一种恐怖的理性。如此，不读原版也会造成对原书意的误解。', pinned: false, wordCount: 6353, url: 'https://aaad-cn.pages.dev/', mark: '读书' },
+        { title: '网约车的垄断租', content: '今天坐网约车回家的路上,网约车司机跟我聊了很多网约车对司机的不公的对待,我也由此产生一些想法。这位司机自称是开了五年出租车,又开了七年网约车(具体数字记不清了,大概就是)\n起因是我打车的地方位于经常堵车的地方,上车后司机就开始抱怨导航一定要导到这条路上,称如果可以灵活一点,如果可以让我往前走点,就可以避开前方的拥堵。对于乘客和司机都有益。但是平台的要求就是要根据导航到达目的地才能接送乘客。否则就会', pinned: false, wordCount: 3000, url: 'https://aaac-cn.pages.dev/', mark: '观点' },
+        { title: '开启我的个人博客', content: '这是我的第一个个人博客,没有买单独的域名,功能也不齐全(换行的显示还不支持),而且文章是直接存在网页前端程序里的(太简陋了),但是目前应该够用了。 \n\n将来的打算是,这个平台作为我发布我文章的地方。微信公众号和知乎我也会同步跟进。', pinned: false, wordCount: 452, url: 'https://aaab-cn.pages.dev/', mark: '介绍' },
+    ];
+    let cards = [];
+    let lastScrollTop = 0;
 
-    function showPage(page) {
-        let content = document.getElementById('content');
-        content.classList.add('fade-out');
-        
-        setTimeout(() => {
-            let newContent = '';
-            if (page === 'home') {
-                newContent = '<div class="card"><h2>❏ 欢迎来到我的个人博客</h2><p>博客是一个信息网站，由离散的、通常是非正式的日记式文本条目（帖子）组成。它是由个人管理的网站或在线日记，用于发布新的文章、图片或视频，用于记录、表达情感或分享信息。</p></div>';
-                articles.forEach(article => {
-                    const previewContent = article.content.slice(0, 200) + '...';
-                    const wordCount = article.wordCount;
-                    const mark = article.mark;
-                    const readingTime = Math.ceil(wordCount / 200); 
-                    newContent += `
-                        <div class="card ${article.pinned ? 'pinned' : ''}">
-                            <h3>${article.title}</h3>
-                            <div class="article-preview">${previewContent}</div>
-                            <div class="article-info">
-                                字数：${wordCount} |阅读时间：约${readingTime}分钟 |分类:${mark} |
-                                <a href="${article.url}" class="article-link" target="_blank">阅读全文</a>
-                            </div>
-                        </div>
-                    `;
-                });
-            } else if (page === 'contact') {
-                newContent = `
-                    <div class="card">
-                    <h2>语言</h2>
-                    <p>此网页还支持<a href="https://b.joyance.page/cn" class="article-link">中文</a>｜<a href="https://b.joyance.page/en" class="article-link">English</a></p>
-                </div>
-                    <div class="card">
-                    <h2>绕开过度审查</h2>
-                    <p>镜像网站(不要输入个人敏感信息</p>
-                    <p>- 简单英语维基百科镜像网站｜<a href="https://s.joyance.page" class="article-link" target="_blank">前往</a></p>
-                    <p>- 中文维基百科镜像网站｜<a href="https://w.joyance.page" class="article-link" target="_blank">前往</a></p>
-                    <p>- 谷歌搜索镜像网站｜<a href="https://google.joyance.page" class="article-link" target="_blank">前往</a></p>
-                    <p>- Duckduckgo搜索镜像网站｜<a href="https://d.joyance.page" class="article-link" target="_blank">前往</a></p>
-                    <p>- 全能镜像站｜<a href="https://proxy.joyance.page/" class="article-link" target="_blank">前往</a></p>
-                    <p>免费提供代理服务器，本人于BoosNet购买|<a href="https://pt.joyance.page/" class="article-link" target="_blank">前往</a></p>
-                </div>
-                <div class="card">
-                    <h2>联系</h2>
-                    <p>邮箱：me@joyance.page <button class="copy-button" onclick="copyToClipboard('me@joyance.page')">复制</button></p>
-                    <p>session账号：<button class="copy-button" onclick="copyToClipboard('05d79f12671d1ca84d190a21c3417036ebd307c3668d4164d89969aa7bc443325a')">复制</button></p>
-                    <p>𝕏 账号：@Xixiphus_Jiayue <button class="copy-button" onclick="copyToClipboard('@Xixiphus_Jiayue')">复制</button></p>
-                </div>
-                <div class="card">
-                <h2>版本</h2>
-                    <p>5.0 </p>
-                    <p>其他版本：<a href="https://testblog-6yi.pages.dev/#" class="article-link">无js版</a>｜<a href="https://blog.joyance.page/" class="article-link">4.5</a>｜<a href="https://blog-cn.joyance.page/" class="article-link">4.0</a></p>
-                </div>
-                `;
-            }
-            content.innerHTML = newContent;
-            content.classList.remove('fade-out');
-            content.classList.add('fade-in');
-            
-            setTimeout(() => {
-                const cards = document.querySelectorAll('.card');
-                cards.forEach((card, index) => {
-                    setTimeout(() => {
-                        card.classList.add('show');
-                    }, index * 100);
-                });
-            }, 50);
-        }, 300);
-    }
+    function showPage(page) {
+        let content = document.getElementById('content');
+        content.classList.add('fade-out');
+        
+        setTimeout(() => {
+            let newContent = '';
+            if (page === 'home') {
+                newContent = '<div class="card"><h2>❏ 欢迎来到我的个人博客</h2><p>博客是一个信息网站，由离散的、通常是非正式的日记式文本条目（帖子）组成。它是由个人管理的网站或在线日记，用于发布新的文章、图片或视频，用于记录、表达情感或分享信息。</p></div>';
+                articles.forEach(article => {
+                    const previewContent = article.content.slice(0, 200) + '...';
+                    const wordCount = article.wordCount;
+                    const mark = article.mark;
+                    const readingTime = Math.ceil(wordCount / 200); 
+                    newContent += `
+                        <div class="card ${article.pinned ? 'pinned' : ''}">
+                            <h3>${article.title}</h3>
+                            <div class="article-preview">${previewContent}</div>
+                            <div class="article-info">
+                                字数：${wordCount} |阅读时间：约${readingTime}分钟 |分类:${mark} |
+                                <a href="${article.url}" class="article-link" target="_blank">阅读全文</a>
+                            </div>
+                        </div>
+                    `;
+                });
+            } else if (page === 'contact') {
+                newContent = `
+                    <div class="card">
+                    <h2>语言</h2>
+                    <p>此网页还支持<a href="https://b.joyance.page/cn" class="article-link">中文</a>｜<a href="https://b.joyance.page/en" class="article-link">English</a></p>
+                </div>
+                    <div class="card">
+                    <h2>绕开过度审查</h2>
+                    <p>镜像网站(不要输入个人敏感信息</p>
+                    <p>- 简单英语维基百科镜像网站｜<a href="https://s.joyance.page" class="article-link" target="_blank">前往</a></p>
+                    <p>- 中文维基百科镜像网站｜<a href="https://w.joyance.page" class="article-link" target="_blank">前往</a></p>
+                    <p>- 谷歌搜索镜像网站｜<a href="https://google.joyance.page" class="article-link" target="_blank">前往</a></p>
+                    <p>- Duckduckgo搜索镜像网站｜<a href="https://d.joyance.page" class="article-link" target="_blank">前往</a></p>
+                    <p>- 全能镜像站｜<a href="https://proxy.joyance.page/" class="article-link" target="_blank">前往</a></p>
+                    <p>免费提供代理服务器，本人于BoosNet购买|<a href="https://pt.joyance.page/" class="article-link" target="_blank">前往</a></p>
+                </div>
+                <div class="card">
+                    <h2>联系</h2>
+                    <p>邮箱：me@joyance.page <button class="copy-button" onclick="copyToClipboard('me@joyance.page')">复制</button></p>
+                    <p>session账号：<button class="copy-button" onclick="copyToClipboard('05d79f12671d1ca84d190a21c3417036ebd307c3668d4164d89969aa7bc443325a')">复制</button></p>
+                    <p>𝕏 账号：@Xixiphus_Jiayue <button class="copy-button" onclick="copyToClipboard('@Xixiphus_Jiayue')">复制</button></p>
+                </div>
+                <div class="card">
+                <h2>版本</h2>
+                    <p>5.0 </p>
+                    <p>其他版本：<a href="https://testblog-6yi.pages.dev/#" class="article-link">无js版</a>｜<a href="https://blog.joyance.page/" class="article-link">4.5</a>｜<a href="https://blog-cn.joyance.page/" class="article-link">4.0</a></p>
+                </div>
+                `;
+            }
+            content.innerHTML = newContent;
+            content.classList.remove('fade-out');
+            content.classList.add('fade-in');
 
-    function copyToClipboard(text) {
-        navigator.clipboard.writeText(text).then(function() {
-            let button = event.target;
-            button.textContent = '已复制';
-            button.classList.add('pulse');
-            setTimeout(() => {
-                button.textContent = '复制';
-                button.classList.remove('pulse');
-            }, 2000);
-        }, function(err) {
-            console.error('error: ', err);
-        });
-    }
+            // 重新选择.card元素
+            cards = document.querySelectorAll('.card');
 
-    function search() {
-        const searchInput = document.getElementById('search-input');
-        const searchResults = document.getElementById('search-results');
-        const query = searchInput.value.toLowerCase();
+            // 添加动画结束事件监听，重置动画
+            cards.forEach(card => {
+                card.addEventListener('animationend', () => {
+                    card.style.animation = '';
+                });
+            });
 
-        if (query.length === 0) {
-            searchResults.style.display = 'none';
-            return;
-        }
+            // 触发scroll事件，初始加载时显示动画
+            window.dispatchEvent(new Event('scroll'));
 
-        const results = articles.filter(article => 
-            article.title.toLowerCase().includes(query) || 
-            article.content.toLowerCase().includes(query) ||
-            pinyinMatch(article.title, query) ||
-            pinyinMatch(article.content, query)
-        );
+        }, 300);
+    }
 
-        if (results.length > 0) {
-            searchResults.innerHTML = results.map(article => 
-                `<div class="search-result-item" onclick="openArticle('${article.url}')">${article.title}</div>`
-            ).join('');
-            searchResults.style.display = 'block';
-        } else {
-            searchResults.innerHTML = '<div class="search-result-item">not found</div>';
-            searchResults.style.display = 'block';
-        }
-    }
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(function() {
+            let button = event.target;
+            button.textContent = '已复制';
+            button.classList.add('pulse');
+            setTimeout(() => {
+                button.textContent = '复制';
+                button.classList.remove('pulse');
+            }, 2000);
+        }, function(err) {
+            console.error('error: ', err);
+        });
+    }
 
-    function pinyinMatch(text, query) {
-        const pinyinText = pinyinPro.pinyin(text, { toneType: 'none', type: 'array' }).join('');
-        const pinyinQuery = pinyinPro.pinyin(query, { toneType: 'none', type: 'array' }).join('');
-        return pinyinText.toLowerCase().includes(pinyinQuery.toLowerCase());
-    }
+    function search() {
+        const searchInput = document.getElementById('search-input');
+        const searchResults = document.getElementById('search-results');
+        const query = searchInput.value.toLowerCase();
 
-    function openArticle(url) {
-        window.open(url, '_blank');
-    }
+        if (query.length === 0) {
+            searchResults.style.display = 'none';
+            return;
+        }
 
-    showPage('home');
+        const results = articles.filter(article => 
+            article.title.toLowerCase().includes(query) || 
+            article.content.toLowerCase().includes(query) ||
+            pinyinMatch(article.title, query) ||
+            pinyinMatch(article.content, query)
+        );
 
-    document.addEventListener('click', function(event) {
-        const searchResults = document.getElementById('search-results');
-        const searchInput = document.getElementById('search-input');
-        if (event.target !== searchInput && !searchResults.contains(event.target)) {
-            searchResults.style.display = 'none';
-        }
-    });
+        if (results.length > 0) {
+            searchResults.innerHTML = results.map(article => 
+                `<div class="search-result-item" onclick="openArticle('${article.url}')">${article.title}</div>`
+            ).join('');
+            searchResults.style.display = 'block';
+        } else {
+            searchResults.innerHTML = '<div class="search-result-item">not found</div>';
+            searchResults.style.display = 'block';
+        }
+    }
+
+    function pinyinMatch(text, query) {
+        const pinyinText = pinyinPro.pinyin(text, { toneType: 'none', type: 'array' }).join('');
+        const pinyinQuery = pinyinPro.pinyin(query, { toneType: 'none', type: 'array' }).join('');
+        return pinyinText.toLowerCase().includes(pinyinQuery.toLowerCase());
+    }
+
+    function openArticle(url) {
+        window.open(url, '_blank');
+    }
+
+    // 添加滚动事件监听
+    window.addEventListener('scroll', () => {
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        cards.forEach(card => {
+            const rect = card.getBoundingClientRect();
+            if (rect.top <= window.innerHeight && rect.bottom >= 0) {
+                if (scrollTop > lastScrollTop) {
+                    // 向下滚动
+                    card.style.animation = 'slideInUp 0.5s forwards';
+                } else {
+                    // 向上滚动
+                    card.style.animation = 'slideInDown 0.5s forwards';
+                }
+            }
+        });
+        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+    });
+
+    let cards = [];
+    let lastScrollTop = 0;
+
+    showPage('home');
+
+    document.addEventListener('click', function(event) {
+        const searchResults = document.getElementById('search-results');
+        const searchInput = document.getElementById('search-input');
+        if (event.target !== searchInput && !searchResults.contains(event.target)) {
+            searchResults.style.display = 'none';
+        }
+    });
 </script>
 </body>
 </html>
