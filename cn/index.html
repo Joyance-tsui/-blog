@@ -22,6 +22,11 @@
             }
         }
         header {
+            position: fixed; /* 固定定位 */
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 999; /* 确保在最上层 */
             background-color: #FFFFFF;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             padding: 16px;
@@ -39,6 +44,11 @@
             background-color: #FFFFFF;
             padding: 8px 16px;
             transition: background-color 0.3s;
+            position: fixed; /* 固定定位 */
+            top: 72px; /* 紧贴在 header 下面 */
+            left: 0;
+            width: 100%;
+            z-index: 998;
         }
         @media (prefers-color-scheme: dark) {
             nav {
@@ -61,6 +71,7 @@
             padding: 16px;
             max-width: 1200px;
             margin: 0 auto;
+            margin-top: 128px; /* 避免内容被固定的 header 和 nav 遮挡 */
         }
         .card {
             background-color: #FFFFFF;
@@ -70,19 +81,17 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
             opacity: 0;
             transform: translateY(20px);
-        }
-        .card.visible {
-            opacity: 1;
-            transform: translateY(0);
             transition: opacity 0.5s ease-out, transform 0.5s ease-out;
         }
-        .card:hover {
-            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
-        }
+        /* 移除了 .card:hover 样式 */
         @media (prefers-color-scheme: dark) {
             .card {
                 background-color: #2C2C2C;
             }
+        }
+        .card.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
         .article {
             margin-bottom: 16px;
@@ -263,6 +272,9 @@
                 display: flex;
                 flex-wrap: wrap;
                 justify-content: space-between;
+                top: auto;
+                position: static;
+                margin-top: 16px;
             }
 
             nav a {
@@ -273,6 +285,7 @@
 
             .container {
                 padding: 12px;
+                margin-top: 16px;
             }
 
             .card {
@@ -298,14 +311,14 @@
 
         .fade-out {
             opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.3s, transform 0.3s;
+            transform: translateX(-50%);
+            transition: opacity 0.5s, transform 0.5s;
         }
 
         .fade-in {
             opacity: 1;
-            transform: translateY(0);
-            transition: opacity 0.3s, transform 0.3s;
+            transform: translateX(0);
+            transition: opacity 0.5s, transform 0.5s;
         }
     </style>
 </head>
@@ -340,19 +353,20 @@
 
     function showPage(page) {
         let content = document.getElementById('content');
+        content.classList.remove('fade-in');
         content.classList.add('fade-out');
 
         setTimeout(() => {
             let newContent = '';
             if (page === 'home') {
-                newContent = '<div class="card"><h2>❏ 欢迎来到我的个人博客</h2><p>博客是一个信息网站，由离散的、通常是非正式的日记式文本条目（帖子）组成。它是由个人管理的网站或在线日记，用于发布新的文章、图片或视频，用于记录、表达情感或分享信息。</p></div>';
+                newContent = '<div class="card visible"><h2>❏ 欢迎来到我的个人博客</h2><p>博客是一个信息网站，由离散的、通常是非正式的日记式文本条目（帖子）组成。它是由个人管理的网站或在线日记，用于发布新的文章、图片或视频，用于记录、表达情感或分享信息。</p></div>';
                 articles.forEach(article => {
                     const previewContent = article.content.slice(0, 200) + '...';
                     const wordCount = article.wordCount;
                     const mark = article.mark;
                     const readingTime = Math.ceil(wordCount / 200); 
                     newContent += `
-                        <div class="card ${article.pinned ? 'pinned' : ''}">
+                        <div class="card">
                             <h3>${article.title}</h3>
                             <div class="article-preview">${previewContent}</div>
                             <div class="article-info">
@@ -364,7 +378,7 @@
                 });
             } else if (page === 'contact') {
                 newContent = `
-                    <div class="card">
+                    <div class="card visible">
                         <h2>语言</h2>
                         <p>此网页还支持<a href="https://b.joyance.page/cn" class="article-link">中文</a>｜<a href="https://b.joyance.page/en" class="article-link">English</a></p>
                     </div>
@@ -398,7 +412,7 @@
             // 初始化动画
             initAnimations();
 
-        }, 300);
+        }, 500); // 与 CSS 中的过渡时间匹配
     }
 
     function copyToClipboard(text) {
@@ -454,7 +468,7 @@
     }
 
     function initAnimations() {
-        const cards = document.querySelectorAll('.card');
+        const cards = document.querySelectorAll('.card:not(.visible)');
         const options = {
             threshold: 0.1
         };
