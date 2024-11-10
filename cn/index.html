@@ -71,6 +71,11 @@
             opacity: 0;
             transform: translateY(20px);
         }
+        .card.visible {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
         .card:hover {
             box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
         }
@@ -302,37 +307,6 @@
             transform: translateY(0);
             transition: opacity 0.3s, transform 0.3s;
         }
-
-        /* 新增动画 */
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes slideInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .animate-up {
-            animation: slideInUp 0.5s forwards;
-        }
-
-        .animate-down {
-            animation: slideInDown 0.5s forwards;
-        }
     </style>
 </head>
 <body>
@@ -484,33 +458,18 @@
         const options = {
             threshold: 0.1
         };
-        let lastScrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                    if (scrollTop > lastScrollTop) {
-                        // 向下滚动
-                        entry.target.classList.add('animate-up');
-                    } else {
-                        // 向上滚动
-                        entry.target.classList.add('animate-down');
-                    }
-                    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
-                    // 取消观察，防止重复动画
-                    observer.unobserve(entry.target);
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target); // 只观察一次，防止重复触发动画
                 }
             });
         }, options);
 
         cards.forEach(card => {
             observer.observe(card);
-            // 清除动画类，以便在重新进入视口时重新添加动画
-            card.addEventListener('animationend', () => {
-                card.classList.remove('animate-up', 'animate-down');
-                observer.observe(card);
-            });
         });
     }
 
