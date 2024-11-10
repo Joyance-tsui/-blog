@@ -22,24 +22,21 @@
             }
         }
 
-        /* 新增固定头部容器 */
+        /* 固定头部容器 */
         .fixed-header {
             position: fixed; /* 固定定位 */
             top: 0;
             left: 0;
             width: 100%;
             z-index: 999; /* 确保在最上层 */
-        }
-
-        /* 为.fixed-header添加渐变背景 */
-        .fixed-header {
-            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 1));
+            /* 更新后的渐变背景，从不透明到透明 */
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
             transition: background 0.3s;
         }
 
         @media (prefers-color-scheme: dark) {
             .fixed-header {
-                background: linear-gradient(to bottom, rgba(30, 30, 30, 0.5), rgba(30, 30, 30, 1));
+                background: linear-gradient(to bottom, rgba(30, 30, 30, 1), rgba(30, 30, 30, 0));
             }
         }
 
