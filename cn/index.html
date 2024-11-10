@@ -21,12 +21,17 @@
                 color: #E0E0E0;
             }
         }
-        header {
+
+        /* 新增固定头部容器 */
+        .fixed-header {
             position: fixed; /* 固定定位 */
             top: 0;
             left: 0;
             width: 100%;
             z-index: 999; /* 确保在最上层 */
+        }
+
+        header {
             background-color: #FFFFFF;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             padding: 16px;
@@ -44,11 +49,7 @@
             background-color: #FFFFFF;
             padding: 8px 16px;
             transition: background-color 0.3s;
-            position: fixed; /* 固定定位 */
-            top: 72px; /* 紧贴在 header 下面 */
-            left: 0;
-            width: 100%;
-            z-index: 998;
+            /* 去掉 position: fixed; 让它跟随 .fixed-header */
         }
         @media (prefers-color-scheme: dark) {
             nav {
@@ -71,7 +72,7 @@
             padding: 16px;
             max-width: 1200px;
             margin: 0 auto;
-            margin-top: 128px; /* 避免内容被固定的 header 和 nav 遮挡 */
+            margin-top: 128px; /* 避免内容被固定的头部和导航栏遮挡 */
         }
         .card {
             background-color: #FFFFFF;
@@ -83,7 +84,6 @@
             transform: translateY(20px);
             transition: opacity 0.5s ease-out, transform 0.5s ease-out;
         }
-        /* 移除了 .card:hover 样式 */
         @media (prefers-color-scheme: dark) {
             .card {
                 background-color: #2C2C2C;
@@ -272,9 +272,7 @@
                 display: flex;
                 flex-wrap: wrap;
                 justify-content: space-between;
-                top: auto;
-                position: static;
-                margin-top: 16px;
+                /* 移除了 position: static; 使其在移动端也固定在顶部 */
             }
 
             nav a {
@@ -285,7 +283,7 @@
 
             .container {
                 padding: 12px;
-                margin-top: 16px;
+                margin-top: 160px; /* 调整上边距，避免遮挡 */
             }
 
             .card {
@@ -311,30 +309,34 @@
 
         .fade-out {
             opacity: 0;
-            transform: translateX(-50%);
+            transform: translateY(20px);
             transition: opacity 0.5s, transform 0.5s;
         }
 
         .fade-in {
             opacity: 1;
-            transform: translateX(0);
+            transform: translateY(0);
             transition: opacity 0.5s, transform 0.5s;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1 id="headerTitle"><a href="https://joyance.page" class="article-link" target="_blank">Joyance</a>的博客</h1>
-        <div id="search-container">
-            <input type="text" id="search-input" placeholder="搜索..." oninput="search()">
-            <div id="search-results"></div>
-        </div>
-    </header>
 
-    <nav>
-        <a href="#" onclick="showPage('home')" id="navHome">首页</a>
-        <a href="#" onclick="showPage('contact')" id="navContact">更多</a>
-    </nav>
+    <!-- 将 header 和 nav 包裹在 fixed-header 容器中 -->
+    <div class="fixed-header">
+        <header>
+            <h1 id="headerTitle"><a href="https://joyance.page" class="article-link" target="_blank">Joyance</a>的博客</h1>
+            <div id="search-container">
+                <input type="text" id="search-input" placeholder="搜索..." oninput="search()">
+                <div id="search-results"></div>
+            </div>
+        </header>
+
+        <nav>
+            <a href="#" onclick="showPage('home')" id="navHome">首页</a>
+            <a href="#" onclick="showPage('contact')" id="navContact">更多</a>
+        </nav>
+    </div>
 
     <div class="container" id="content">
     </div>
