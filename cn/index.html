@@ -31,31 +31,39 @@
             z-index: 999; /* 确保在最上层 */
         }
 
+        /* 为了实现模糊效果，给.fixed-header添加背景色和透明度 */
+        .fixed-header {
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: none;
+            transition: backdrop-filter 0.3s, background-color 0.3s;
+        }
+
+        /* 滚动时添加的模糊效果 */
+        .fixed-header.blur {
+            backdrop-filter: blur(8px);
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .fixed-header {
+                background-color: rgba(30, 30, 30, 0.8);
+            }
+            .fixed-header.blur {
+                background-color: rgba(30, 30, 30, 0.5);
+            }
+        }
+
         header {
-            background-color: #FFFFFF;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             padding: 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: background-color 0.3s;
         }
-        @media (prefers-color-scheme: dark) {
-            header {
-                background-color: #1E1E1E;
-            }
-        }
+
         nav {
-            background-color: #FFFFFF;
             padding: 8px 16px;
-            transition: background-color 0.3s;
-            /* 去掉 position: fixed; 让它跟随 .fixed-header */
         }
-        @media (prefers-color-scheme: dark) {
-            nav {
-                background-color: #1E1E1E;
-            }
-        }
+
         nav a {
             color: #212121;
             text-decoration: none;
@@ -272,7 +280,6 @@
                 display: flex;
                 flex-wrap: wrap;
                 justify-content: space-between;
-                /* 移除了 position: static; 使其在移动端也固定在顶部 */
             }
 
             nav a {
@@ -323,7 +330,7 @@
 <body>
 
     <!-- 将 header 和 nav 包裹在 fixed-header 容器中 -->
-    <div class="fixed-header">
+    <div class="fixed-header" id="fixedHeader">
         <header>
             <h1 id="headerTitle"><a href="https://joyance.page" class="article-link" target="_blank">Joyance</a>的博客</h1>
             <div id="search-container">
@@ -488,6 +495,16 @@
             observer.observe(card);
         });
     }
+
+    // 监听滚动事件，添加或移除模糊效果
+    window.addEventListener('scroll', function() {
+        const fixedHeader = document.getElementById('fixedHeader');
+        if (window.scrollY > 50) {
+            fixedHeader.classList.add('blur');
+        } else {
+            fixedHeader.classList.remove('blur');
+        }
+    });
 
     document.addEventListener('click', function(event) {
         const searchResults = document.getElementById('search-results');
