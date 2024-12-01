@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <!--© Ceci est un site web personnel, tous droits réservés par Joyance, le propriétaire. -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Blog de Joyance</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #FAFAFA;
+            color: #212121;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #121212;
+                color: #E0E0E0;
+            }
+        }
+
+        /* 固定头部容器 */
+        .fixed-header {
+            position: fixed; /* 固定定位 */
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 999; /* 确保在最上层 */
+            /* 更新后的渐变背景，从不透明到透明 */
+            background: linear-gradient(to bottom, rgb(255, 255, 255), rgba(255, 255, 255, 0.615));
+            transition: background 0.3s;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .fixed-header {
+                background: linear-gradient(to bottom, rgba(30, 30, 30, 1), rgba(30, 30, 30, 0));
+            }
+        }
+
+        header {
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav {
+            padding: 8px 16px;
+        }
+
+        nav a {
+            color: #212121;
+            text-decoration: none;
+            margin-right: 16px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        @media (prefers-color-scheme: dark) {
+            nav a {
+                color: #E0E0E0;
+            }
+        }
+        .container {
+            padding: 16px;
+            max-width: 1200px;
+            margin: 0 auto;
+            margin-top: 128px; /* 避免内容被固定的头部和导航栏遮挡 */
+        }
+        .card {
+            background-color: #FFFFFF;
+            border-radius: 2px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+        @media (prefers-color-scheme: dark) {
+            .card {
+                background-color: #2C2C2C;
+            }
+        }
+        .card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .article {
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #EEEEEE;
+            transition: border-bottom-color 0.3s;
+        }
+        @media (prefers-color-scheme: dark) {
+            .article {
+                border-bottom-color: #424242;
+            }
+        }
+        button {
+            background-color: #212121;
+            color: #FFFFFF;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+        }
+        @media (prefers-color-scheme: dark) {
+            button {
+                background-color: #4A4A4A;
+                color: #E0E0E0;
+            }
+        }
+        button:hover {
+            background-color: #FFFFFF;
+            color: #212121;
+            transform: scale(1.05);
+        }
+        @media (prefers-color-scheme: dark) {
+            button:hover {
+                background-color: #E0E0E0;
+                color: #4A4A4A;
+            }
+        }
+        .pinned {
+            border-left: 4px solid #9E9E9E;
+            transition: border-left-color 0.3s;
+        }
+        @media (prefers-color-scheme: dark) {
+            .pinned {
+                border-left: 4px solid #757575;
+            }
+        }
+        .article-preview {
+            white-space: pre-wrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+        }
+        .article-link {
+            color: #212121;
+            text-decoration: underline;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        @media (prefers-color-scheme: dark) {
+            .article-link {
+                color: #E0E0E0;
+            }
+        }
+        .article-info {
+            font-size: 0.9em;
+            color: #757575;
+            margin-top: 8px;
+            transition: color 0.3s;
+        }
+        @media (prefers-color-scheme: dark) {
+            .article-info {
+                color: #BDBDBD;
+            }
+        }
+        .copy-button {
+            margin-left: 10px;
+            padding: 4px 8px;
+            font-size: 12px;
+        }
+        .forwords-button {
+            margin-left: 10px;
+            padding: 4px 8px;
+            font-size: 12px;
+        }
+
+        #search-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        #search-input {
+            padding: 8px 12px;
+            border: 1px solid #BDBDBD;
+            border-radius: 20px;
+            font-size: 14px;
+            width: 200px;
+            transition: all 0.3s;
+        }
+
+        #search-input:focus {
+            outline: none;
+            border-color: #757575;
+            box-shadow: 0 0 5px rgba(117, 117, 117, 0.5);
+            width: 220px;
+        }
+
+        #search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: #FFFFFF;
+            border: 1px solid #BDBDBD;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+            z-index: 1000;
+        }
+
+        .search-result-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .search-result-item:hover {
+            background-color: #F5F5F5;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            #search-input {
+                background-color: #2C2C2C;
+                color: #E0E0E0;
+                border-color: #757575;
+            }
+
+            #search-input:focus {
+                border-color: #BDBDBD;
+                box-shadow: 0 0 5px rgba(189, 189, 189, 0.5);
+            }
+
+            #search-results {
+                background-color: #2C2C2C;
+                border-color: #757575;
+            }
+
+            .search-result-item:hover {
+                background-color: #424242;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 12px;
+            }
+
+            #search-container {
+                width: 100%;
+                margin-top: 12px;
+            }
+
+            #search-input {
+                width: 100%;
+            }
+
+            nav {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+
+            nav a {
+                flex: 1 0 auto;
+                text-align: center;
+                padding: 8px 0;
+            }
+
+            .container {
+                padding: 12px;
+                margin-top: 160px; /* 调整上边距，避免遮挡 */
+            }
+
+            .card {
+                padding: 12px;
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .pulse {
+            animation: pulse 0.5s;
+        }
+
+        .fade-out {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s, transform 0.5s;
+        }
+
+        .fade-in {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.5s, transform 0.5s;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 将 header 和 nav 包裹在 fixed-header 容器中 -->
+    <div class="fixed-header" id="fixedHeader">
+        <header>
+            <h1 id="headerTitle">Le Blog de <a href="https://joyance.page" class="article-link" target="_blank">Joyance</a></h1>
+            <div id="search-container">
+                <input type="text" id="search-input" placeholder="Rechercher ici" oninput="search()">
+                <div id="search-results"></div>
+            </div>
+        </header>
+
+        <nav>
+            <a href="#" onclick="showPage('home')" id="navHome">maison</a>
+            <a href="#" onclick="showPage('contact')" id="navContact">contact</a>
+        </nav>
+    </div>
+
+    <div class="container" id="content">
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/pinyin-pro@3.13.2/dist/index.js"></script>
+<script>
+    let articles = [
+    { title: 'L\'information incomplète est trompeuse', content: 'Internet regorge de fausses informations et de rumeurs dont les dangers sont évidents. Mais ce que vous ignorez peut-être, c\'est que même des informations', pinned:false, wordCount: 1889, url: 'https://b.joyance.page/article/fr/aaag' },
+        { title: 'À propos de la vie privée', content: 'Le droit à la vie privée est la capacité d\'un individu ou d\'un groupe à s\'isoler ou à protéger les informations qu\'il ne souhaite pas partager, lui permettant ainsi de s\'exprimer de manière sélective. À l\'ère d\'Internet, les moyens', pinned: false, wordCount: 800, url: 'https://b.joyance.page/article/fr/aaae' },
+        { title: '1984 - La forme ultime du totalitarisme', content: 'Je viens de terminer la lecture du roman dystopique "1984" et j\'ai réalisé qu\'il vaut vraiment la peine de lire la version originale. Les autres interprétations ont tendance à compresser le contenu du livre original', pinned: false, wordCount: 13220, url: 'https://b.joyance.page/article/fr/aaad' },
+        { title: 'Le monopole des services chinois de covoiturage', content: 'Aujourd\'hui, sur le chemin du retour en VTC, le chauffeur m\'a parlé des nombreux traitements injustes que les chauffeurs subissent de la part des plateformes de VTC, ce qui m\'a donné quelques idées. C', pinned: false, wordCount: 500, url: 'https://b.joyance.page/article/fr/aaac' },
+        { title: 'Lancement de mon blog personnel', content: 'Voici mon premier blog personnel. Je n\'ai pas acheté de nom de domaine séparé, les fonctionnalités ne sont pas complètes (le retour à la ligne n\'est pas encore pris en charge), et les articles sont directement', pinned: false, wordCount: 452, url: 'https://b.joyance.page/article/fr/aaab' },
+    ];
+
+    function showPage(page) {
+        let content = document.getElementById('content');
+        content.classList.remove('fade-in');
+        content.classList.add('fade-out');
+
+        setTimeout(() => {
+            let newContent = '';
+            if (page === 'home') {
+                newContent = '<div class="card"><h2>welcome to my blog</h2><p>A blog is an informational website consisting of discrete, often informal diary-style text entries (posts).It is a website or online diary managed by an individual to post new articles, pictures or videos, used to record, express emotions or share information.</p></div>';
+                articles.forEach(article => {
+                    const previewContent = article.content.slice(0, 200) + '...';
+                    const wordCount = article.wordCount;
+                    const mark = article.mark;
+                    const readingTime = Math.ceil(wordCount / 200); 
+                    newContent += `
+                        <div class="card">
+                            <h3>${article.title}</h3>
+                            <div class="article-preview">${previewContent}</div>
+                            <div class="article-info">
+                                Word count：${wordCount} | time may spend：${readingTime}min | <a href="${article.url}" class="article-link" target="_blank">Read</a>
+                            </div>
+                        </div>
+                    `;
+                });
+            } else if (page === 'contact') {
+                newContent = `
+                    <div class="card">
+                    <h2>languages</h2>
+                    <p>this is also available with <a href="https://b.joyance.page/cn" class="article-link">中文</a>｜<a href="https://b.joyance.page/en" class="article-link">English</a></p>
+                </div>
+                <div class="card">
+                    <h2>contact</h2>
+		    <p>email: me@joyance.page <button class="copy-button" onclick="copyToClipboard('me@joyance.page')">copy</button></p>
+      <p>𝕏 account: @Xixiphus_Jiayue <button class="copy-button" onclick="copyToClipboard('@Xixiphus_Jiayue')">copy</button></p>
+      <p>SessionID: <button class="copy-button" onclick="copyToClipboard('05d79f12671d1ca84d190a21c3417036ebd307c3668d4164d89969aa7bc443325a')">copy</button></p>
+      </div>
+                `;
+            }
+            content.innerHTML = newContent;
+            content.classList.remove('fade-out');
+            content.classList.add('fade-in');
+
+            // 初始化动画
+            initAnimations();
+
+        }, 500); // 与 CSS 中的过渡时间匹配
+    }
+
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(function() {
+            let button = event.target;
+            button.textContent = 'copied';
+            button.classList.add('pulse');
+            setTimeout(() => {
+                button.textContent = 'copy';
+                button.classList.remove('pulse');
+            }, 2000);
+        }, function(err) {
+            console.error('error: ', err);
+        });
+    }
+
+    function search() {
+        const searchInput = document.getElementById('search-input');
+        const searchResults = document.getElementById('search-results');
+        const query = searchInput.value.toLowerCase();
+
+        if (query.length === 0) {
+            searchResults.style.display = 'none';
+            return;
+        }
+
+        const results = articles.filter(article => 
+            article.title.toLowerCase().includes(query) || 
+            article.content.toLowerCase().includes(query) ||
+            pinyinMatch(article.title, query) ||
+            pinyinMatch(article.content, query)
+        );
+
+        if (results.length > 0) {
+            searchResults.innerHTML = results.map(article => 
+                `<div class="search-result-item" onclick="openArticle('${article.url}')">${article.title}</div>`
+            ).join('');
+            searchResults.style.display = 'block';
+        } else {
+            searchResults.innerHTML = '<div class="search-result-item">not found</div>';
+            searchResults.style.display = 'block';
+        }
+    }
+
+    function pinyinMatch(text, query) {
+        const pinyinText = pinyinPro.pinyin(text, { toneType: 'none', type: 'array' }).join('');
+        const pinyinQuery = pinyinPro.pinyin(query, { toneType: 'none', type: 'array' }).join('');
+        return pinyinText.toLowerCase().includes(pinyinQuery.toLowerCase());
+    }
+
+    function openArticle(url) {
+        window.open(url, '_blank');
+    }
+
+    function initAnimations() {
+        const cards = document.querySelectorAll('.card:not(.visible)');
+        const options = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target); // 只观察一次，防止重复触发动画
+                }
+            });
+        }, options);
+
+        cards.forEach(card => {
+            observer.observe(card);
+        });
+    }
+
+    // 初始化页面
+    showPage('home');
+</script>
+</body>
+</html>
