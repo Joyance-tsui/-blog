@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Post</title>
+    <style>
+        :root {
+            --background-color: #ffffff;
+            --text-color: #000000;
+            --button-color: #757575;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background-color: #121212;
+                --text-color: #ffffff;
+                --button-color: #9e9e9e;
+            }
+        }
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .container {
+            max-width: 65%;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        @media (max-width: 768px) {
+            .container {
+                max-width: 100%;
+                padding: 10px;
+            }
+        }
+        .content {
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .back-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--button-color);
+            color: var(--background-color);
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            transition: background-color 0.3s;
+            z-index: 1000;
+        }
+        .back-button:hover {
+            background-color: #616161;
+        }
+        a {
+            color: inherit;
+            text-decoration: none;
+            border-bottom: 1px dotted var(--text-color);
+        }
+        .copy-button {
+            display: inline-block;
+            cursor: pointer;
+            margin-left: 5px;
+            font-size: 0.8em;
+            vertical-align: super;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <h1 id="article-title"></h1>
+            <div id="article-content"></div>
+        </div>
+    </div>
+    <button class="back-button" onclick="window.close()">Close</button>
+
+    <script>
+        const article = { title: 'About Privacy', content: 'Privacy is the ability of an individual or group to keep themselves or information about themselves from being shared or made public, allowing them to express themselves selectively. In the internet age, the methods and costs of invading personal privacy have changed. Online, privacy violations can come from individuals or groups.\n\nThe power of individuals has been strengthened in this era. Through the open platform of the internet, everyone can share content with every other internet user, which actually increases the risk of your privacy being leaked to individuals.\n\nGroup power has also been strengthened. These groups can be made up of non-platform individuals or be platforms themselves. Non-platform groups are essentially a combination of individuals or extensions of individuals, with little difference in impact from individuals. However, platforms that own media have greatly increased their power regarding privacy in this era.\n\nBecause the data used to provide services to the public is stored on the platform\'s servers, the platform actually owns the data. According to the Coase theorem, as long as transaction costs are zero, the initial allocation of legal rights (i.e., property rights) does not affect efficiency. This means that when transaction costs are zero, privacy legally belonging to individuals will flow to individuals, groups, or organizations that can best utilize the privacy data.\n\nPrivacy that can be best utilized by platforms should belong to platforms, otherwise, social costs will be wasted on resource reallocation. However, this doesn\'t mean all privacy protection should be abolished. For example, letting a platform know where you\'ve highlighted in a book can help the platform find the most highlighted parts and provide better service. This kind of concession is appropriate because the information about your highlights isn\'t associated with you personally but is aggregated with others on the platform. It\'s also because the platform can make better use of this content.\n\nHowever, letting a platform know your exact location while reading is inappropriate if the platform doesn\'t offer location-based services. This is because it\'s tied to you personally, and the platform can\'t make better use of it. In summary, privacy that can be conceded is that which: only retains information about the collective when processed centrally (losing its private nature), and can actually be put to better use by the platform.\n\nBased on this conclusion, let\'s examine the privacy that internet companies shouldn\'t have in our daily lives. In reality, internet companies obtain more privacy than they actually need or can handle well. Individuals haven\'t found suitable ways to protect their privacy, so internet companies have used their enormous economic power to obtain much more privacy data than they should.\n\nBrowsing history: This privacy information is generated when users use internet company services. It\'s used to build clear user profiles for better ad targeting. However, the problem is that this profile is individual-specific and can\'t become collective information without personal binding, as that wouldn\'t enable precise targeting for each individual. So, internet companies that don\'t operate ads shouldn\'t request users\' browsing history.\n\nLocation data: This privacy information is provided by the user\'s terminal or IP when using services. It\'s reasonable if used by navigation software for route planning (but shouldn\'t be stored for user profile analysis). However, for other applications without related convenient services, they shouldn\'t collect users\' location information.\n\nPersonal information: This includes name, birthday, contact information. Most platforms can\'t handle this information better than users. Except for programs calculating things like the number of people with the same birthday, this information is only useful to individuals because they happen to be related to this information. For platforms, this information can\'t be used for better information push and shouldn\'t be requested.\n\nCommunication information: This privacy includes users\' emails, chat records, and other communication content. Although platforms can improve ad targeting accuracy by using this information, individuals value it more. This information has high spiritual or practical value for individuals, while platforms can only apply it to individual ad targeting. Therefore, communication information shouldn\'t be collected by platforms.\n\nIn reality, many platforms collect information they shouldn\'t. In the Cambridge Analytica scandal, Facebook was accused of collecting and sharing user data without consent for political ad targeting. Google was found to continuously track users\' geographic locations without explicit consent, even when location services were turned off. TikTok was accused of collecting large amounts of user data, including location, device information, and clipboard content.\n\nTo protect your privacy, the best method is to use products from platforms that prioritize privacy to replace your daily platforms for certain functions. Especially those operated by foundations. Because their income comes from donations to non-profit foundations, they have no incentive to sell your privacy. Of course, well-known and open-source projects are best. Being well-known means more people have used it, and open-source means anyone can check for vulnerabilities in the source code.\n\nNot casually leaking your information online is also a good method. Some information won\'t be leaked as long as you don\'t actively post it on social media or send it to untrusted platforms. For example, real-time updating your location on social media is not a good idea, nor is showing the interior of your home on Weibo.\n\nOf course, there are some advanced protection methods to actively protect your privacy. For example, using a proxy server when accessing untrusted networks. Proxy servers can encrypt your network traffic, preventing internet service providers from knowing your actions.\n\nIn real life, transaction costs can never be zero, and in this case, any theoretical approach requires time and space costs. This leads to any rights struggle being a process, and privacy rights are no exception. The process of fighting for privacy rights will certainly be bumpy. However, recognizing which privacy should be retained or conceded can help us see the development of privacy rights more clearly. And next, it\'s our own actions that promote privacy rights. Each small step will accumulate into a huge force.', pinned: false };
+
+        function processContent(content) {
+            return content
+                .replace(/\[link:(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>')
+                .replace(/\[copy-broad:(.*?)\]/g, '$1<span class="copy-button" onclick="copyText(\'$1\')">❐</span>');
+        }
+
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Text copied to clipboard');
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
+        }
+
+        function loadArticle() {
+            document.title = article.title;
+            document.getElementById('article-title').textContent = article.title;
+            document.getElementById('article-content').innerHTML = processContent(article.content);
+        }
+
+        window.onload = loadArticle;
+    </script>
+</body>
+</html>
