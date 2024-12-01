@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>博客文章</title>
+    <style>
+        :root {
+            --background-color: #ffffff;
+            --text-color: #000000;
+            --button-color: #757575;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background-color: #121212;
+                --text-color: #ffffff;
+                --button-color: #9e9e9e;
+            }
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .container {
+            max-width: 65%;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        @media (max-width: 768px) {
+            .container {
+                max-width: 100%;
+                padding: 10px;
+            }
+        }
+        .content {
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+        .back-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--button-color);
+            color: var(--background-color);
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            transition: background-color 0.3s;
+            z-index: 1000;
+        }
+        .back-button:hover {
+            background-color: #616161;
+        }
+        a {
+            color: inherit;
+            text-decoration: none;
+            border-bottom: 1px dotted var(--text-color);
+        }
+        .copy-button {
+            display: inline-block;
+            cursor: pointer;
+            margin-left: 5px;
+            font-size: 0.8em;
+            vertical-align: super;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <h1 id="article-title"></h1>
+            <div id="article-content"></div>
+        </div>
+    </div>
+    <button class="back-button" onclick="window.close()">返回</button>
+
+    <script>
+        const article = { title: '网约车的垄断租', content: '今天坐网约车回家的路上，网约车司机跟我聊了很多网约车对司机的不公的对待，我也由此产生一些想法。这位司机自称是开了五年出租车，又开了七年网约车（具体数字记不清了，大概就是）\n\n起因是我打车的地方位于经常堵车的地方，上车后司机就开始抱怨导航一定要导到这条路上，称如果可以灵活一点，如果可以让我往前走点，就可以避开前方的拥堵。对于乘客和司机都有益。但是平台的要求就是要根据导航到达目的地才能接送乘客。否则就会遭到平台的相应举措，比如扣钱、封号等。\n\n接着，他就开始介绍起这个平台。他讲了一个故事。一次，他送一个乘客去很远的地方（他说了去哪，但是我没记住），是他的注册地区以外的地方。送到以后，乘客就通过平台给他付了钱。\n\n乘客说，乘客付了一百多元，司机可以挣好多钱。但是他又看了他收到的钱，下面写着：平台不抽成，但是收到的就只有六十元左右。他就告诉了乘客，乘客可能也好奇，把手机页面和他的页面比对，发现确实，平台在其中抽了钱，而且还很多。\n\n于是他就去平台举报，但是平台发下来的不是一个合理的解释，也不是其中相差的钱，而是一份警告。这份警告称，与客户对账，是违反平台规则的行为。他感觉到莫大的不公，于是便向客服反应。可是好不容易等来客服，客服又称他无权透露。\n\n他说，还有一种情况：他的乘客在车上指了一条与导航不同的路，让他走那条路。而他也不从客户端更改路线。等到到了目的地，乘客就翻脸了，称司机绕了远路，要去投诉。而司机没有办法，因为他也没有按导航的道路走。\n平台最后判，司机却实绕路，扣了他几百元。司机就提起申诉，因为乘客的话驾驶全程都有录音，录音里就可以看出是乘客指的路。但是客服说，要以实际路线和乘客是否更改导航路线为准。如果乘客要换路线，为什么不在客户端换？所以申诉失败。\n\n我问他，那么你觉得现在的生活好还是以前做出租车的时候好？\n\n他继续讲，他为什么从出租车转到了网约车。“在一开始，网约车平台的优惠那是高，”他说道，“网约车当时有很多政策支持出租车司机转干网约车司机。”。他继续介绍道。当时的网约车一天挣得钱可高了，比出租车高上很多。但是在那以后，等到出租车已经被网约车基本取代，网约车平台又变得很难接单了，他的生活有越变越差。\n\n他还说了很多平台不合理的地方，比如只会分配他去接两公里以外的订单，而近在眼前的单子接不了等。（不过这一点他自己也承认，这是为了防止刷单行为）而他对于这一情况的归因是，都是因为资本家的作恶。\n\n我并不同意这个观点。为什么？\n\n因为资本家的目的是赚钱，但是他并不能无止境的赚钱。因为员工在他这里工作其实是因为他提供的风险管理。员工不需要花时间考虑一个政策对他的损失。但是如果资本家索取的太多，多余他给予的价值，就会有另一个资本家出现，他就可以用更低的抽成和更高的工资来吸引原来那个资本家的员工。而这样就使得原来的那个资本家的所有员工都流失了。\n\n所以在自由市场（每个人都可以成为资本家的市场）资本家并不会无止境的压榨员工，而是会在他提供的和员工提供的之间形成一个平衡。其实资本家并不能决定他要的钱的多少，而是员工在别处能得到的最大的收益决定的。\n\n那么这位网约车司机抱怨的这种情况是如何产生的呢？这就要引入一个概念了：经济租（简称租，rent）。这是什么呢？经济租，是指一个人或组织，因为其稀缺性而产生的额外价值。简单来说，在这个例子里，就是因为竞争对手少，所以每个员工的选择少，所以资本家就可以多从员工手里拿走的收入。他是市场不充分的体现。\n\n所以有了租，网约车平台就可以比起一开始发展的时候更剥削他的雇员。是什么造成了网约车平台拥有这么大的垄断租呢？于是我查阅了资料，发现了其中的一个点：企业运营网约车有入门门槛。网页车运营平台需要向当地主管部门申请《网络预约出租汽车经营许可证》。这时一点，入门的门槛。可能一些地方不给其他想要运营的平台发行，因为他们收到大平台的贿赂。\n\n还有一点，因为平台已经产生了规模效应。平台可以通过他的垄断来产生很强的垄断租。因为正如我所说，我使用的高德地图打车，而大家都是用的高德地图。这时一个新的平台就很难在挤进这个市场了。毕竟对于客户来说，换不换平台都没什么区别，而只是对于司机有好处。\n\n但是哪怕是司机有好处，也可能促成这个新平台，因为司机如果都转用新的平台，那么人们在老平台上用着不方便，也会转用新平台。但是由于司机的错误归因，他们就再也不信任新的平台了，因为他们认为那也是资本家的阴谋。\n\n从前，有一个小孩，他在山上放着羊。这时，有一天，他感到无聊，就大喊：狼来了。于是人们就都赶来打狼。这时这个小孩却将他们圈起来，收费才能离开。于是大家不情愿的交了费才走。有一天，来了一个新的放羊娃，他真的遇到了狼，就大喊：狼来了！可是一个人也没来，于是他的羊群就没了。人的信任不光会被你自己消耗光，也会被同类的人消耗光。\n\n2024/7/28'};
+
+        function processContent(content) {
+            return content
+                .replace(/\[link:(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>')
+                .replace(/\[copy-broad:(.*?)\]/g, '$1<span class="copy-button" onclick="copyText(\'$1\')">📋</span>');
+        }
+
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('文本已复制到剪贴板');
+            }).catch(err => {
+                console.error('无法复制文本: ', err);
+            });
+        }
+
+        function loadArticle() {
+            document.title = article.title;
+            document.getElementById('article-title').textContent = article.title;
+            document.getElementById('article-content').innerHTML = processContent(article.content);
+        }
+
+        window.onload = loadArticle;
+    </script>
+</body>
+</html>
