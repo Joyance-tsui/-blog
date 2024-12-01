@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Article de blog</title>
+    <style>
+        :root {
+            --background-color: #ffffff;
+            --text-color: #000000;
+            --button-color: #757575;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background-color: #121212;
+                --text-color: #ffffff;
+                --button-color: #9e9e9e;
+            }
+        }
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .container {
+            max-width: 65%;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        @media (max-width: 768px) {
+            .container {
+                max-width: 100%;
+                padding: 10px;
+            }
+        }
+        .content {
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .back-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--button-color);
+            color: var(--background-color);
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            transition: background-color 0.3s;
+            z-index: 1000;
+        }
+        .back-button:hover {
+            background-color: #616161;
+        }
+        a {
+            color: inherit;
+            text-decoration: none;
+            border-bottom: 1px dotted var(--text-color);
+        }
+        .copy-button {
+            display: inline-block;
+            cursor: pointer;
+            margin-left: 5px;
+            font-size: 0.8em;
+            vertical-align: super;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <h1 id="article-title"></h1>
+            <div id="article-content"></div>
+        </div>
+    </div>
+    <button class="back-button" onclick="window.close()">Fermer</button>
+
+    <script>
+        const article = { title: 'L\'information incomplète est trompeuse', content: 'Internet regorge de fausses informations et de rumeurs dont les dangers sont évidents. Mais ce que vous ignorez peut-être, c\'est que même des informations composées entièrement de faits peuvent être trompeuses. Cette forme de tromperie peut être plus grave, plus influente et plus difficile à identifier que les fausses informations. Il s\'agit de la présentation sélective des faits, où des informations tout aussi importantes sont délibérément ou involontairement omises ou ignorées.\n\nAppelons ces informations présentées de manière sélective des "informations incomplètes". Bien que la production d\'informations incomplètes puisse être involontaire, les organisations et institutions assumant une responsabilité publique doivent être tenues responsables des informations qu\'elles diffusent. C\'est une compétence fondamentale des médias traditionnels.\n\nIl est impossible de présenter toutes les informations en raison de diverses contraintes (confidentialité, complexité). Cependant, nous devrions viser l\'exhaustivité, qui est l\'un des critères d\'évaluation de la qualité d\'un média ou d\'une plateforme. Pour faciliter cette évaluation, redéfinissons les informations incomplètes :\n\nLes informations incomplètes sont celles qui, lors de leur présentation, ne parviennent pas à inclure plusieurs perspectives ou angles liés à leur contenu, en particulier les points de vue aussi importants que le contenu lui-même.\n\nLes dangers des informations incomplètes sont considérables car il est presque impossible de les réfuter. Par définition, ces informations sont vraies, mais elles contiennent une orientation de valeur intrinsèque qui déforme la réalité dans son ensemble. Le problème réside dans le fait que la sélection même de l\'information est porteuse de valeurs.\n\nSi vous ne recevez que des informations incomplètes, vous ne réaliserez pas leur partialité. Au contraire, vous pourriez penser que ceux qui les contestent ont tort. À long terme, vos valeurs pourraient changer insidieusement ou renforcer celles que vous avez déjà.\n\nLa complexité du monde risque d\'être abandonnée, ainsi que la vérité globale qu\'elle constitue. La sélection de l\'information nécessite des règles. Les informations incomplètes résultent d\'un filtrage intentionnel basé sur la volonté subjective ou les contraintes sociales de celui qui les publie ou les diffuse. Cette action confère une orientation subjective à des faits autrement neutres, trompant ainsi le lecteur.\n\nInternet, en tant que médium d\'information, devrait être analysé sous plusieurs angles. Pour les sites web des médias traditionnels, l\'analyse mentionnée ci-dessus s\'applique. Cependant, pour les individus sur Internet, leurs déclarations devraient être considérées dans leur ensemble.\n\nL\'analyse de la santé d\'une plateforme peut utiliser ce critère : dispose-t-elle d\'informations complètes et quelle est l\'ampleur des écarts d\'attention entre ces informations ? L\'analyse de la popularité de divers contenus sur une plateforme peut révéler ses orientations de valeur potentielles, résultant soit de ses politiques de modération, soit de sa base d\'utilisateurs.\n\nBien sûr, les plateformes d\'information parfaitement équilibrées sont rares, voire impossibles. Fondamentalement, les humains sont des animaux sociaux qui ont besoin d\'un sentiment d\'appartenance. Cela implique inévitablement un certain filtrage des informations défavorables au groupe.\n\nLes plateformes ne peuvent pas équilibrer l\'information en partie à cause de leur modèle économique basé sur la publicité et l\'économie de l\'attention. Cependant, les moteurs de recherche offrent généralement un contenu plus complet, contrairement au contenu diffusé passivement qui tend à correspondre à vos préférences.\n\nCela peut conduire à une désinformation par des informations incomplètes, en particulier pour les contenus d\'actualité et politiques. Une bonne solution consiste à suivre au moins deux médias aux positions opposées, ou à rechercher une plateforme sans censure (apparente) du discours politique.\n\nPour les autres contenus, il est recommandé d\'utiliser des projets d\'organisations à but non lucratif, comme Wikipédia. Leur financement par dons encourage la diversité et une bonne expérience utilisateur.\n\nC\'est pourquoi nous devons rechercher plus de liberté en matière d\'information. Seule cette liberté peut garantir l\'exhaustivité de l\'information. Heureusement, les progrès technologiques favorisent ces libertés. Rappelez-vous, nous avons besoin d\'un environnement de libre expression, car sans cette liberté, nous n\'avons pas la liberté d\'obtenir des informations aussi complètes que possible, ni la liberté d\'accéder à toutes les vérités équivalentes, et donc probablement pas à la vérité.\n\nSinon, il ne restera que des slogans de propagande et la satisfaction de désirs bestiaux.', pinned: false }
+
+function processContent(content) {
+            return content
+                .replace(/\[link:(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>')
+                .replace(/\[copy-broad:(.*?)\]/g, '$1<span class="copy-button" onclick="copyText(\'$1\')">❐</span>');
+        }
+
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Texte copié dans le presse-papiers');
+            }).catch(err => {
+                console.error('Échec de la copie du texte : ', err);
+            });
+        }
+
+        function loadArticle() {
+            document.title = article.title;
+            document.getElementById('article-title').textContent = article.title;
+            document.getElementById('article-content').innerHTML = processContent(article.content);
+        }
+
+        window.onload = loadArticle;
+    </script>
+</body>
+</html>
