@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Post</title>
+    <style>
+        :root {
+            --background-color: #ffffff;
+            --text-color: #000000;
+            --button-color: #757575;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background-color: #121212;
+                --text-color: #ffffff;
+                --button-color: #9e9e9e;
+            }
+        }
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .container {
+            max-width: 65%;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        @media (max-width: 768px) {
+            .container {
+                max-width: 100%;
+                padding: 10px;
+            }
+        }
+        .content {
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .back-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--button-color);
+            color: var(--background-color);
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            transition: background-color 0.3s;
+            z-index: 1000;
+        }
+        .back-button:hover {
+            background-color: #616161;
+        }
+        a {
+            color: inherit;
+            text-decoration: none;
+            border-bottom: 1px dotted var(--text-color);
+        }
+        .copy-button {
+            display: inline-block;
+            cursor: pointer;
+            margin-left: 5px;
+            font-size: 0.8em;
+            vertical-align: super;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <h1 id="article-title"></h1>
+            <div id="article-content"></div>
+        </div>
+    </div>
+    <button class="back-button" onclick="window.close()">Close</button>
+
+    <script>
+        const article = { title: 'Starting My Personal Blog', content: 'This is my first personal blog. I haven\'t bought a separate domain, and the functionality is not complete (line breaks are not yet supported). The articles are directly stored in the frontend code (it\'s quite rudimentary), but it should be sufficient for now.\n\nMy future plan is to use this platform to publish my articles. I will also synchronize updates on WeChat Official Account and Zhihu.\n\nBut how is this blog different from WeChat Official Account and Zhihu?\n\nMainly, it\'s designed according to my aesthetic preferences. Although this platform is small, it suits my current writing style very well.\n\nAs I mentioned in my previous summary, I\'m not making a profit based on my hobbies.\n\nOf course, there\'s another reason: I might have some restrictions on what I can say on other platforms.\n\nHere, I can post content that I wouldn\'t share on Zhihu or WeChat Official Account.\n\nSome content may come from my WeChat Moments.\n\nHowever, WeChat Moments also has censorship (although I use a WeChat account), and the reach is limited.\n\nSo, this is the plan for the blog.\n\nIf you have good programming skills (especially in web development) and are willing to help me improve this website, you can find my WeChat ID and email in the Contact section.\n\nIf you\'re just here to read, don\'t forget to bookmark the page, or you might not be able to find it later. (I\'ll definitely set up a domain name in the future, and I\'ll make an announcement when that happens.)\n\n2024/7/26'};
+
+        function processContent(content) {
+            return content
+                .replace(/\[link:(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>')
+                .replace(/\[copy-broad:(.*?)\]/g, '$1<span class="copy-button" onclick="copyText(\'$1\')">❐</span>');
+        }
+
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Text copied to clipboard');
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
+        }
+
+        function loadArticle() {
+            document.title = article.title;
+            document.getElementById('article-title').textContent = article.title;
+            document.getElementById('article-content').innerHTML = processContent(article.content);
+        }
+
+        window.onload = loadArticle;
+    </script>
+</body>
+</html>
