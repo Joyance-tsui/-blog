@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Post</title>
+    <style>
+        :root {
+            --background-color: #ffffff;
+            --text-color: #000000;
+            --button-color: #757575;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background-color: #121212;
+                --text-color: #ffffff;
+                --button-color: #9e9e9e;
+            }
+        }
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .container {
+            max-width: 65%;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        @media (max-width: 768px) {
+            .container {
+                max-width: 100%;
+                padding: 10px;
+            }
+        }
+        .content {
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .back-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--button-color);
+            color: var(--background-color);
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            transition: background-color 0.3s;
+            z-index: 1000;
+        }
+        .back-button:hover {
+            background-color: #616161;
+        }
+        a {
+            color: inherit;
+            text-decoration: none;
+            border-bottom: 1px dotted var(--text-color);
+        }
+        .copy-button {
+            display: inline-block;
+            cursor: pointer;
+            margin-left: 5px;
+            font-size: 0.8em;
+            vertical-align: super;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <h1 id="article-title"></h1>
+            <div id="article-content"></div>
+        </div>
+    </div>
+    <button class="back-button" onclick="window.close()">Close</button>
+
+    <script>
+        const article = { title: 'Incomplete Information is Misleading', content: 'The internet is full of false information and rumors, and their harmful effects are obvious. However, you may not know that information composed entirely of facts can also be misleading. This kind of misleading can be even more serious than false information, causing greater impact and being harder to identify. This is called selective presentation of facts, where equally important information is intentionally or unintentionally deleted or ignored.\n\nLet\'s call this selectively presented information "incomplete information." Incomplete information may be unintentional, but for any organization with public responsibility, they should be accountable for the information they spread. This is a basic quality of traditional media.\n\nDue to various reasons (such as confidentiality or complexity), it\'s impossible to present all information at once. However, we should strive for completeness as much as possible. This is one of the standards we use to judge the quality of media or platforms. To make this judgment, let\'s narrow down the definition of incomplete information:\n\nIncomplete information refers to information presented without including multiple relevant perspectives or angles, especially those views that are equally important to the content itself.\n\nThe harm of incomplete information is enormous because it\'s almost impossible to deny. By definition, such information is true, and you can\'t argue against true information. However, it contains an inherent value orientation that distorts the overall facts. Of course, it may not contain all the facts, but this is not the root of the problem. The issue is that the selection of information itself carries a value orientation.\n\nIf you only receive such incomplete information, you won\'t know that the information you got is one-sided. Instead, you might think that those who argue against this information are wrong, and you\'ve found the truth about the world. Over time, your values may change imperceptibly, or your existing values may be reinforced. The former might make you feel like you\'ve refreshed your understanding, as if you\'ve had an epiphany, while the latter will make you increasingly self-satisfied.\n\nBut the complexity of the world might be discarded, along with the overall truth composed of this complexity. Information filtering needs rules. Incomplete information is produced because the person publishing or spreading the information filters it based on their subjective will or social environment. This action gives these originally value-neutral facts the author\'s subjective orientation, which is misleading to readers.\n\nAs a medium of information, the internet should be analyzed from multiple angles. For traditional media websites (or new media accounts forced to adapt to the times), we should use the above method of analysis. However, this analysis doesn\'t apply to every individual on the internet. Each individual\'s statements should be integrated and analyzed as a whole.\n\nThe health of a platform can be judged by this standard: whether the platform has comprehensive information, and how small the difference is in the possibility of this information being noticed (of course, the smaller the better). Analyzing the attention given to various content on a platform can also reveal the platform\'s potential value orientation. This value orientation either comes from the platform\'s censorship and traffic control policies or from the platform\'s user base.\n\nOf course, completely balanced information platforms are rare, and achieving this point may be impossible. Essentially, humans are social animals and need a sense of group belonging. This sense of belonging inevitably includes some filtering of information unfavorable to the group. To gain group recognition and acceptance, individuals often actively or passively follow the group\'s behavioral norms and values. At the same time, due to the mutual influence between group members, individuals\' channels and methods of obtaining information also tend to be similar, forming information cocoons.\n\nPlatforms can\'t balance information also because of the profit logic of most internet platforms, which is to push ads to users and achieve profits through the attention economy. In other words, you\'ll see more of what you like to see. Of course, for those search engines (like DuckDuckGo, Google, etc.) where you actively seek answers, their content is mostly comprehensive. But for passively played content, it might just be content you like.\n\nThis can lead to the misleading of incomplete information, especially for news and political content. These are the types of content that people want to control the most. For these contents, a good solution is to follow at least two media outlets with opposite stances, whose content barely meets the criteria of not being incomplete information, or to find a platform that (at least appears to) have no censorship on political speech to understand information.\n\nFor other content, it\'s recommended to use projects from non-profit organizations, such as Wikipedia. Their income comes from donations, which come from good experiences, which in turn come from their inherent diversity. Platforms that are undesirable are those with obvious non-moral (except pan-moral) censorship, strong exclusivity, and content pushed by big data.\n\nThis is why we should pursue more freedom in terms of information. Only with these freedoms can the comprehensiveness of information be guaranteed. Fortunately, technological development is also promoting these freedoms. Remember, we need a freer speech environment, because without such freedom, there is no freedom to obtain the most comprehensive information possible, no freedom to obtain all equivalent truths, and thus probably no truth at all.\n\nWhat\'s left then might just be propaganda slogans and the satisfaction of bestial desires.', pinned: false };
+
+        function processContent(content) {
+            return content
+                .replace(/\[link:(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>')
+                .replace(/\[copy-broad:(.*?)\]/g, '$1<span class="copy-button" onclick="copyText(\'$1\')">❐</span>');
+        }
+
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Text copied to clipboard');
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
+        }
+
+        function loadArticle() {
+            document.title = article.title;
+            document.getElementById('article-title').textContent = article.title;
+            document.getElementById('article-content').innerHTML = processContent(article.content);
+        }
+
+        window.onload = loadArticle;
+    </script>
+</body>
+</html>
