@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Post</title>
+    <style>
+        :root {
+            --background-color: #ffffff;
+            --text-color: #000000;
+            --button-color: #757575;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background-color: #121212;
+                --text-color: #ffffff;
+                --button-color: #9e9e9e;
+            }
+        }
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .container {
+            max-width: 65%;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        @media (max-width: 768px) {
+            .container {
+                max-width: 100%;
+                padding: 10px;
+            }
+        }
+        .content {
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .back-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--button-color);
+            color: var(--background-color);
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            transition: background-color 0.3s;
+            z-index: 1000;
+        }
+        .back-button:hover {
+            background-color: #616161;
+        }
+        a {
+            color: inherit;
+            text-decoration: none;
+            border-bottom: 1px dotted var(--text-color);
+        }
+        .copy-button {
+            display: inline-block;
+            cursor: pointer;
+            margin-left: 5px;
+            font-size: 0.8em;
+            vertical-align: super;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <h1 id="article-title"></h1>
+            <div id="article-content"></div>
+        </div>
+    </div>
+    <button class="back-button" onclick="window.close()">Close</button>
+
+    <script>
+        const article = { title: 'The Monopoly of Chinese Ride-Hailing Services', content: 'Today, on my way home in a ride-hailing car, the driver told me about the unfair treatment they face. This got me thinking. The driver said he drove a taxi for five years and has been a ride-hailing driver for seven years (he wasn\'t sure about the exact numbers).\n\nIt started because I got in the car in a traffic-heavy area. The driver complained that the navigation always directs him to that road. He said if he could be more flexible and let me walk a bit ahead, we could avoid the traffic, benefiting both of us. However, the platform requires following the navigation to the destination; otherwise, he faces penalties like fines or account suspension.\n\nHe then shared a story. Once, he took a passenger to a far place outside his registered area. After the ride, the passenger paid through the platform. The passenger paid over 100 yuan, thinking the driver would earn a lot. However, the driver received only about 60 yuan, despite the platform claiming not to take a cut. When he reported this to the platform, he received a warning instead of an explanation or the missing money. The warning stated that comparing payments with passengers violates platform rules. Feeling this was unfair, he contacted customer service, but they said they couldn’t disclose information.\n\nHe also mentioned another situation where a passenger directed him to take a different route than the navigation. At the destination, the passenger accused him of taking a longer route and threatened to complain. The platform fined the driver hundreds of yuan, despite having a recording of the passenger directing the route. Customer service said the complaint was valid since the route wasn\'t changed in the app.\n\nI asked him if life was better now or when he drove a taxi. He explained why he switched from taxi to ride-hailing. Initially, ride-hailing platforms offered high incentives and policies to attract taxi drivers. He made more money than with a taxi. However, as ride-hailing replaced taxis, it became harder to get orders, and his life worsened.\n\nHe mentioned other unfair platform practices, like being assigned distant orders while missing nearby ones. He attributed this to the platform preventing fraudulent activities. He blamed these issues on greedy capitalists.\n\nI disagreed with him. I believe capitalists aim to make money but can\'t do so endlessly. Employees work for them because they manage risks. If a capitalist takes too much, another will offer better terms, attracting employees. In a free market, capitalists balance what they provide and what employees give. They can\'t set prices arbitrarily; it\'s determined by what employees can get elsewhere.\n\nSo, why does this driver face such issues? It’s due to "economic rent." This means extra value from scarcity. Here, fewer competitors mean fewer choices for workers, allowing capitalists to take more. This shows a market imbalance.\n\nRide-hailing platforms exploit this economic rent more than before. One reason is the entry barrier for operating a ride-hailing service. Platforms need a permit from local authorities, which might be limited due to bribery by big platforms.\n\nAnother reason is the platform\'s scale. It\'s hard for new platforms to compete, as everyone uses established ones like Gaode Map. Even if a new platform benefits drivers, they might not trust it, thinking it\'s another capitalist scheme.\n\nAn old story illustrates this: A boy tending sheep on a hill cried "wolf" for fun, making people come and pay to leave. Later, a new boy faced a real wolf, but no one came, and his sheep were lost. Trust can be wasted not only by oneself but also by others.\n\n2024/7/28', pinned: false };
+
+        function processContent(content) {
+            return content
+                .replace(/\[link:(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>')
+                .replace(/\[copy-broad:(.*?)\]/g, '$1<span class="copy-button" onclick="copyText(\'$1\')">❐</span>');
+        }
+
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Text copied to clipboard');
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
+        }
+
+        function loadArticle() {
+            document.title = article.title;
+            document.getElementById('article-title').textContent = article.title;
+            document.getElementById('article-content').innerHTML = processContent(article.content);
+        }
+
+        window.onload = loadArticle;
+    </script>
+</body>
+</html>
