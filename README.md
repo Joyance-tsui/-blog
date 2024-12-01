@@ -1,3 +1,3 @@
 # My personal blog system
 
-6.0.0
+v6.0.0
