@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Article de blog</title>
+    <style>
+        :root {
+            --background-color: #ffffff;
+            --text-color: #000000;
+            --button-color: #757575;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background-color: #121212;
+                --text-color: #ffffff;
+                --button-color: #9e9e9e;
+            }
+        }
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .container {
+            max-width: 65%;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        @media (max-width: 768px) {
+            .container {
+                max-width: 100%;
+                padding: 10px;
+            }
+        }
+        .content {
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .back-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--button-color);
+            color: var(--background-color);
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            transition: background-color 0.3s;
+            z-index: 1000;
+        }
+        .back-button:hover {
+            background-color: #616161;
+        }
+        a {
+            color: inherit;
+            text-decoration: none;
+            border-bottom: 1px dotted var(--text-color);
+        }
+        .copy-button {
+            display: inline-block;
+            cursor: pointer;
+            margin-left: 5px;
+            font-size: 0.8em;
+            vertical-align: super;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <h1 id="article-title"></h1>
+            <div id="article-content"></div>
+        </div>
+    </div>
+    <button class="back-button" onclick="window.close()">Fermer</button>
+
+    <script>
+        const article = { title: 'À propos de la vie privée', content: 'Le droit à la vie privée est la capacité d\'un individu ou d\'un groupe à s\'isoler ou à protéger les informations qu\'il ne souhaite pas partager, lui permettant ainsi de s\'exprimer de manière sélective. À l\'ère d\'Internet, les moyens et les coûts de violation de la vie privée ont changé. En ligne, les atteintes à la vie privée peuvent provenir d\'individus ou de groupes.\n\nLe pouvoir des individus s\'est renforcé à notre époque. Grâce à la plateforme ouverte qu\'est Internet, chacun peut partager du contenu avec tous les utilisateurs, ce qui augmente le risque de fuite de vos informations privées.\n\nLe pouvoir des groupes s\'est également renforcé. Ces groupes peuvent être composés d\'individus hors plateforme ou être les plateformes elles-mêmes. Les groupes hors plateforme sont essentiellement une combinaison d\'individus, avec peu de différence d\'impact. Cependant, les plateformes propriétaires de médias ont considérablement accru leur pouvoir en matière de vie privée.\n\nLes données utilisées pour fournir des services au public étant stockées sur les serveurs des plateformes, celles-ci en sont propriétaires. Selon le théorème de Coase, tant que les coûts de transaction sont nuls, l\'allocation initiale des droits légaux n\'affecte pas l\'efficacité. Cela signifie que lorsque les coûts de transaction sont nuls, la vie privée appartenant légalement aux individus ira vers ceux qui peuvent le mieux l\'utiliser.\n\nLes informations privées que les plateformes peuvent le mieux utiliser devraient leur appartenir, sinon les coûts sociaux seraient gaspillés en réallocation de ressources. Cependant, cela ne signifie pas que toute protection de la vie privée devrait être abolie. Par exemple, permettre à une plateforme de savoir où vous avez surligné dans un livre peut l\'aider à trouver les parties les plus surlignées et à améliorer son service. Ce type de concession est approprié car l\'information n\'est pas associée à vous personnellement mais est agrégée avec d\'autres sur la plateforme.\n\nCependant, permettre à une plateforme de connaître votre position exacte pendant la lecture est inapproprié si elle n\'offre pas de services basés sur la localisation. C\'est parce que c\'est lié à vous personnellement et que la plateforme ne peut pas en faire un meilleur usage. En résumé, la vie privée qui peut être cédée est celle qui : ne conserve que des informations sur le collectif lorsqu\'elle est traitée de manière centralisée, et peut être mieux utilisée par la plateforme.\n\nExaminons maintenant les informations privées que les entreprises Internet ne devraient pas avoir dans notre vie quotidienne. En réalité, ces entreprises obtiennent plus d\'informations privées qu\'elles n\'en ont réellement besoin ou qu\'elles ne peuvent bien gérer.\n\nHistorique de navigation : Ces informations sont générées lorsque les utilisateurs utilisent les services des entreprises Internet. Elles sont utilisées pour créer des profils d\'utilisateurs pour un meilleur ciblage publicitaire. Cependant, ce profil est spécifique à l\'individu et ne peut pas devenir une information collective sans lien personnel.\n\nDonnées de localisation : Ces informations sont fournies par le terminal de l\'utilisateur ou son IP. C\'est raisonnable si elles sont utilisées par un logiciel de navigation pour la planification d\'itinéraire. Cependant, pour d\'autres applications sans services connexes, elles ne devraient pas collecter ces informations.\n\nInformations personnelles : Cela inclut le nom, la date de naissance, les coordonnées. La plupart des plateformes ne peuvent pas mieux gérer ces informations que les utilisateurs eux-mêmes.\n\nInformations de communication : Cela inclut les e-mails, les historiques de chat et autres contenus de communication. Bien que les plateformes puissent améliorer la précision du ciblage publicitaire en utilisant ces informations, les individus les valorisent davantage.\n\nEn réalité, de nombreuses plateformes collectent des informations qu\'elles ne devraient pas. Dans le scandale Cambridge Analytica, Facebook a été accusé de collecter et de partager des données d\'utilisateurs sans consentement. Google a été découvert en train de suivre en continu la localisation géographique des utilisateurs sans consentement explicite. TikTok a été accusé de collecter de grandes quantités de données utilisateurs.\n\nPour protéger votre vie privée, la meilleure méthode est d\'utiliser des produits de plateformes qui privilégient la confidentialité. Ne pas divulguer négligemment vos informations en ligne est également une bonne méthode. Il existe également des méthodes de protection avancées, comme l\'utilisation d\'un serveur proxy lors de l\'accès à des réseaux non fiables.\n\nDans la vie réelle, les coûts de transaction ne peuvent jamais être nuls, et toute approche théorique nécessite des coûts en temps et en espace. Cela conduit à ce que toute lutte pour les droits soit un processus, et les droits à la vie privée ne font pas exception. Le processus de lutte pour les droits à la vie privée sera certainement difficile. Cependant, reconnaître quelle vie privée doit être conservée ou cédée peut nous aider à voir plus clairement le développement des droits à la vie privée. Et ensuite, ce sont nos propres actions qui favorisent les droits à la vie privée. Chaque petit pas s\'accumulera en une force énorme.', pinned: false }
+
+function processContent(content) {
+            return content
+                .replace(/\[link:(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>')
+                .replace(/\[copy-broad:(.*?)\]/g, '$1<span class="copy-button" onclick="copyText(\'$1\')">❐</span>');
+        }
+
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Texte copié dans le presse-papiers');
+            }).catch(err => {
+                console.error('Échec de la copie du texte : ', err);
+            });
+        }
+
+        function loadArticle() {
+            document.title = article.title;
+            document.getElementById('article-title').textContent = article.title;
+            document.getElementById('article-content').innerHTML = processContent(article.content);
+        }
+
+        window.onload = loadArticle;
+    </script>
+</body>
+</html>
