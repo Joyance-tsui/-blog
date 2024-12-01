@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Article de blog</title>
+    <style>
+        :root {
+            --background-color: #ffffff;
+            --text-color: #000000;
+            --button-color: #757575;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background-color: #121212;
+                --text-color: #ffffff;
+                --button-color: #9e9e9e;
+            }
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .container {
+            max-width: 65%;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        @media (max-width: 768px) {
+            .container {
+                max-width: 100%;
+                padding: 10px;
+            }
+        }
+        .content {
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+        .back-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--button-color);
+            color: var(--background-color);
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            transition: background-color 0.3s;
+            z-index: 1000;
+        }
+        .back-button:hover {
+            background-color: #616161;
+        }
+        a {
+            color: inherit;
+            text-decoration: none;
+            border-bottom: 1px dotted var(--text-color);
+        }
+        .copy-button {
+            display: inline-block;
+            cursor: pointer;
+            margin-left: 5px;
+            font-size: 0.8em;
+            vertical-align: super;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <h1 id="article-title"></h1>
+            <div id="article-content"></div>
+        </div>
+    </div>
+    <button class="back-button" onclick="window.close()">Retour</button>
+
+    <script>
+        const article = { title: 'Lancement de mon blog personnel', content: 'Voici mon premier blog personnel. Je n\'ai pas acheté de nom de domaine séparé, les fonctionnalités ne sont pas complètes (l\'affichage des sauts de ligne n\'est pas encore pris en charge), et les articles sont directement stockés dans le programme front-end du site web (c\'est très rudimentaire), mais cela devrait suffire pour le moment. \n\nMon plan pour l\'avenir est d\'utiliser cette plateforme pour publier mes articles. Je mettrai également à jour mon compte officiel WeChat et Zhihu en parallèle. \n\nMais en quoi ce blog est-il différent de mon compte officiel WeChat et de Zhihu ? \n\nPrincipalement, il est conçu selon mon esthétique personnelle. Bien que cette plateforme soit petite, elle correspond parfaitement à mon état d\'esprit actuel pour l\'écriture d\'articles. \n\nComme je l\'ai mentionné dans mon précédent résumé, je n\'ai pas de but lucratif, je le fais par passion. \n\nBien sûr, il y a une autre raison : il est possible que je sois limité dans ce que je peux dire sur d\'autres plateformes. \n\nIci, je peux publier du contenu que je ne posterais pas sur Zhihu ou sur mon compte officiel WeChat. \n\nBien sûr, certains contenus proviennent de mes moments WeChat. \n\nMais les moments WeChat sont également soumis à une censure (même si j\'utilise un compte WeChat), et la portée de diffusion est limitée. \n\nDonc, voilà le plan pour le blog. \n\nSi vous avez de bonnes compétences en programmation (en particulier en développement web) et que vous souhaitez m\'aider à améliorer ce site, vous pouvez trouver mon numéro WeChat et mon e-mail dans la section "Contact". \n\nSi vous êtes simplement un lecteur, n\'oubliez pas d\'ajouter le site à vos favoris, sinon vous risquez de ne plus le retrouver. (Un nom de domaine sera certainement ajouté plus tard, je vous en informerai à ce moment-là) \n\n26/07/2024'};
+
+        function processContent(content) {
+            return content
+                .replace(/\[link:(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>')
+                .replace(/\[copy-broad:(.*?)\]/g, '$1<span class="copy-button" onclick="copyText(\'$1\')">📋</span>');
+        }
+
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Le texte a été copié dans le presse-papiers');
+            }).catch(err => {
+                console.error('Impossible de copier le texte : ', err);
+            });
+        }
+
+        function loadArticle() {
+            document.title = article.title;
+            document.getElementById('article-title').textContent = article.title;
+            document.getElementById('article-content').innerHTML = processContent(article.content);
+        }
+
+        window.onload = loadArticle;
+    </script>
+</body>
+</html>
