@@ -353,7 +353,7 @@
         setTimeout(() => {
             let newContent = '';
             if (page === 'home') {
-                newContent = '<div class="card"><h2>welcome to my blog</h2><p>A blog is an informational website consisting of discrete, often informal diary-style text entries (posts).It is a website or online diary managed by an individual to post new articles, pictures or videos, used to record, express emotions or share information.</p></div>';
+                newContent = '<div class="card"><h2>❏ Bienvenue sur mon blog personnel</h2><p>Un blog est un site web d\'information composé d\'entrées textuelles discrètes, généralement informelles de type journal (posts). C\'est un site web ou un journal en ligne géré par un individu pour publier de nouveaux articles, images ou vidéos, pour enregistrer, exprimer des émotions ou partager des informations.</p></div>';
                 articles.forEach(article => {
                     const previewContent = article.content.slice(0, 200) + '...';
                     const wordCount = article.wordCount;
@@ -364,7 +364,8 @@
                             <h3>${article.title}</h3>
                             <div class="article-preview">${previewContent}</div>
                             <div class="article-info">
-                                Word count：${wordCount} | time may spend：${readingTime}min | <a href="${article.url}" class="article-link" target="_blank">Read</a>
+                                Nombre de mots : ${wordCount} | Temps de lecture : environ ${readingTime} minute${readingTime > 1 ? 's' : ''}
+                            <a href="${article.url}" class="article-link" target="_blank">Lire la suite</a>
                             </div>
                         </div>
                     `;
@@ -373,7 +374,7 @@
                 newContent = `
                     <div class="card">
                     <h2>languages</h2>
-                    <p>this is also available with <a href="https://b.joyance.page/cn" class="article-link">中文</a>｜<a href="https://b.joyance.page/en" class="article-link">English</a></p>
+                    <p>this is also available with <a href="https://b.joyance.page/cn" class="article-link">中文</a>|<a href="https://b.joyance.page/en" class="article-link">English</a>|<a href="https://b.joyance.page/fr" class="article-link">français</a></p>
                 </div>
                 <div class="card">
                     <h2>contact</h2>
