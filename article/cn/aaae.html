@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>博客文章</title>
+    <style>
+        :root {
+            --background-color: #ffffff;
+            --text-color: #000000;
+            --button-color: #757575;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background-color: #121212;
+                --text-color: #ffffff;
+                --button-color: #9e9e9e;
+            }
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .container {
+            max-width: 65%;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        @media (max-width: 768px) {
+            .container {
+                max-width: 100%;
+                padding: 10px;
+            }
+        }
+        .content {
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+        .back-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--button-color);
+            color: var(--background-color);
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            transition: background-color 0.3s;
+            z-index: 1000;
+        }
+        .back-button:hover {
+            background-color: #616161;
+        }
+        a {
+            color: inherit;
+            text-decoration: none;
+            border-bottom: 1px dotted var(--text-color);
+        }
+        .copy-button {
+            display: inline-block;
+            cursor: pointer;
+            margin-left: 5px;
+            font-size: 0.8em;
+            vertical-align: super;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <h1 id="article-title"></h1>
+            <div id="article-content"></div>
+        </div>
+    </div>
+    <button class="back-button" onclick="window.close()">返回</button>
+
+    <script>
+        const article = { title: '关于隐私', content: '隐私权，是一个个人或团体隔离自己或有关自己不愿告诉别人或不愿公开的信息或事务，从而得以选择性地表达自己的能力。互联网时代，对于个人隐私的侵犯的手段和成本都产生了变化。在网上，侵犯你的隐私的可分为个体或团体。个体在这个时代的力量被加强了，通过互联网这个开放的平台，每个人都可以将内容与每一个使用互联网的个体分享，这实际上也就给了你的隐私泄露给个体后更大的风险。\n\n团体的力量也被加强。这里的团体可能是由非平台的个体组成的，也可能是平台本身。非平台的团体实际上就是个人的叠加，也可能只是个人的延伸，其影响和个人已无太大差异。但是平台本身，拥有着媒介的平台，这一团体实际上在这一时代在隐私方面被大大的加强了。\n\n因为平台为公众提供服务所服务的数据存储在平台的服务器上，这就意味着平台实际上拥有数据。而根据科斯定理，只要交易成本等于零，法定权利（即产权）的初始配置并不影响效率。意味着在交易成本为零时，法定归个人所有的隐私也会流向对隐私数据利用的最好的个人、团体、或组织。\n\n在平台可以发挥最大价值的隐私理应归平台所有，否则会导致社会总成本被耗散在资源的重新配置上。但这并不意味着所有的隐私保护都应废止。比如，让平台知道你在一本书的那里进行了勾画，可以利于平台寻找出最多勾画而使平台提供更好的服务。这样的让渡就是应该的，因为你个人对于勾画的位置的信息并不会与你个人关联，而是与其他人的一起被汇总到平台。还因为平台能让这一内容发挥更大价值。\n\n但是，让平台知道你在什么精确的位置读书，如果平台没有相应位置服务，这就是不应该的。因为首先，他与你的个人进行了绑定。其次，平台也没有更好的利用他。综上，可以让渡的隐私就是那些：被集中处理只保留对集体的信息的（也就是失去了隐私属性的），平台在实际上可以发挥更大价值的。\n\n依靠这一结论，我们审视一下生活中互联网公司应该不能保有的隐私。因为在实际上，互联网公司获取的隐私是超过了他们实际应有的，可以很好处理的隐私的范围。而在此个人也没有找到合适的途径保护隐私，所以互联网公司利用了其巨大的经济租争取到了很多超格的隐私数据。\n\n浏览记录：这一隐私信息是用户在使用互联网公司的服务时所产生的数据。这一内容被用于建立和清晰用户画像，使得平台可以更好的推送广告。但是问题是，这个画像是针对个人的，没有办法成为一个去个人绑定的对集体的信息，因为那样不会促成对每个个体的精准推送。所以用户的浏览记录，那些并非运营广告的互联网公司不应该征求。\n\n位置数据：这一隐私信息是用户在使用服务时的终端或者IP提供的。这一内容如果被导航软件应用于规划线路等，那是合理的。导航可以更好的利用这些数据（但是不应该被存储下来用于用户画像的分析）。但是对与其他的应用，如果没有这相关的便捷的业务，也不应该搜集用户的位置信息。\n\n个人信息：这里是狭义的个人信息，包括姓名、生日、联系方式。这类的信息大部分的平台都无法比用户更好的处理。除非一些计算相同生日人数等的程序，这些信息只对于个人有用，因为他们恰好遇这些信息有关联，但对平台来说这些信息并不能被用于更好的信息推送，这也是不应该被征求的。\n\n通讯信息：这一隐私是用户的电子邮件、聊天记录等通讯内容。这类的信息平台使用后虽然可以提升广告推送精准度，但是个人对其利用的价值更高。因为这些信息对于个人具有很高的或者精神或者现实价值。而平台只能将其运用在对个人的广告推送。所以通信信息是不应该被平台收集的。\n\n而事实上，现实中的很多平台都收集了这些它们不应该收集的信息。剑桥分析公司(Cambridge Analytica)事件中，Facebook被指控未经用户同意收集并分享用户数据，用于政治广告定位。Google被发现未经用户明确同意，持续追踪用户的地理位置，即使用户关闭了位置服务。TikTok被指控收集大量用户数据，包括位置、设备信息和剪贴板内容。\n\n而要想让你的隐私不被暴露，最好的方法就是使用那些以隐私为卖点的平台的产品代替你日常中实现某个功能的平台。特别是一些由基金会运营的平台。因为他们的收入来源是非营利的基金会收到的捐款，所以他们没有动力出卖你的隐私。当然，最好是那些有名的且开源的项目。有名，就意味着经过了跟多人的使用，开源，就意味着所有人都可以查找原代码中的漏洞。\n\n不在网络上随意泄漏你的信息也是一个好的方法，对于一些信息只要你不把他们主动发在社交媒体上，主动发给不信任的平台，那么他们是不会被泄漏的。比如，在朋友圈实时跟进你的位置就不是一个好的主意，在微博上晒出你的家的内饰也不是个好主意。\n\n当然，还有一些进阶的保护手段，主动保护你的隐私。比如在接入不信任的网络时使用代理服务器。代理服务器就可以加密你的网络流量，就让互联网运营商不知道你的行动。更多方法详见[link:这篇文章](https://aaaf-cn.pages.dev/)\n\n在现实生活中，交易成本不可能为零，而在此情况下，对任何理论上的的逼近都要付出时间、空间上的代价。这就导致的任何权利的争取都是一个过程，隐私权也不例外。隐私权的争取过程也肯定是坎坷的。但是，认识到那些隐私是应该保留或让步的，可以让我们看代隐私权的发展更清晰。而接下来，就是自己的行动，促成隐私权的推动。每一步微小，会汇集的力量是巨大的。', pinned: false };
+
+        function processContent(content) {
+            return content
+                .replace(/\[link:(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>')
+                .replace(/\[copy-broad:(.*?)\]/g, '$1<span class="copy-button" onclick="copyText(\'$1\')">📋</span>');
+        }
+
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('文本已复制到剪贴板');
+            }).catch(err => {
+                console.error('无法复制文本: ', err);
+            });
+        }
+
+        function loadArticle() {
+            document.title = article.title;
+            document.getElementById('article-title').textContent = article.title;
+            document.getElementById('article-content').innerHTML = processContent(article.content);
+        }
+
+        window.onload = loadArticle;
+    </script>
+</body>
+</html>
