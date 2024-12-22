@@ -90,11 +90,11 @@
         </div>
         <!-- 嵌入的评论区域 -->
         <div class="comment-container">
-            <iframe 
+            <iframe
                 id="commentFrame"
-                src="https://comment.joyance.page/embed/area/test-area" 
-                class="comment-iframe" 
-                frameborder="0" 
+                class="comment-iframe"
+                src="https://comment.joyance.page/embed/area/test-area"
+                frameborder="0"
                 allowtransparency="true"
                 onload="resizeIframe(this)">
             </iframe>
@@ -130,7 +130,16 @@
             obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px';
         }
 
-        window.onload = loadArticle;
+        function updateCommentIframeTheme() {
+            const commentFrame = document.getElementById('commentFrame');
+            const currentTheme = document.documentElement.getAttribute('data-theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            commentFrame.src = `https://comment.joyance.page/embed/area/test-area?theme=${currentTheme}`;
+        }
+
+        window.onload = function() {
+            loadArticle();
+            updateCommentIframeTheme();
+        };
     </script>
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </body>
