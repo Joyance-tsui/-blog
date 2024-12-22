@@ -71,12 +71,15 @@
             font-size: 0.8em;
             vertical-align: super;
         }
-          .comment-iframe {
-              width: 100%;
-              border: none;
-            min-height: 500px; /* Adjust as needed */
-           margin-top: 20px;
-         }
+        .comment-container {
+            width: 100%;
+            margin-top: 20px;
+        }
+        .comment-iframe {
+            width: 100%;
+            border: none;
+            min-height: 600px; /* 调整高度以适应内容 */
+        }
     </style>
 </head>
 <body>
@@ -85,8 +88,17 @@
             <h1 id="article-title"></h1>
             <div id="article-content"></div>
         </div>
-         <!--  Embedded Comment Section -->
-      <iframe class="comment-iframe" src="https://comment.joyance.apge/embed/area/test-area"></iframe>
+        <!-- 嵌入的评论区域 -->
+        <div class="comment-container">
+            <iframe 
+                id="commentFrame"
+                src="https://comment.joyance.page/embed/area/test-area" 
+                class="comment-iframe" 
+                frameborder="0" 
+                allowtransparency="true"
+                onload="resizeIframe(this)">
+            </iframe>
+        </div>
     </div>
     <button class="back-button" onclick="window.close()">返回</button>
 
@@ -113,7 +125,13 @@
             document.getElementById('article-content').innerHTML = processContent(article.content);
         }
 
+        // 动态调整 iframe 高度
+        function resizeIframe(obj) {
+            obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px';
+        }
+
         window.onload = loadArticle;
     </script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </body>
 </html>
