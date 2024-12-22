@@ -71,6 +71,12 @@
             font-size: 0.8em;
             vertical-align: super;
         }
+          .comment-iframe {
+              width: 100%;
+              border: none;
+            min-height: 500px; /* Adjust as needed */
+           margin-top: 20px;
+         }
     </style>
 </head>
 <body>
@@ -79,6 +85,8 @@
             <h1 id="article-title"></h1>
             <div id="article-content"></div>
         </div>
+         <!--  Embedded Comment Section -->
+      <iframe class="comment-iframe" src="https://comment.joyance.apge/embed/area/test-area"></iframe>
     </div>
     <button class="back-button" onclick="window.close()">返回</button>
 
