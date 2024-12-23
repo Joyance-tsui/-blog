@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>博客文章</title>
     <style>
-       :root {
+        :root {
             --background-color: #ffffff;
             --text-color: #000000;
             --button-color: #757575;
@@ -127,7 +127,9 @@
 
         // 动态调整 iframe 高度
         function resizeIframe(obj) {
-            obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px';
+           setTimeout(() => {
+               obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px';
+            }, 200);
         }
           function updateCommentIframeTheme() {
             const commentFrame = document.getElementById('commentFrame');
