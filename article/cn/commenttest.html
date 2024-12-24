@@ -9,31 +9,12 @@
             --background-color: #ffffff;
             --text-color: #000000;
             --button-color: #757575;
-            --link-color: #007bff;
-             --link-hover-color: #0056b3;
-              --input-bg-color: #f8f9fa;
-            --border-color: #ced4da;
-            --notification-bg-color: #f0f0f0;
-            --notification-text-color: #333;
-            --comment-bg-color: #fff;
-            --comment-text-color:#495057;
-            --hint-color:#6c757d;
-             --button-text-color: #fff;
         }
         @media (prefers-color-scheme: dark) {
             :root {
                 --background-color: #121212;
                 --text-color: #ffffff;
                 --button-color: #9e9e9e;
-                 --link-color: #66b1ff;
-                 --link-hover-color: #80c0ff;
-                    --input-bg-color: #495057;
-                      --border-color: #6c757d;
-                      --notification-bg-color: #495057;
-                       --notification-text-color: #fff;
-                         --comment-bg-color: #495057;
-                            --comment-text-color:#e9ecef;
-                            --hint-color:#adb5bd;
             }
         }
         body {
@@ -61,11 +42,11 @@
             white-space: pre-wrap;
         }
         .back-button {
-             position: fixed;
+            position: fixed;
             top: 20px;
             right: 20px;
             background-color: var(--button-color);
-             color: var(--button-text-color);
+            color: var(--background-color);
             border: none;
             border-radius: 4px;
             padding: 8px 16px;
@@ -79,11 +60,10 @@
             background-color: #616161;
         }
         a {
-            color: var(--link-color);
+            color: inherit;
             text-decoration: none;
             border-bottom: 1px dotted var(--text-color);
         }
-         a:hover { color: var(--link-hover-color); }
         .copy-button {
             display: inline-block;
             cursor: pointer;
@@ -91,66 +71,14 @@
             font-size: 0.8em;
             vertical-align: super;
         }
-    .comment-list { margin-top: 20px; }
-    .comment-item { margin-bottom: 15px; padding: 10px; background: var(--comment-bg-color); border-radius: 4px; }
-   .reply-item { margin-left: 20px; }
-    .reply-btn, .report-btn {
-        margin-left: 10px; color: #999; cursor: pointer; font-size: 12px; text-decoration: underline;
-    }
-    .reply-box { margin-top: 5px; }
-    .markdown-content { font-size: 14px; color: var(--comment-text-color); }
-
-     .form-group textarea {
-            background: var(--input-bg-color); color: var(--text-color); border: 1px solid var(--border-color); padding: 8px; width: calc(100% - 18px); height: 60px;
-            resize: vertical; margin-bottom: 10px; font-size: 14px;
-         }
-     button {
-        background: var(--button-color); color: var(--button-text-color); border: none; padding: 8px 12px; cursor: pointer; border-radius: 3px;
-        transition: background 0.3s ease, transform 0.2s ease;
-       }
-      button:hover {
-          background: #616161;
-     }
-    .notification-bar {
-        position: fixed; bottom: 0; left: 0; width: 100%; background: var(--notification-bg-color); color: var(--notification-text-color); padding: 10px 20px;
-          display: flex; align-items: center; justify-content: space-between; font-size: 14px; z-index: 9999;
-        }
-        .notification-bar.hidden { display: none; }
-        .close-btn { cursor: pointer; margin-left: 20px; font-weight: bold; }
-
-        /* 隐藏评论时，仅显示占位/按钮 */
-        .hidden-comment-placeholder {
-         font-style: italic;
-         color: #888;
-        }
-        .show-btn {
-            color: var(--link-color);
-            margin-left: 8px;
-            text-decoration: underline;
-            cursor: pointer;
-        }
-          /* 评论区样式 */
-      .comment-list {
+        .comment-container {
+            width: 100%;
             margin-top: 20px;
         }
-        .comment-item {
-            margin-bottom: 15px;
-             padding: 10px;
-            background: var(--comment-bg-color);
-            border-radius: 4px;
-        }
-        .reply-item {
-            margin-left: 20px;
-        }
-        .reply-btn, .report-btn {
-           margin-left: 10px;
-            color: #999;
-            cursor: pointer;
-            font-size: 12px;
-            text-decoration: underline;
-        }
-        .reply-box {
-             margin-top: 5px;
+        .comment-iframe {
+            width: 100%;
+            border: none;
+            min-height: 600px; /* 调整高度以适应内容 */
         }
     </style>
 </head>
@@ -160,14 +88,22 @@
             <h1 id="article-title"></h1>
             <div id="article-content"></div>
         </div>
-        <div id="comments-container">
-            <div id="comment-loading">正在加载评论...</div>
+        <!-- 嵌入的评论区域 -->
+        <div class="comment-container">
+            <iframe
+                id="commentFrame"
+                class="comment-iframe"
+                src=""
+                frameborder="0"
+                allowtransparency="true"
+                onload="resizeIframe(this)">
+            </iframe>
         </div>
     </div>
     <button class="back-button" onclick="window.close()">返回</button>
+
     <script>
-         const article = { title: '开启我的个人博客', content: '这是我的第一个个人博客，没有买单独的域名，<e style="text-decoration: line-through;">功能也不齐全（换行的显示还不支持）</e>（2024/8/19 现已支持），而且文章是直接存在网页前端程序里<e style="text-decoration: line-through;">（太简陋了）</e>（2024/8/19 因为每个文章界面单独作为page页面，这个问题并不存在），但是目前应该够用了。 \n\n将来的打算是，这个平台作为我发布我文章的地方。<e style="text-decoration: line-through;">微信公众号和知乎我也会同步跟进。</e>（2024/8/19 现不打算同步更新） \n\n但是这个博客与公众号和知乎有什么不同的呢？ \n\n主要是他是我根据我的审美设计的 这样的平台虽然小了，但是却很符合我目前写文章的状态 \n\n也是我的上一次总结里说的，凭借自己的爱好 我是没有盈利的 \n\n当然还有一个原因，有可能其他的平台上我说话有些限制 \n\n在这里就可以发一些我不会在知乎上和公众号上发送的内容 \n\n当然有一些的来源是微信朋友圈 \n\n但是微信朋友圈也有审查（虽然我用的是WeChat账号） 而且传播范围也有限 \n\n所以，博客的计划就这样了 \n\n如果你的编程水平（特别是写网页的）不错 愿意帮我完善这个网站 你可以在"联系"那一栏找到我的微信号和邮箱 \n\n如果你只是单纯的阅读，那也别忘了加个收藏 不然以后就找不到了 （以后肯定会挂域名的，到时候另作通知 \n\n2024/7/26', pinned: true };
-        const commentAreaKey = 'aaab';  //  评论区 key
+        const article = { title: '开启我的个人博客', content: '这是我的第一个个人博客，没有买单独的域名，<e style="text-decoration: line-through;">功能也不齐全（换行的显示还不支持）</e>（2024/8/19 现已支持），而且文章是直接存在网页前端程序里<e style="text-decoration: line-through;">（太简陋了）</e>（2024/8/19 因为每个文章界面单独作为page页面，这个问题并不存在），但是目前应该够用了。 \n\n将来的打算是，这个平台作为我发布我文章的地方。<e style="text-decoration: line-through;">微信公众号和知乎我也会同步跟进。</e>（2024/8/19 现不打算同步更新） \n\n但是这个博客与公众号和知乎有什么不同的呢？……（文本）'};
 
         function processContent(content) {
             return content
@@ -189,40 +125,24 @@
             document.getElementById('article-content').innerHTML = processContent(article.content);
         }
 
-        async function loadComments() {
-            console.log('loadComments 开始执行');
-            const commentsContainer = document.getElementById('comments-container');
-            const commentLoading = document.getElementById('comment-loading');
+            // 动态调整 iframe 高度
+        function resizeIframe(obj) {
+            setTimeout(() => {
+                obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px';
+            }, 200);
+        }
+        function updateCommentIframeTheme() {
+            const commentFrame = document.getElementById('commentFrame');
+            const currentTheme = document.documentElement.getAttribute('data-theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+             commentFrame.src = `https://comment.joyance.page/embed/area/test-1?theme=${currentTheme}&lang=en`;
+        }
 
-             commentLoading.style.display = 'block';
-
-              try {
-                  const res = await fetch('https://comment.joyance.page/embed/area/' + commentAreaKey);
-                if (!res.ok) {
-                    console.error("Fetch error: ", res);
-                    commentsContainer.textContent = '评论加载失败,HTTP状态码:' + res.status;
-                     return;
-                }
-                const html = await res.text();
-                console.log("返回的HTML:", html);
-                commentsContainer.innerHTML = html;
-            } catch (error) {
-                   console.error("Fetch failed:", error);
-                  commentsContainer.textContent = '评论加载出错，请检查控制台';
-            } finally {
-                  commentLoading.style.display = 'none';
-                 console.log('loadComments 执行完毕');
-             }
-          }
-
-       window.onload = async () => {
+        window.onload = function() {
             loadArticle();
-            await loadComments();
+            updateCommentIframeTheme();
         };
-
-
+       window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateCommentIframeTheme);
     </script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/11.1.1/marked.min.js"></script>
-       <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </body>
 </html>
