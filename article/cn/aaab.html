@@ -1,477 +1,149 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="system">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>Comment Area</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.5.0/github-markdown.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/11.1.1/marked.min.js"></script>
+    <title>博客文章</title>
     <style>
+        :root {
+            --background-color: #ffffff;
+            --text-color: #000000;
+            --button-color: #757575;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background-color: #121212;
+                --text-color: #ffffff;
+                --button-color: #9e9e9e;
+            }
+        }
         body {
-            background: var(--bg-color);
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--background-color);
             color: var(--text-color);
-            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .container {
+            max-width: 65%;
+            margin: 0 auto;
             padding: 20px;
-            margin: 0; /* Remove body default margin */
+            box-sizing: border-box;
+        }
+        @media (max-width: 768px) {
+            .container {
+                max-width: 100%;
+                padding: 10px;
+            }
+        }
+        .content {
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+        .back-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--button-color);
+            color: var(--background-color);
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            transition: background-color 0.3s;
+            z-index: 1000;
+        }
+        .back-button:hover {
+            background-color: #616161;
         }
         a {
-            color: var(--link-color);
+            color: inherit;
             text-decoration: none;
+            border-bottom: 1px dotted var(--text-color);
         }
-
-        a:hover {
-            color: var(--link-hover-color);
+        .copy-button {
+            display: inline-block;
+            cursor: pointer;
+            margin-left: 5px;
+            font-size: 0.8em;
+            vertical-align: super;
         }
-
-        .hint {
-            color: var(--hint-color);
-            margin-bottom: 10px;
-        }
-
-        .comment-list {
+        .comment-container {
+            width: 100%;
             margin-top: 20px;
         }
-
-        .comment-item {
-            margin-bottom: 15px;
-            padding: 10px;
-            background: var(--comment-bg-color);
-            border-radius: 4px;
-        }
-
-        .reply-item {
-            margin-left: 20px;
-        }
-
-        .reply-btn,
-        .report-btn,
-        .like-btn {
-            margin-left: 10px;
-            color: var(--hint-color);
-            cursor: pointer;
-            font-size: 12px;
-           display: inline-block;
-        }
-        .like-btn.liked {
-            color: var(--link-color);
-        }
-        .reply-box {
-            margin-top: 5px;
-        }
-
-        .markdown-content {
-            font-size: 14px;
-            color: var(--comment-text-color);
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: row;
-            align-items: flex-start;
-        }
-
-        .form-group textarea {
-            background: var(--input-bg-color);
-            color: var(--text-color);
-            border: 1px solid var(--border-color);
-            padding: 8px;
-            width: calc(100% - 18px);
-            height: 60px;
-            resize: vertical;
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
-
-        .form-group .comment-action {
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            align-items: flex-end;
-        }
-
-        .form-group button {
-            background: var(--button-bg-color);
-            color: var(--button-text-color);
+        .comment-iframe {
+            width: 100%;
             border: none;
-            padding: 6px 10px;
-            cursor: pointer;
-            border-radius: 3px;
-            transition: background 0.3s ease, transform 0.2s ease;
-            margin-left: 5px;
-            font-size: 12px;
-            white-space: nowrap;
+            min-height: 600px; /* 调整高度以适应内容 */
         }
-
-        .form-group button:hover {
-            background: var(--button-hover-color);
-            transform: scale(1.02);
-        }
-
-        .form-group button[disabled] {
-             background: #ddd; /* 禁用状态时的背景色 */
-             color: #999; /* 禁用状态时的文字颜色 */
-             cursor: not-allowed; /* 禁用状态时的鼠标样式 */
-        }
-
-        .form-group button[disabled]:hover {
-            background: #ddd;
-            color: #999;
-            transform: none;
-        }
-        .comment-tip {
-            font-size: 0.8em;
-            color: var(--hint-color);
-            margin-top: 5px;
-            white-space: nowrap;
-        }
-        .cf-challenge {
-             margin-bottom: 10px;
-        }
-    /* 悬浮文本 */
-      .tooltip {
-         position: relative;
-         display: inline-block;
-        }
-     .tooltip .tooltiptext {
-         visibility: hidden;
-          background-color: var(--hint-color);
-         color: var(--text-color);
-         text-align: center;
-         border-radius: 6px;
-          padding: 5px;
-         position: absolute;
-          z-index: 1;
-          bottom: 125%;
-          left: 50%;
-          margin-left: -60px;
-          font-size: 0.8em;
-          white-space: nowrap;
-          opacity: 0;
-          transition: opacity 0.3s;
-        }
-
-    .tooltip:hover .tooltiptext {
-      visibility: visible;
-       opacity: 1;
-        }
-    .notification-bar {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        background: var(--notification-bg-color);
-        color: var(--notification-text-color);
-        padding: 10px 20px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        font-size: 14px;
-        z-index: 9999;
-    }
-
-    .notification-bar.hidden {
-        display: none;
-    }
-
-    .close-btn {
-        cursor: pointer;
-        margin-left: 20px;
-        font-weight: bold;
-    }
-
-     /* 隐藏评论时，仅显示占位/按钮 */
-    .hidden-comment-placeholder {
-         font-style: italic;
-        color: var(--hint-color);
-   }
-    .show-btn {
-       color: var(--link-color);
-        margin-left: 8px;
-      text-decoration: underline;
-      cursor: pointer;
-   }
-    .show-comment-input {
-         margin-top: 10px;
-         text-align: left;
-    }
-    .show-comment-input button {
-        background: var(--button-bg-color);
-         color: var(--button-text-color);
-        border: none;
-       padding: 8px 12px;
-        cursor: pointer;
-        border-radius: 3px;
-      transition: background 0.3s ease, transform 0.2s ease;
-     margin-bottom: 10px;
-   }
-
-   .show-comment-input button:hover {
-      background: var(--button-hover-color);
-        transform: scale(1.02);
-   }
-
-    /* Black, White, Gray */
-    :root {
-       --bg-color: #fff;
-        --text-color: #000;
-       --link-color: #555;
-        --link-hover-color: #222;
-       --input-bg-color: #f0f0f0;
-        --border-color: #ccc;
-        --button-bg-color: #eee;
-        --button-text-color: #333;
-        --button-hover-color: #ddd;
-        --notification-bg-color: #f0f0f0;
-       --notification-text-color: #333;
-        --comment-bg-color: #f9f9f9;
-        ----comment-text-color: #495057;
-        --hint-color: #777;
-    }
-
-    /* System Theme */
-    @media (prefers-color-scheme: dark) {
-        :root {
-          --bg-color: #121212;
-          --text-color: #fff;
-          --link-color: #bbb;
-          --link-hover-color: #fff;
-          --input-bg-color: #1e1e1e;
-          --border-color: #444;
-         --button-bg-color: #333;
-          --button-text-color: #fff;
-         --button-hover-color: #444;
-          --notification-bg-color: #2a2a2a;
-          --notification-text-color: #fff;
-           --comment-bg-color: #1e1e1e;
-          --comment-text-color: #ccc;
-         --hint-color: #aaa;
-      }
-  }
-</style>
+    </style>
 </head>
-<body data-theme="system">
-<div class="show-comment-input" id="showCommentInput">
-    <button id="showInputBtn">Show Comment Input</button>
-</div>
-<div id="commentForm" class="form-group" style="display: none;">
-    <textarea id="newComment" placeholder="Markdown is supported, reply available"></textarea>
-    <div class="comment-action">
-        <input type="hidden" id="parentId" value="0"/>
-        <div class="cf-challenge" data-sitekey="0x4AAAAAAAj5PEZ2S9nG-4jI"  data-theme="auto"></div>
-           <div class="tooltip">
-              <button id="submitBtn" disabled>Submit Comment
-                 <span class="tooltiptext" id="submitTooltip">Name and key are required</span>
-             </button>
-            </div>
-        <div class="comment-tip">Once posted cannot be deleted</div>
+<body>
+    <div class="container">
+        <div class="content">
+            <h1 id="article-title"></h1>
+            <div id="article-content"></div>
+        </div>
+        <!-- 嵌入的评论区域 -->
+        <div class="comment-container">
+            <iframe
+                id="commentFrame"
+                class="comment-iframe"
+                src="https://comment.joyance.page/embed/area/test-area"
+                frameborder="0"
+                allowtransparency="true"
+                onload="resizeIframe(this)">
+            </iframe>
+        </div>
     </div>
-</div>
-<div class="comment-list" id="commentList">Loading...</div>
-<!-- Notification Bar -->
-<div id="notificationBar" class="notification-bar hidden">
-    <span id="notificationText"></span>
-    <span id="closeNotification" class="close-btn">×</span>
-</div>
-<script>
-    const notificationBar = document.getElementById('notificationBar');
-    const notificationText = document.getElementById('notificationText');
-    const closeNotification = document.getElementById('closeNotification');
-    closeNotification.addEventListener('click', () => notificationBar.classList.add('hidden'));
+    <button class="back-button" onclick="window.close()">返回</button>
 
-    function showNotification(msg) {
-        notificationText.textContent = msg;
-        notificationBar.classList.remove('hidden');
-    }
-    let commentList = document.getElementById('commentList');
-    let comments = [];
+    <script>
+        const article = { title: '开启我的个人博客', content: '这是我的第一个个人博客，没有买单独的域名，<e style="text-decoration: line-through;">功能也不齐全（换行的显示还不支持）</e>（2024/8/19 现已支持），而且文章是直接存在网页前端程序里<e style="text-decoration: line-through;">（太简陋了）</e>（2024/8/19 因为每个文章界面单独作为page页面，这个问题并不存在），但是目前应该够用了。 \n\n将来的打算是，这个平台作为我发布我文章的地方。<e style="text-decoration: line-through;">微信公众号和知乎我也会同步跟进。</e>（2024/8/19 现不打算同步更新） \n\n但是这个博客与公众号和知乎有什么不同的呢？……（文本）'};
 
-    async function loadComments() {
-        commentList.textContent = 'Loading...';
-        const areaKey = new URLSearchParams(window.location.search).get('areaKey');
-        if (!areaKey) {
-            commentList.textContent = 'Area key is missing.';
-            return;
+        function processContent(content) {
+            return content
+                .replace(/\[link:(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>')
+                .replace(/\[copy-broad:(.*?)\]/g, '$1<span class="copy-button" onclick="copyText(\'$1\')">📋</span>');
         }
-        const res = await fetch('https://your-worker-url/embed/area/' + encodeURIComponent(areaKey) + '/comments'); // Replace with your actual worker URL
-        if (!res.ok) {
-            commentList.textContent = 'Not Found.';
-            return;
-        }
-        comments = await res.json();
-        renderComments(comments);
-    }
-        // 将平面评论数据组装成树形结构
-    function buildCommentTree(list) {
-        const map = {};
-          list.forEach(c => { map[c.id] = { ...c, replies: [] }; });
-        const roots = [];
-        list.forEach(c => {
-            if (c.parent_id && c.parent_id !== 0) {
-              map[c.parent_id]?.replies.push(map[c.id]);
-            } else {
-                  roots.push(map[c.id]);
-            }
-      });
-        return roots;
-      }
-      // 渲染评论树
-    function renderComments(comments) {
-          commentList.innerHTML = '';
-          if (comments.length === 0) {
-              commentList.textContent = 'No comments yet';
-            return;
-        }
-        const tree = buildCommentTree(comments);
-         tree.forEach(comment => {
-               commentList.appendChild(renderCommentItem(comment));
-         });
-    }
- function renderCommentItem(comment) {
-         const div = document.createElement('div');
-         div.className = 'comment-item' + (comment.parent_id ? ' reply-item' : '');
-           // 如果评论被隐藏
-         if (comment.hidden === 1) {
-          //  普通用户: 仅显示「此评论已被隐藏」，点击「查看」再展开
-           div.innerHTML = `
-                <div class="hidden-comment-placeholder">
-                     This comment has been hidden
-                       <span class="show-btn" onclick="toggleHiddenContent(this, ${comment.id})">View</span>
-                 </div>
-                  <div class="hidden-content" style="display:none;">
-                      <div class="markdown-content markdown-body">${comment.html_content}</div>
-                        <small style="color:#777;">${comment.created_at || ''}</small>
-                        <span class="reply-btn" data-comment-id="${comment.id}">Reply</span>
-                       <span class="report-btn" onclick="reportComment(${comment.id})">Report</span>
-                    </div>
-                `;
-        } else {
-              // 未隐藏
-               div.innerHTML = `
-                  <div class="markdown-content markdown-body">${comment.html_content}</div>
-                    <small style="color:#777;">${comment.created_at || ''}</small>
-                       <span class="reply-btn" data-comment-id="${comment.id}">Reply</span>
-                    <span class="report-btn" onclick="reportComment(${comment.id})">Report</span>
-                       <span class="like-btn" data-comment-id="${comment.id}" onclick="likeComment(${comment.id})">${comment.liked ? 'Liked': 'Like'}${comment.likes > 0 ? `(${comment.likes})`: ''}</span>
-                `;
-         }
-       // 若有子回复
-     if (comment.replies && comment.replies.length > 0) {
-         comment.replies.forEach(r => {
-                div.appendChild(renderCommentItem(r));
-              });
-        }
-           return div;
-       }
 
-      // 前端切换「已隐藏」评论的显示/折叠
-        window.toggleHiddenContent = (trigger, commentId) => {
-          const wrapper = trigger.closest('.hidden-comment-placeholder').nextElementSibling;
-             if (!wrapper) return;
-             const isHidden = (wrapper.style.display === 'none');
-            wrapper.style.display = isHidden ? 'block' : 'none';
-            trigger.textContent = isHidden ? 'Collapse' : 'View';
-      };
-    // 监听输入框
-    const newCommentInput = document.getElementById('newComment');
-    const submitButton = document.getElementById('submitBtn');
-    const submitTooltip = document.getElementById('submitTooltip');
-    const cfChallenge = document.querySelector('.cf-challenge');
-
-   function checkFormValidity() {
-      if(newCommentInput.value.trim() && cfChallenge.querySelector('[name="cf-turnstile-response"]')?.value){
-          submitButton.disabled = false;
-          submitTooltip.style.visibility = 'hidden';
-      } else {
-          submitButton.disabled = true;
-          submitTooltip.style.visibility = 'visible';
-           if(!newCommentInput.value.trim()){
-                submitTooltip.textContent = 'Comment content cannot be empty';
-           } else if(!cfChallenge.querySelector('[name="cf-turnstile-response"]')?.value){
-             submitTooltip.textContent = 'Please complete the verification';
-          }
-      }
-   }
-
- newCommentInput.addEventListener('input', checkFormValidity);
- cfChallenge.addEventListener('DOMSubtreeModified', checkFormValidity);
-
-    // 显示评论输入
-    document.getElementById('showInputBtn').addEventListener('click', () => {
-        document.getElementById('commentForm').style.display = 'flex';
-        document.getElementById('showCommentInput').style.display = 'none';
-    });
-    // 启动回复
-   document.addEventListener('click', e => {
-        if (e.target && e.target.classList.contains('reply-btn')) {
-             const commentId = e.target.dataset.commentId;
-           document.getElementById('parentId').value = commentId;
-            document.getElementById('commentForm').style.display = 'flex';
-            document.getElementById('showCommentInput').style.display = 'none';
-           document.getElementById('newComment').focus();
-        }
-   });
-    // 提交评论
-    submitButton.addEventListener('click', async () => {
-        const content = document.getElementById('newComment').value.trim();
-        const parentId = document.getElementById('parentId').value || '0';
-       if (!content) {
-         showNotification('Comment content cannot be empty');
-           return;
-        }
-        // Turnstile token
-        const token = document.querySelector('[name="cf-turnstile-response"]')?.value || '';
-        const formData = new FormData();
-        formData.append('content', content);
-       formData.append('parent_id', parentId);
-        formData.append('cf-turnstile-response', token);
-        const areaKey = new URLSearchParams(window.location.search).get('areaKey');
-        const res = await fetch('https://comment-new.wfds.workers.dev/embed/area/' + encodeURIComponent(areaKey) + '/comment', {  // Replace with your actual worker URL
-            method: 'POST', body: formData
-        });
-        if (res.ok) {
-            document.getElementById('newComment').value = '';
-            document.getElementById('parentId').value = '0';
-           // 重新获取评论
-            loadComments();
-        } else {
-            showNotification('Failed to submit comment：' + (await res.text()));
-        }
-    });
-        // 点赞评论
-        window.likeComment = async (commentId) => {
-            const areaKey = new URLSearchParams(window.location.search).get('areaKey');
-         const res = await fetch('https://your-worker-url/embed/area/' + encodeURIComponent(areaKey) + '/comment/' + commentId + '/like', { method: 'POST' }); // Replace with your actual worker URL
-           if (res.ok) {
-                // 局部更新
-                const index = comments.findIndex(c => c.id === commentId);
-                if (index !== -1) {
-                  comments[index].liked = !comments[index].liked;
-                  comments[index].likes = comments[index].liked ? comments[index].likes +1 : comments[index].likes -1;
-               }
-             renderComments(comments);
-         } else {
-              showNotification('Failed to like comment：' + (await res.text()));
-            }
-        }
-     // 举报评论
-        window.reportComment = async (commentId) => {
-            const reason = prompt('Report comment:');
-            if (!reason) return;
-            const areaKey = new URLSearchParams(window.location.search).get('areaKey');
-         const formData = new FormData();
-           formData.append('reason', reason);
-            const res = await fetch('https://your-worker-url/embed/area/' + encodeURIComponent(areaKey) + '/comment/' + commentId + '/report', {    // Replace with your actual worker URL
-                method: 'POST',
-                body: formData
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('文本已复制到剪贴板');
+            }).catch(err => {
+                console.error('无法复制文本: ', err);
             });
-            if (res.ok) {
-              showNotification('Reported successfully');
-            } else {
-              showNotification('Failed to report：' + (await res.text()));
-            }
-       }
-    loadComments();
-</script>
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+        }
+
+        function loadArticle() {
+            document.title = article.title;
+            document.getElementById('article-title').textContent = article.title;
+            document.getElementById('article-content').innerHTML = processContent(article.content);
+        }
+
+        // 动态调整 iframe 高度
+        function resizeIframe(obj) {
+           setTimeout(() => {
+               obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px';
+            }, 200);
+        }
+          function updateCommentIframeTheme() {
+            const commentFrame = document.getElementById('commentFrame');
+            const currentTheme = document.documentElement.getAttribute('data-theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+           const currentLang = document.documentElement.lang || 'zh-CN';
+            commentFrame.src = `https://comment.joyance.page/embed/area/test-area?theme=${currentTheme}&lang=${currentLang}`;
+        }
+
+        window.onload = function() {
+            loadArticle();
+             updateCommentIframeTheme();
+        };
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateCommentIframeTheme);
+    </script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </body>
 </html>
