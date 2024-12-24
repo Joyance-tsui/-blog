@@ -129,7 +129,7 @@
 
         // 动态调整 iframe 高度
         function resizeIframe(obj) {
-            setTimeout(() => {
+             setTimeout(() => {
                 obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px';
             }, 200);
         }
@@ -145,6 +145,6 @@
         };
        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateCommentIframeTheme);
     </script>
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer crossorigin="anonymous"></script>
 </body>
 </html>
