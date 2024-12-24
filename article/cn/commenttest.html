@@ -125,7 +125,7 @@
             document.getElementById('article-content').innerHTML = processContent(article.content);
         }
 
-            // 动态调整 iframe 高度
+        // 动态调整 iframe 高度
         function resizeIframe(obj) {
             setTimeout(() => {
                 obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px';
