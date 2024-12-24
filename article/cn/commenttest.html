@@ -75,11 +75,13 @@
             width: 100%;
             margin-top: 20px;
         }
-        .comment-iframe {
+       .comment-iframe {
             width: 100%;
             border: none;
-            min-height: 600px; /* 调整高度以适应内容 */
-        }
+            overflow-y: auto; /* 允许 iframe 内容滚动 */
+            display: block; /* 确保 iframe 占满容器宽度 */
+           min-height: 300px;
+         }
     </style>
 </head>
 <body>
