@@ -75,31 +75,200 @@
             width: 100%;
             margin-top: 20px;
         }
-       .comment-iframe {
-            width: 100%;
-            border: none;
-            overflow-y: auto; /* 允许 iframe 内容滚动 */
-            display: block; /* 确保 iframe 占满容器宽度 */
-           min-height: 300px;
-         }
+       .comment-list {
+           width: 100%;
+            margin-top: 20px;
+             overflow-y: auto;
+        }
+    </style>
+     <style>
+        body {
+            background: var(--bg-color); color: var(--text-color); font-family: sans-serif;
+            padding: 20px;
+            margin: 0; /* 移除 body 的默认 margin */
+        }
+        a { color: var(--link-color); text-decoration: none; }
+        a:hover { color: var(--link-hover-color); }
+        .hint { color: var(--hint-color); margin-bottom: 10px; }
+       .comment-list { margin-top: 20px; }
+        .comment-item {
+            margin-bottom: 15px; padding: 10px; background: var(--comment-bg-color); border-radius: 4px;
+        }
+         .reply-item { margin-left: 20px; }
+      .reply-btn, .report-btn, .like-btn {
+            margin-left: 10px; color: var(--hint-color); cursor: pointer; font-size: 12px;
+            display: inline-block;
+        }
+      .like-btn.liked {
+            color: var(--link-color);
+        }
+        .reply-box { margin-top: 5px; }
+        .markdown-content { font-size: 14px; color: var(--comment-text-color); }
+        .form-group {
+            display:flex;flex-direction:row;align-items: flex-start;
+        }
+        .form-group textarea {
+            background: var(--input-bg-color); color: var(--text-color); border: 1px solid var(--border-color); padding: 8px; width: calc(100% - 18px); height: 60px;
+            resize: vertical; margin-bottom: 10px; font-size: 14px;
+        }
+      .form-group .comment-action {
+            display:flex;flex-direction:column;justify-content: flex-end;align-items: flex-end;
+        }
+        .form-group button {
+            background: var(--button-bg-color); color: var(--button-text-color); border: none; padding: 6px 10px; cursor: pointer; border-radius: 3px;
+            transition: background 0.3s ease, transform 0.2s ease;
+            margin-left: 5px;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+        .form-group button:hover {
+            background: var(--button-hover-color); transform: scale(1.02);
+        }
+        .form-group button[disabled] {
+            background: #ddd; /* 禁用状态时的背景色 */
+            color: #999; /* 禁用状态时的文字颜色 */
+            cursor: not-allowed; /* 禁用状态时的鼠标样式 */
+        }
+        .form-group button[disabled]:hover{
+            background: #ddd; /* 禁用状态时的背景色 */
+            color: #999; /* 禁用状态时的文字颜色 */
+            transform:none;
+        }
+        .comment-tip {
+            font-size: 0.8em;
+            color: var(--hint-color);
+            margin-top: 5px;
+            white-space: nowrap;
+        }
+    .cf-challenge {
+            margin-bottom: 10px;
+        }
+    /* 悬浮文本 */
+    .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+    .tooltip .tooltiptext {
+            visibility: hidden;
+            background-color: var(--hint-color);
+            color: var(--text-color);
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            font-size: 0.8em;
+            white-space: nowrap;
+            opacity: 0;
+        transition: opacity 0.3s;
+        }
+    .tooltip:hover .tooltiptext {
+            visibility: visible;
+           opacity: 1;
+    }
+    .notification-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%; background: var(--notification-bg-color); color: var(--notification-text-color); padding: 10px 20px;
+            display: flex; align-items: center; justify-content: space-between; font-size: 14px; z-index: 9999;
+        }
+        .notification-bar.hidden { display: none; }
+        .close-btn { cursor: pointer; margin-left: 20px; font-weight: bold; }
+        /* 隐藏评论时，仅显示占位/按钮 */
+      .hidden-comment-placeholder {
+            font-style: italic;
+            color: var(--hint-color);
+        }
+      .show-btn {
+            color: var(--link-color);
+            margin-left: 8px;
+          cursor: pointer;
+        }
+      .show-btn:hover {
+            text-decoration: underline;
+        }
+        .show-comment-input {
+            margin-top: 10px;
+            text-align: left;
+        }
+    .show-comment-input button {
+            background: var(--button-bg-color); color: var(--button-text-color); border: none; padding: 8px 12px; cursor: pointer; border-radius: 3px;
+            transition: background 0.3s ease, transform 0.2s ease;
+            margin-bottom: 10px;
+        }
+    .show-comment-input button:hover {
+        background: var(--button-hover-color); transform: scale(1.02);
+        }
+           :root {
+            --bg-color: #121212;
+            --text-color: #fff;
+            --link-color: #bbb;
+            --link-hover-color: #fff;
+            --input-bg-color: #1e1e1e;
+            --border-color: #444;
+            --button-bg-color: #333;
+            --button-text-color: #fff;
+            --button-hover-color: #444;
+           --notification-bg-color: #2a2a2a;
+            --notification-text-color: #fff;
+            --comment-bg-color: #1e1e1e;
+            --comment-text-color:#ccc;
+              --hint-color:#aaa;
+        }
+
+        [data-theme="light"] {
+            --bg-color: #f9f9f9;
+            --text-color: #333;
+            --link-color: #555;
+          --link-hover-color: #000;
+            --input-bg-color: #eee;
+            --border-color: #ccc;
+            --button-bg-color: #ddd;
+            --button-text-color: #333;
+          --button-hover-color: #eee;
+            --notification-bg-color: #f0f0f0;
+            --notification-text-color: #333;
+             --comment-bg-color: #eee;
+            --comment-text-color:#555;
+                --hint-color:#777;
+        }
+        .markdown-content.markdown-body{
+        background-color: inherit;
+        }
     </style>
 </head>
-<body>
+<body data-theme="${theme}">
     <div class="container">
         <div class="content">
             <h1 id="article-title"></h1>
             <div id="article-content"></div>
         </div>
-        <!-- 嵌入的评论区域 -->
-        <div class="comment-container">
-            <iframe
-                id="commentFrame"
-                class="comment-iframe"
-                src=""
-                frameborder="0"
-                allowtransparency="true"
-                onload="resizeIframe(this)">
-            </iframe>
+        <!-- 评论区域 -->
+       <div class="comment-container">
+            <div class="show-comment-input" id="showCommentInput">
+                <button id="showInputBtn">Show Comment Input</button>
+            </div>
+            <div id="commentForm" class="form-group" style="display: none;">
+                <textarea id="newComment" placeholder="Markdown is supported, reply available"></textarea>
+                <div class="comment-action">
+                    <input type="hidden" id="parentId" value="0" />
+                    <div class="cf-challenge" data-sitekey="${env.TURNSTILE_SITEKEY || ''}" data-theme="auto" style="display:none;"></div>
+                    <div class="tooltip">
+                    <button id="submitBtn" disabled>Submit Comment
+                        <span class="tooltiptext" id="submitTooltip">Name and key are required</span>
+                    </button>
+                    </div>
+                    <div class="comment-tip">Once posted cannot be deleted</div>
+                </div>
+            </div>
+             <div class="comment-list" id="commentList">Loading...</div>
+           
+              <!-- 通知栏 -->
+              <div id="notificationBar" class="notification-bar hidden">
+                <span id="notificationText"></span>
+                    <span id="closeNotification" class="close-btn">×</span>
+                </div>
         </div>
     </div>
     <button class="back-button" onclick="window.close()">返回</button>
@@ -126,24 +295,244 @@
             document.getElementById('article-title').textContent = article.title;
             document.getElementById('article-content').innerHTML = processContent(article.content);
         }
-
-        // 动态调整 iframe 高度
-        function resizeIframe(obj) {
-             setTimeout(() => {
-                obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px';
-            }, 200);
+         let commentList =  document.getElementById('commentList');
+        let comments = []; // 缓存评论数据
+        async function loadComments() {
+             commentList.textContent = 'Loading...';
+             const res = await fetch('/embed/area/test-1/comments');
+            if (!res.ok) {
+                commentList.textContent = 'Not Found';
+              return;
+            }
+             comments = await res.json();
+              renderComments(comments);
         }
-        function updateCommentIframeTheme() {
-            const commentFrame = document.getElementById('commentFrame');
-            const currentTheme = document.documentElement.getAttribute('data-theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-             commentFrame.src = `https://comment.joyance.page/embed/area/test-1?theme=${currentTheme}&lang=en`;
+        function buildCommentTree(list) {
+           const map = {};
+             list.forEach(c => { map[c.id] = { ...c, replies: [] }; });
+             const roots = [];
+            list.forEach(c => {
+                if (c.parent_id && c.parent_id !== 0) {
+                   map[c.parent_id]?.replies.push(map[c.id]);
+                } else {
+                       roots.push(map[c.id]);
+                }
+           });
+            return roots;
         }
-
-        window.onload = function() {
-            loadArticle();
-            updateCommentIframeTheme();
+      
+        // 渲染评论树
+        function renderComments(comments) {
+                commentList.innerHTML = '';
+            if (comments.length === 0) {
+                    commentList.textContent = 'No comments yet';
+                return;
+            }
+          const tree = buildCommentTree(comments);
+            tree.forEach(comment => {
+                    commentList.appendChild(renderCommentItem(comment));
+            });
+        }
+          function renderCommentItem(comment) {
+            const div = document.createElement('div');
+            div.className = 'comment-item' + (comment.parent_id ? ' reply-item' : '');
+              // 如果评论被隐藏
+          if (comment.hidden === 1) {
+           
+                // 普通用户: 仅显示「此评论已被隐藏」，点击「查看」再展开
+                div.innerHTML = `
+                  <div class="hidden-comment-placeholder">
+                      This comment has been hidden
+                        <span class="show-btn" onclick="toggleHiddenContent(this, \${comment.id})">View</span>
+                    </div>
+                <div class="hidden-content" style="display:none;">
+                        <div class="markdown-content markdown-body">\${comment.html_content}</div>
+                    <small style="color:#777;">\${comment.created_at || ''}</small>
+                        <span class="reply-btn" data-comment-id="\${comment.id}"  style="text-decoration: none;">Reply</span>
+                    <span class="report-btn" onclick="reportComment(\${comment.id})" style="text-decoration: none;">Report</span>
+                 </div>
+                `;
+           
+          } else {
+              // 未隐藏
+               div.innerHTML = `
+                    <div class="markdown-content markdown-body">\${comment.html_content}</div>
+                      <small style="color:#777;">\${comment.created_at || ''}</small>
+                        <span class="reply-btn" data-comment-id="\${comment.id}"  style="text-decoration: none;">Reply</span>
+                    <span class="report-btn" onclick="reportComment(\${comment.id})" style="text-decoration: none;">Report</span>
+                    <span class="like-btn" data-comment-id="\${comment.id}" onclick="likeComment(\${comment.id})" style="text-decoration: none;">\${comment.liked ? 'Liked': 'Like'}\${comment.likes > 0 ? \`(\${comment.likes})\`: ''}</span>
+           
+            `;
+          }
+       // 若有子回复
+          if (comment.replies && comment.replies.length > 0) {
+                comment.replies.forEach(r => {
+                        div.appendChild(renderCommentItem(r));
+               });
+          }
+            return div;
+        }
+        
+        // 前端切换「已隐藏」评论的显示/折叠
+        window.toggleHiddenContent = (trigger, commentId) => {
+            const wrapper = trigger.closest('.hidden-comment-placeholder').nextElementSibling;
+             if (!wrapper) return;
+            const isHidden = (wrapper.style.display === 'none');
+              wrapper.style.display = isHidden ? 'block' : 'none';
+                trigger.textContent = isHidden ? 'Collapse' : 'View';
         };
-       window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateCommentIframeTheme);
+         // 监听输入框
+        const newCommentInput = document.getElementById('newComment');
+          const submitButton = document.getElementById('submitBtn');
+        const submitTooltip = document.getElementById('submitTooltip');
+        const cfChallenge = document.querySelector('.cf-challenge');
+     function checkFormValidity() {
+         if(newCommentInput.value.trim() && cfChallenge.querySelector('[name="cf-turnstile-response"]')?.value){
+                submitButton.disabled = false;
+               submitTooltip.style.visibility = 'hidden';
+           } else {
+                submitButton.disabled = true;
+                submitTooltip.style.visibility = 'visible';
+             if(!newCommentInput.value.trim()){
+                    submitTooltip.textContent = 'Comment content cannot be empty';
+              } else if(!cfChallenge.querySelector('[name="cf-turnstile-response"]')?.value){
+                    submitTooltip.textContent = 'Please complete verification';
+               }
+           }
+       }
+  newCommentInput.addEventListener('input', checkFormValidity);
+  cfChallenge.addEventListener('DOMSubtreeModified', checkFormValidity);
+        // 显示评论输入
+          document.getElementById('showInputBtn').addEventListener('click', () => {
+           document.getElementById('commentForm').style.display = 'flex';
+           document.getElementById('showCommentInput').style.display = 'none';
+             // 初始化 Turnstile
+            const challengeDiv = document.querySelector('.cf-challenge');
+             challengeDiv.innerHTML = '';
+                challengeDiv.style.display = 'block';
+            if (window.turnstile) {
+                 turnstile.render(challengeDiv, {
+                  sitekey: '${env.TURNSTILE_SITEKEY || ''}',
+                    theme: 'auto',
+                });
+           } else {
+               document.addEventListener('turnstile-ready', () => {
+                 turnstile.render(challengeDiv, {
+                   sitekey: '${env.TURNSTILE_SITEKEY || ''}',
+                     theme: 'auto',
+                    });
+                });
+            }
+        });
+     // 启动回复
+    document.addEventListener('click', e => {
+          if (e.target && e.target.classList.contains('reply-btn')) {
+                const commentId = e.target.dataset.commentId;
+                 document.getElementById('parentId').value = commentId;
+               document.getElementById('commentForm').style.display = 'flex';
+                document.getElementById('showCommentInput').style.display = 'none';
+            document.getElementById('newComment').focus();
+               // 初始化 Turnstile
+                 const challengeDiv = document.querySelector('.cf-challenge');
+                 challengeDiv.innerHTML = '';
+                  challengeDiv.style.display = 'block';
+            if (window.turnstile) {
+                 turnstile.render(challengeDiv, {
+                  sitekey: '${env.TURNSTILE_SITEKEY || ''}',
+                    theme: 'auto',
+                });
+           } else {
+               document.addEventListener('turnstile-ready', () => {
+                 turnstile.render(challengeDiv, {
+                   sitekey: '${env.TURNSTILE_SITEKEY || ''}',
+                     theme: 'auto',
+                    });
+                });
+            }
+        }
+    });
+       
+        // 提交评论
+        submitButton.addEventListener('click', async () => {
+            const content = document.getElementById('newComment').value.trim();
+            const parentId = document.getElementById('parentId').value || '0';
+            if (!content) {
+                showNotification('Comment content cannot be empty');
+                return;
+            }
+      // Turnstile token
+            const token = document.querySelector('[name="cf-turnstile-response"]')?.value || '';
+            const formData = new FormData();
+            formData.append('content', content);
+            formData.append('parent_id', parentId);
+            formData.append('cf-turnstile-response', token);
+          const res = await fetch('/embed/area/test-1/comment', { method: 'POST', body: formData });
+            if (res.ok) {
+                  document.getElementById('newComment').value = '';
+                document.getElementById('parentId').value = '0';
+                   // 重新获取评论
+                 const res = await fetch('/embed/area/test-1/comments');
+                 if (!res.ok) {
+                        showNotification('Failed to submit comment：' + (await res.text()));
+                       return;
+                }
+               comments = await res.json();
+                renderComments(comments);
+            // 隐藏并重置 Turnstile
+            const challengeDiv = document.querySelector('.cf-challenge');
+            challengeDiv.style.display = 'none';
+           setTimeout(() => {
+              challengeDiv.innerHTML = '';
+             challengeDiv.style.display = 'block';
+                // 重新渲染 Turnstile
+                  turnstile.render(challengeDiv, {
+                    sitekey: '${env.TURNSTILE_SITEKEY || ''}',
+                    theme: 'auto',
+                  });
+              }, 100);
+            } else {
+                  showNotification('Failed to submit comment：' + (await res.text()));
+            }
+        });
+       // 点赞评论
+        window.likeComment = async (commentId) => {
+             const res = await fetch('/embed/area/test-1/comment/' + commentId + '/like', { method: 'POST' });
+             if (res.ok) {
+                  // 局部更新
+                    const index = comments.findIndex(c => c.id === commentId);
+                     if (index !== -1) {
+                            comments[index].liked = !comments[index].liked;
+                            comments[index].likes = comments[index].liked ? comments[index].likes +1 : comments[index].likes -1;
+                     }
+                  renderComments(comments);
+            } else {
+                showNotification('Operation failed：' + (await res.text()));
+            }
+        }
+        // 举报评论
+        window.reportComment = async (commentId) => {
+            const reason = prompt('Report Comment:');
+            if (!reason) return;
+            const formData = new FormData();
+            formData.append('reason', reason);
+           const res = await fetch('/embed/area/test-1/comment/' + commentId + '/report', {
+                method: 'POST',
+                   body: formData
+            });
+            if (res.ok) {
+                 showNotification('Reported successfully');
+             } else {
+                  showNotification('Failed to report：' + (await res.text()));
+            }
+        }
+      loadArticle();
+      loadComments();
+       function updateCommentIframeTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+              document.documentElement.setAttribute('data-theme', currentTheme);
+        }
+    updateCommentIframeTheme();
+   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateCommentIframeTheme);
     </script>
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer crossorigin="anonymous"></script>
 </body>
