@@ -81,7 +81,7 @@
              overflow-y: auto;
         }
     </style>
-     <style>
+    <style>
         body {
             background: var(--bg-color); color: var(--text-color); font-family: sans-serif;
             padding: 20px;
@@ -214,7 +214,7 @@
                 --notification-text-color: #fff;
                 --comment-bg-color: #1e1e1e;
                  --comment-text-color:#ccc;
-                  --hint-color:#aaa;
+                 --hint-color:#aaa;
             }
 
             [data-theme="light"] {
@@ -229,7 +229,7 @@
               --button-hover-color: #eee;
                --notification-bg-color: #f0f0f0;
                 --notification-text-color: #333;
-                --comment-bg-color: #eee;
+                 --comment-bg-color: #eee;
                  --comment-text-color:#555;
                   --hint-color:#777;
             }
@@ -253,7 +253,7 @@
                 <textarea id="newComment" placeholder="Markdown is supported, reply available"></textarea>
                 <div class="comment-action">
                     <input type="hidden" id="parentId" value="0" />
-                    <div class="cf-challenge" data-sitekey="${env.TURNSTILE_SITEKEY || ''}" data-theme="auto" style="display:none;"></div>
+                    <div class="cf-challenge" data-theme="auto" style="display:none;"></div>
                     <div class="tooltip">
                     <button id="submitBtn" disabled>Submit Comment
                         <span class="tooltiptext" id="submitTooltip">Name and key are required</span>
@@ -380,12 +380,12 @@
               wrapper.style.display = isHidden ? 'block' : 'none';
                 trigger.textContent = isHidden ? 'Collapse' : 'View';
         };
-
          // 监听输入框
         const newCommentInput = document.getElementById('newComment');
           const submitButton = document.getElementById('submitBtn');
         const submitTooltip = document.getElementById('submitTooltip');
         const cfChallenge = document.querySelector('.cf-challenge');
+      let sitekey = '';
      function checkFormValidity() {
          if(newCommentInput.value.trim() && cfChallenge.querySelector('[name="cf-turnstile-response"]')?.value){
                 submitButton.disabled = false;
@@ -412,13 +412,13 @@
                 challengeDiv.style.display = 'block';
             if (window.turnstile) {
                  turnstile.render(challengeDiv, {
-                  sitekey: '${env.TURNSTILE_SITEKEY || ''}',
+                  sitekey: sitekey,
                     theme: 'auto',
                 });
            } else {
                document.addEventListener('turnstile-ready', () => {
                  turnstile.render(challengeDiv, {
-                   sitekey: '${env.TURNSTILE_SITEKEY || ''}',
+                   sitekey: sitekey,
                      theme: 'auto',
                     });
                 });
@@ -438,13 +438,13 @@
                   challengeDiv.style.display = 'block';
             if (window.turnstile) {
                  turnstile.render(challengeDiv, {
-                  sitekey: '${env.TURNSTILE_SITEKEY || ''}',
+                  sitekey: sitekey,
                     theme: 'auto',
                 });
            } else {
                document.addEventListener('turnstile-ready', () => {
                  turnstile.render(challengeDiv, {
-                   sitekey: '${env.TURNSTILE_SITEKEY || ''}',
+                   sitekey: sitekey,
                      theme: 'auto',
                     });
                 });
@@ -486,7 +486,7 @@
               challengeDiv.style.display = 'block';
                // 重新渲染 Turnstile
                 turnstile.render(challengeDiv, {
-                    sitekey: '${env.TURNSTILE_SITEKEY || ''}',
+                    sitekey: sitekey,
                     theme: 'auto',
                 });
           }, 100);
@@ -534,6 +534,21 @@ if (res.ok) {
         }
     updateCommentIframeTheme();
    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateCommentIframeTheme);
+     sitekey = '${env.TURNSTILE_SITEKEY || ''}';
+        const challengeDiv = document.querySelector('.cf-challenge');
+         if (window.turnstile) {
+                 turnstile.render(challengeDiv, {
+                  sitekey: sitekey,
+                    theme: 'auto',
+                });
+           } else {
+               document.addEventListener('turnstile-ready', () => {
+                 turnstile.render(challengeDiv, {
+                   sitekey: sitekey,
+                     theme: 'auto',
+                    });
+                });
+            }
     </script>
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer crossorigin="anonymous"></script>
 </body>
