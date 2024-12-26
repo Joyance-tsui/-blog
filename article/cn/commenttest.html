@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>博客文章</title>
     <style>
-
         :root {
             --background-color: #ffffff;
             --text-color: #000000;
@@ -75,21 +74,13 @@
         .comment-container {
             width: 100%;
             margin-top: 20px;
+            overflow: hidden; /* 隐藏 iframe 滚动条 */
         }
         .comment-iframe {
             width: 100%;
             border: none;
-            min-height: 600px; /* 调整高度以适应内容 */
-        }
-        
-        .comment-container {
-            width: 100%;
-            margin-top: 20px;
-        }
-        .comment-iframe {
-            width: 100%;
-            border: none;
-            min-height: 600px; /* 调整高度以适应内容 */
+            display: block;
+            transition: height 0.3s ease-in-out; /* 可选：添加高度过渡效果 */
         }
     </style>
 </head>
@@ -104,7 +95,7 @@
             <iframe
                 id="commentFrame"
                 class="comment-iframe"
-                src="https://comment.joyance.page/embed/area/test-1"
+                src=""
                 frameborder="0"
                 allowtransparency="true"
                 onload="resizeIframe(this)">
@@ -138,12 +129,34 @@
 
         // 动态调整 iframe 高度
         function resizeIframe(obj) {
-           setTimeout(() => {
-               obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px';
-            }, 200);
+            setTimeout(() => {
+                if (obj && obj.contentWindow && obj.contentWindow.document && obj.contentWindow.document.documentElement) {
+                    obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px';
+                }
+            }, 500); // 增加延迟确保内容加载
         }
 
-        window.onload = loadArticle;
+        function updateCommentIframeTheme() {
+            const commentFrame = document.getElementById('commentFrame');
+            if (!commentFrame) return;
+            const currentTheme = document.documentElement.getAttribute('data-theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            const currentLang = document.documentElement.lang || 'zh-CN';
+            commentFrame.src = `https://comment.joyance.page/embed/area/test-1?theme=${currentTheme}&lang=${currentLang}`;
+        }
+
+        window.onload = function() {
+            loadArticle();
+            updateCommentIframeTheme();
+        };
+
+        // 监听 prefers-color-scheme 变化
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateCommentIframeTheme);
+
+        // 监听页面自身主题变化 (如果你的页面有切换主题的功能)
+        const toggleThemeBtn = document.querySelectorAll('#toggleTheme'); // 假设你的主题切换按钮有这个 ID
+        toggleThemeBtn.forEach(button => {
+            button.addEventListener('click', updateCommentIframeTheme);
+        });
     </script>
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </body>
