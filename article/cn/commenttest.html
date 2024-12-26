@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>博客文章</title>
     <style>
-        :root {
+       :root {
             --background-color: #ffffff;
             --text-color: #000000;
             --button-color: #757575;
@@ -74,13 +74,13 @@
         .comment-container {
             width: 100%;
             margin-top: 20px;
-             /* Removed overflow: hidden; */
         }
          .comment-iframe {
             width: 100%;
             border: none;
              min-height: 600px; /* Set initial height */
              display: block;
+             transition: height 0.3s ease-in-out;
          }
     </style>
 </head>
@@ -147,25 +147,11 @@
             const currentLang = document.documentElement.lang || 'zh-CN';
             commentFrame.src = `https://comment.joyance.page/embed/area/test-1?theme=${currentTheme}&lang=${currentLang}`;
         }
-         function fixLikeButton(){
-             const commentFrame = document.getElementById('commentFrame');
-                if (!commentFrame) return;
-            commentFrame.contentWindow.likeComment = async (commentId) => {
-            const isEmbed = window.self !== window.top;
-           let baseUrl = location.origin;
-           const res = await fetch( baseUrl + '/area/test-1/comment/' + commentId + '/like', { method: 'POST' });
-                 if (res.ok) {
-                      commentFrame.contentWindow.location.reload();
-            } else {
-               commentFrame.contentWindow.showNotification('Operation failed: ' + (await res.text()));
-            }
-         }
-    }
+          
         window.onload = function() {
             loadArticle();
             updateCommentIframeTheme();
-              fixLikeButton();
-        };
+         };
 
         // 监听 prefers-color-scheme 变化
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateCommentIframeTheme);
