@@ -74,7 +74,7 @@
         .comment-container {
             width: 100%;
             margin-top: 20px;
-            overflow: hidden; /* 隐藏 iframe 滚动条 */
+             overflow: hidden; /* 隐藏 iframe 滚动条 */
         }
         .comment-iframe {
             width: 100%;
@@ -126,19 +126,23 @@
             document.getElementById('article-title').textContent = article.title;
             document.getElementById('article-content').innerHTML = processContent(article.content);
         }
-
-        // 动态调整 iframe 高度
         function resizeIframe(obj) {
-            setTimeout(() => {
-                if (obj && obj.contentWindow && obj.contentWindow.document && obj.contentWindow.document.documentElement) {
-                    obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px';
-                }
-            }, 500); // 增加延迟确保内容加载
-        }
+            // This function is now empty, as height is handled by postMessage.
+          }
+
+         // Attach event listener for postMessage
+         window.addEventListener('message', function (event) {
+           if (event.data.type === 'iframeHeight') {
+             const iframe = document.getElementById('commentFrame');
+             if (iframe) {
+               iframe.style.height = event.data.height + 'px';
+             }
+           }
+         });
 
         function updateCommentIframeTheme() {
             const commentFrame = document.getElementById('commentFrame');
-            if (!commentFrame) return;
+             if (!commentFrame) return;
             const currentTheme = document.documentElement.getAttribute('data-theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
             const currentLang = document.documentElement.lang || 'zh-CN';
             commentFrame.src = `https://comment.joyance.page/embed/area/test-1?theme=${currentTheme}&lang=${currentLang}`;
@@ -150,7 +154,7 @@
         };
 
         // 监听 prefers-color-scheme 变化
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateCommentIframeTheme);
+         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateCommentIframeTheme);
 
         // 监听页面自身主题变化 (如果你的页面有切换主题的功能)
         const toggleThemeBtn = document.querySelectorAll('#toggleTheme'); // 假设你的主题切换按钮有这个 ID
