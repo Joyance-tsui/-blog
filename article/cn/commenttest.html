@@ -74,13 +74,15 @@
         .comment-container {
             width: 100%;
             margin-top: 20px;
-             overflow: hidden; /* 隐藏 iframe 滚动条 */
+            overflow: hidden; /* 隐藏 iframe 滚动条 */
+           min-height: 200px; /* Set initial height */
         }
         .comment-iframe {
             width: 100%;
             border: none;
             display: block;
             transition: height 0.3s ease-in-out; /* 可选：添加高度过渡效果 */
+            min-height: 200px; /* Set initial height */
         }
     </style>
 </head>
@@ -162,6 +164,6 @@
             button.addEventListener('click', updateCommentIframeTheme);
         });
     </script>
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </body>
 </html>
