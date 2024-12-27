@@ -1,200 +1,524 @@
-<!DOCTYPE html>
-<html lang="zh">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>博客文章</title>
-    <style>
-       :root {
-            --background-color: #ffffff;
-            --text-color: #000000;
-            --button-color: #757575;
-        }
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --background-color: #121212;
-                --text-color: #ffffff;
-                --button-color: #9e9e9e;
-            }
-        }
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        .container {
-            max-width: 65%;
-            margin: 0 auto;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        @media (max-width: 768px) {
-            .container {
-                max-width: 100%;
-                padding: 10px;
-            }
-        }
-        .content {
-            line-height: 1.6;
-            white-space: pre-wrap;
-        }
-        .back-button {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: var(--button-color);
-            color: var(--background-color);
-            border: none;
-            border-radius: 4px;
-            padding: 8px 16px;
-            font-size: 16px;
-            cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-            transition: background-color 0.3s;
-            z-index: 1000;
-        }
-        .back-button:hover {
-            background-color: #616161;
-        }
-        a {
-            color: inherit;
-            text-decoration: none;
-            border-bottom: 1px dotted var(--text-color);
-        }
-        .copy-button {
-            display: inline-block;
-            cursor: pointer;
-            margin-left: 5px;
-            font-size: 0.8em;
-            vertical-align: super;
-        }
-        .comment-container {
-            width: 100%;
-            margin-top: 20px;
-        }
-         .comment-iframe {
-            width: 100%;
-            border: none;
-             min-height: 600px; /* Set initial height */
-             display: block;
-             transition: height 0.3s ease-in-out;
-         }
-       .like-btn.liked {
-            color: var(--link-color);
-           transition: transform 0.2s ease;
-        }
-       .like-btn:not(.liked):hover {
-           transform: scale(1.05);
-       }
+ // 新增：处理嵌入评论区的函数
+  async function handleEmbedCommentArea(areaKey, request, env, lang, theme) {
+    const t = i18n['en'];
+    const area = await env.DB.prepare(`
+    SELECT * FROM comment_areas WHERE area_key = ?
+    `).bind(areaKey).first();
 
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="content">
-            <h1 id="article-title"></h1>
-            <div id="article-content"></div>
-        </div>
-        <!-- 嵌入的评论区域 -->
-        <div class="comment-container">
-            <iframe
-                id="commentFrame"
-                class="comment-iframe"
-                src=""
-                frameborder="0"
-                allowtransparency="true"
-                onload="resizeIframe(this)">
-            </iframe>
-        </div>
-    </div>
-    <button class="back-button" onclick="window.close()">返回</button>
-
-    <script>
-        const article = { title: '开启我的个人博客', content: '这是我的第一个个人博客，没有买单独的域名，<e style="text-decoration: line-through;">功能也不齐全（换行的显示还不支持）</e>（2024/8/19 现已支持），而且文章是直接存在网页前端程序里<e style="text-decoration: line-through;">（太简陋了）</e>（2024/8/19 因为每个文章界面单独作为page页面，这个问题并不存在），但是目前应该够用了。 \n\n将来的打算是，这个平台作为我发布我文章的地方。<e style="text-decoration: line-through;">微信公众号和知乎我也会同步跟进。</e>（2024/8/19 现不打算同步更新） \n\n但是这个博客与公众号和知乎有什么不同的呢？……（文本）'};
-
-        function processContent(content) {
-            return content
-                .replace(/\[link:(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>')
-                .replace(/\[copy-broad:(.*?)\]/g, '$1<span class="copy-button" onclick="copyText(\'$1\')">📋</span>');
-        }
-
-        function copyText(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                alert('文本已复制到剪贴板');
-            }).catch(err => {
-                console.error('无法复制文本: ', err);
-            });
-        }
-
-        function loadArticle() {
-            document.title = article.title;
-            document.getElementById('article-title').textContent = article.title;
-            document.getElementById('article-content').innerHTML = processContent(article.content);
-        }
-        function resizeIframe(obj) {
-            // This function is now empty, as height is handled by postMessage.
+    if (!area || area.hidden === 1) {
+      return new Response("Comment area not available", { status: 404 });
+    }
+  const html = `
+  <!DOCTYPE html>
+  <html lang="en" data-theme="${theme}">
+  <head>
+      <meta charset="UTF-8">
+      <title>${t.comment_title} - ${escapeHtml(area.name)}</title>
+      <meta name="viewport" content="width=device-width,initial-scale=1.0">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.5.0/github-markdown.min.css" crossorigin="anonymous">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/11.1.1/marked.min.js" crossorigin="anonymous"></script>
+      <style>
+          body {
+              background: var(--bg-color); color: var(--text-color); font-family: sans-serif;
+              padding: 20px;
+              margin: 0; /* 移除 body 的默认 margin */
           }
-
-         // Attach event listener for postMessage
-         window.addEventListener('message', function (event) {
-           if (event.data.type === 'iframeHeight') {
-             const iframe = document.getElementById('commentFrame');
-             if (iframe) {
-               iframe.style.height = event.data.height + 'px';
-             }
-           }
-           if (event.data.type === 'likeComment') {
-               const commentId = event.data.commentId;
-               likeComment(commentId);
-           }
-         });
-
-        function updateCommentIframeTheme() {
-            const commentFrame = document.getElementById('commentFrame');
-             if (!commentFrame) return;
-            const currentTheme = document.documentElement.getAttribute('data-theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-            const currentLang = document.documentElement.lang || 'zh-CN';
-            commentFrame.src = `https://comment.joyance.page/embed/area/test-1?theme=${currentTheme}&lang=${currentLang}`;
-        }
-
-         // 在这里定义 likeComment 函数
-        async function likeComment(commentId) {
-          const res = await fetch(`https://comment.joyance.page/area/test-1/comment/${commentId}/like`, { method: 'POST' });
-          if (res.ok) {
-              const data = await res.json();
-              if (data.success) {
-                 //  给iframe发消息，更新点赞状态
-                    document.getElementById('commentFrame').contentWindow.postMessage({
-                      type: 'updateLikeUI',
-                     commentId: data.commentId,
-                    liked: data.liked,
-                   likes: data.likes,
-               }, '*');
-           } else {
-                   console.error('点赞失败:', await res.text());
+          a { color: var(--link-color); text-decoration: none; }
+          a:hover { color: var(--link-hover-color); }
+          .hint { color: var(--hint-color); margin-bottom: 10px; }
+          .comment-list { margin-top: 20px; }
+          .comment-item {
+              margin-bottom: 15px; padding: 10px; background: var(--comment-bg-color); border-radius: 4px;
+          }
+           .reply-item { margin-left: 20px; }
+        .reply-btn, .report-btn, .like-btn {
+              margin-left: 10px; color: var(--hint-color); cursor: pointer; font-size: 12px;
+              display: inline-block;
+          }
+        .like-btn.liked {
+              color: var(--link-color);
+          }
+          .reply-box { margin-top: 5px; }
+          .markdown-content { font-size: 14px; color: var(--comment-text-color); }
+          .form-group {
+              display:flex;flex-direction:row;align-items: flex-start;
+          }
+          .form-group textarea {
+              background: var(--input-bg-color); color: var(--text-color); border: 1px solid var(--border-color); padding: 8px; width: calc(100% - 18px); height: 60px;
+              resize: vertical; margin-bottom: 10px; font-size: 14px;
+          }
+        .form-group .comment-action {
+              display:flex;flex-direction:column;justify-content: flex-end;align-items: flex-end;
+          }
+          .form-group button {
+              background: var(--button-bg-color); color: var(--button-text-color); border: none; padding: 6px 10px; cursor: pointer; border-radius: 3px;
+              transition: background 0.3s ease, transform 0.2s ease;
+              margin-left: 5px;
+              font-size: 12px;
+              white-space: nowrap;
+          }
+          .form-group button:hover {
+              background: var(--button-hover-color); transform: scale(1.02);
+          }
+          .form-group button[disabled] {
+              background: #ddd; /* 禁用状态时的背景色 */
+              color: #999; /* 禁用状态时的文字颜色 */
+              cursor: not-allowed; /* 禁用状态时的鼠标样式 */
+          }
+          .form-group button[disabled]:hover{
+              background: #ddd; /* 禁用状态时的背景色 */
+              color: #999; /* 禁用状态时的文字颜色 */
+              transform:none;
+          }
+          .comment-tip {
+              font-size: 0.8em;
+              color: var(--hint-color);
+              margin-top: 5px;
+              white-space: nowrap;
+          }
+      .cf-challenge {
+              margin-bottom: 10px;
+          }
+      /* 悬浮文本 */
+      .tooltip {
+              position: relative;
+              display: inline-block;
+          }
+      .tooltip .tooltiptext {
+              visibility: hidden;
+              background-color: var(--hint-color);
+              color: var(--text-color);
+              text-align: center;
+              border-radius: 6px;
+              padding: 5px;
+              position: absolute;
+              z-index: 1;
+              bottom: 125%;
+              left: 50%;
+              margin-left: -60px;
+              font-size: 0.8em;
+              white-space: nowrap;
+              opacity: 0;
+          transition: opacity 0.3s;
+          }
+      .tooltip:hover .tooltiptext {
+              visibility: visible;
+             opacity: 1;
+      }
+      .notification-bar {
+              position: fixed; bottom: 0; left: 0; width: 100%; background: var(--notification-bg-color); color: var(--notification-text-color); padding: 10px 20px;
+              display: flex; align-items: center; justify-content: space-between; font-size: 14px; z-index: 9999;
+          }
+          .notification-bar.hidden { display: none; }
+          .close-btn { cursor: pointer; margin-left: 20px; font-weight: bold; }
+          /* 隐藏评论时，仅显示占位/按钮 */
+        .hidden-comment-placeholder {
+              font-style: italic;
+              color: var(--hint-color);
+          }
+        .show-btn {
+              color: var(--link-color);
+              margin-left: 8px;
+            cursor: pointer;
+          }
+        .show-btn:hover {
+              text-decoration: underline;
+          }
+          .show-comment-input {
+              margin-top: 10px;
+              text-align: left;
+          }
+      .show-comment-input button {
+              background: var(--button-bg-color); color: var(--button-text-color); border: none; padding: 8px 12px; cursor: pointer; border-radius: 3px;
+              transition: background 0.3s ease, transform 0.2s ease;
+              margin-bottom: 10px;
+          }
+      .show-comment-input button:hover {
+          background: var(--button-hover-color); transform: scale(1.02);
+          }
+          /* 深浅色主题 */
+             :root {
+              --bg-color: #121212;
+                  --text-color: #fff;
+                  --link-color: #bbb;
+                  --link-hover-color: #fff;
+                  --input-bg-color: #1e1e1e;
+                  --border-color: #444;
+                  --button-bg-color: #333;
+                  --button-text-color: #fff;
+                  --button-hover-color: #444;
+                 --notification-bg-color: #2a2a2a;
+                  --notification-text-color: #fff;
+                  --comment-bg-color: #1e1e1e;
+                   --comment-text-color:#ccc;
+                    --hint-color:#aaa;
               }
 
-          } else {
-              console.error('点赞失败:', await res.text());
-           }
+              [data-theme="light"] {
+                --bg-color: #f9f9f9;
+                  --text-color: #333;
+                  --link-color: #555;
+                --link-hover-color: #000;
+                  --input-bg-color: #eee;
+                  --border-color: #ccc;
+                  --button-bg-color: #ddd;
+                  --button-text-color: #333;
+                --button-hover-color: #eee;
+                 --notification-bg-color: #f0f0f0;
+                  --notification-text-color: #333;
+                  --comment-bg-color: #eee;
+                   --comment-text-color:#555;
+                  --hint-color:#777;
+              }
+           .markdown-content.markdown-body{
+          background-color: inherit;
+          }
+       /*点赞动画*/
+        .like-btn.liked {
+            color: var(--link-color);
+          }
+        .like-btn.like-animating {
+            transform: scale(1.2); /* 放大效果 */
+            transition: transform 0.1s ease; /* 设置过渡效果 */
         }
-        window.onload = function() {
-            loadArticle();
-            updateCommentIframeTheme();
-         };
+      </style>
+  </head>
+  <body data-theme="${theme}">
+  <div class="top-actions" style="text-align: right;">
+      <button id="toggleTheme">${theme === 'light' ? t.dark : t.light}</button>
+      <button id="toggleLang">${lang === 'zh-CN' ? 'EN' : '中文'}</button>
+  </div>
+  <div class="show-comment-input" id="showCommentInput">
+  <button id="showInputBtn">${t.show_comment_input}</button>
+  </div>
+  <div id="commentForm" class="form-group" style="display: none;">
+          <textarea id="newComment" placeholder="${t.comment_placeholder}"></textarea>
+          <div class="comment-action">
+              <input type="hidden" id="parentId" value="0" />
+              <div class="cf-challenge" data-sitekey="${env.TURNSTILE_SITEKEY || ''}" data-theme="${theme}" style="display:none;"></div>
+              <div class="tooltip">
+             <button id="submitBtn" disabled>${t.submit_comment_btn}
+                      <span class="tooltiptext" id="submitTooltip">${t.notification_missing_input}</span>
+                  </button>
+             </div>
+              <div class="comment-tip">${t.comment_tip}</div>
+          </div>
+  </div>
+  <div class="comment-list" id="commentList">${t.loading}</div>
+    <!-- 通知栏 -->
+    <div id="notificationBar" class="notification-bar hidden">
+          <span id="notificationText"></span>
+              <span id="closeNotification" class="close-btn">×</span>
+      </div>
+      <script>
+        function sendHeight() {
+             const height = document.documentElement.scrollHeight;
+             window.parent.postMessage({ type: 'iframeHeight', height }, '*');
+           }
+        sendHeight();
+         window.addEventListener('load', sendHeight);
+         window.addEventListener('resize', sendHeight);
+          const notificationBar = document.getElementById('notificationBar');
+          const notificationText = document.getElementById('notificationText');
+            const closeNotification = document.getElementById('closeNotification');
+           closeNotification.addEventListener('click', () => notificationBar.classList.add('hidden'));
+          function showNotification(msg) {
+              notificationText.textContent = msg;
+              notificationBar.classList.remove('hidden');
+          }
+          let commentList =  document.getElementById('commentList');
+          let comments = []; // 缓存评论数据
+          async function loadComments() {
+              commentList.textContent = '${t.loading}';
+                const res = await fetch('/area/${areaKey}/comments');
+              if (!res.ok) {
+                  commentList.textContent = '${t.notification_not_found}';
+                return;
+              }
+              comments = await res.json();
+                renderComments(comments);
+          }
+           // 将平面评论数据组装成树形结构
+          function buildCommentTree(list) {
+             const map = {};
+               list.forEach(c => { map[c.id] = { ...c, replies: [] }; });
+               const roots = [];
+              list.forEach(c => {
+                  if (c.parent_id && c.parent_id !== 0) {
+                     map[c.parent_id]?.replies.push(map[c.id]);
+                  } else {
+                         roots.push(map[c.id]);
+                  }
+             });
+              return roots;
+          }
+          // 判断是否登录管理员
+              const authed = document.cookie.includes('auth=1');
+          // 渲染评论树
+          function renderComments(comments) {
+                  commentList.innerHTML = '';
+              if (comments.length === 0) {
+                      commentList.textContent = '${t.no_comments}';
+                  return;
+              }
+            const tree = buildCommentTree(comments);
+              tree.forEach(comment => {
+                      commentList.appendChild(renderCommentItem(comment));
+              });
+          }
+          function renderCommentItem(comment) {
+              const div = document.createElement('div');
+              div.className = 'comment-item' + (comment.parent_id ? ' reply-item' : '');
+                // 如果评论被隐藏
+            if (comment.hidden === 1) {
 
-        // 监听 prefers-color-scheme 变化
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateCommentIframeTheme);
+                  // 普通用户: 仅显示「此评论已被隐藏」，点击「查看」再展开
+                  div.innerHTML = \`
+                    <div class="hidden-comment-placeholder">
+                        ${t.comment_hidden}
+                          <span class="show-btn" onclick="toggleHiddenContent(this, \${comment.id})">${t.view_comment}</span>
+                      </div>
+                  <div class="hidden-content" style="display:none;">
+                          <div class="markdown-content markdown-body">\${comment.html_content}</div>
+                      <small style="color:#777;">\${comment.created_at || ''}</small>
+                          <span class="reply-btn" data-comment-id="\${comment.id}"  style="text-decoration: none;">${t.reply_btn}</span>
+                      <span class="report-btn" onclick="reportComment(\${comment.id})" style="text-decoration: none;">${t.report_comment}</span>
+                   </div>
+                  \`;
 
-        // 监听页面自身主题变化 (如果你的页面有切换主题的功能)
-        const toggleThemeBtn = document.querySelectorAll('#toggleTheme'); // 假设你的主题切换按钮有这个 ID
-        toggleThemeBtn.forEach(button => {
-            button.addEventListener('click', updateCommentIframeTheme);
+            } else {
+                // 未隐藏
+                 div.innerHTML = \`
+                      <div class="markdown-content markdown-body">\${comment.html_content}</div>
+                        <small style="color:#777;">\${comment.created_at || ''}</small>
+                          <span class="reply-btn" data-comment-id="\${comment.id}"  style="text-decoration: none;">${t.reply_btn}</span>
+                      <span class="report-btn" onclick="reportComment(\${comment.id})" style="text-decoration: none;">${t.report_comment}</span>
+                      <span class="like-btn \${comment.liked ? 'liked' : ''}" data-comment-id="\${comment.id}" onclick="likeComment(\${comment.id},this)" style="text-decoration: none;">\${comment.liked ? '${t.liked}': '${t.like}'}\${comment.likes > 0 ? \`(\${comment.likes})\`: ''}</span>
+              \`;
+            }
+         // 若有子回复
+            if (comment.replies && comment.replies.length > 0) {
+                  comment.replies.forEach(r => {
+                          div.appendChild(renderCommentItem(r));
+                 });
+            }
+              return div;
+          }
+
+          // 前端切换「已隐藏」评论的显示/折叠
+          window.toggleHiddenContent = (trigger, commentId) => {
+              const wrapper = trigger.closest('.hidden-comment-placeholder').nextElementSibling;
+               if (!wrapper) return;
+              const isHidden = (wrapper.style.display === 'none');
+                wrapper.style.display = isHidden ? 'block' : 'none';
+                  trigger.textContent = isHidden ? '${t.collapse_comment}' : '${t.view_comment}';
+          };
+
+           // 监听输入框
+          const newCommentInput = document.getElementById('newComment');
+            const submitButton = document.getElementById('submitBtn');
+          const submitTooltip = document.getElementById('submitTooltip');
+          const cfChallenge = document.querySelector('.cf-challenge');
+       function checkFormValidity() {
+           if(newCommentInput.value.trim()){
+                  submitButton.disabled = false;
+                 submitTooltip.style.visibility = 'hidden';
+             } else {
+                  submitButton.disabled = true;
+                  submitTooltip.style.visibility = 'visible';
+               if(!newCommentInput.value.trim()){
+                      submitTooltip.textContent = '${t.notification_comment_missing_content}';
+                }
+             }
+         }
+    newCommentInput.addEventListener('input', checkFormValidity);
+          // 显示评论输入
+            document.getElementById('showInputBtn').addEventListener('click', () => {
+             document.getElementById('commentForm').style.display = 'flex';
+             document.getElementById('showCommentInput').style.display = 'none';
+               // 初始化 Turnstile
+              const challengeDiv = document.querySelector('.cf-challenge');
+               challengeDiv.innerHTML = '';
+                  challengeDiv.style.display = 'block';
+              if (window.turnstile) {
+                   turnstile.render(challengeDiv, {
+                    sitekey: '${env.TURNSTILE_SITEKEY || ''}',
+                         theme: '${theme}',
+                  });
+             } else {
+                 document.addEventListener('turnstile-ready', () => {
+                   turnstile.render(challengeDiv, {
+                     sitekey: '${env.TURNSTILE_SITEKEY || ''}',
+                         theme: '${theme}',
+                      });
+                  });
+              }
+          });
+       // 启动回复
+      document.addEventListener('click', e => {
+            if (e.target && e.target.classList.contains('reply-btn')) {
+                  const commentId = e.target.dataset.commentId;
+                   document.getElementById('parentId').value = commentId;
+                 document.getElementById('commentForm').style.display = 'flex';
+                  document.getElementById('showCommentInput').style.display = 'none';
+              document.getElementById('newComment').focus();
+                 // 初始化 Turnstile
+                   const challengeDiv = document.querySelector('.cf-challenge');
+                   challengeDiv.innerHTML = '';
+                    challengeDiv.style.display = 'block';
+              if (window.turnstile) {
+                   turnstile.render(challengeDiv, {
+                    sitekey: '${env.TURNSTILE_SITEKEY || ''}',
+                         theme: '${theme}',
+                  });
+             } else {
+                 document.addEventListener('turnstile-ready', () => {
+                   turnstile.render(challengeDiv, {
+                     sitekey: '${env.TURNSTILE_SITEKEY || ''}',
+                         theme: '${theme}',
+                      });
+                  });
+              }
+          }
+      });
+
+          // 提交评论
+          submitButton.addEventListener('click', async () => {
+              const content = document.getElementById('newComment').value.trim();
+              const parentId = document.getElementById('parentId').value || '0';
+              if (!content) {
+                  showNotification('${t.notification_comment_missing_content}');
+                  return;
+              }
+        // Turnstile token
+              const token = document.querySelector('[name="cf-turnstile-response"]')?.value || '';
+              const formData = new FormData();
+              formData.append('content', content);
+              formData.append('parent_id', parentId);
+              formData.append('cf-turnstile-response', token);
+            const res = await fetch('/area/${areaKey}/comment', { method: 'POST', body: formData });
+            if (res.ok) {
+                  document.getElementById('newComment').value = '';
+                document.getElementById('parentId').value = '0';
+                   // 重新获取评论
+                 const res = await fetch('/area/${areaKey}/comments');
+                 if (!res.ok) {
+                        showNotification('${t.notification_comment_submit_failed}：' + (await res.text()));
+                       return;
+                }
+               comments = await res.json();
+                renderComments(comments);
+            // 隐藏并重置 Turnstile
+            const challengeDiv = document.querySelector('.cf-challenge');
+            challengeDiv.style.display = 'none';
+           setTimeout(() => {
+              challengeDiv.innerHTML = '';
+             challengeDiv.style.display = 'block';
+                // 重新渲染 Turnstile
+                  turnstile.render(challengeDiv, {
+                    sitekey: '${env.TURNSTILE_SITEKEY || ''}',
+                       theme: '${theme}',
+                  });
+              }, 100);
+            } else {
+                  showNotification('${t.notification_comment_submit_failed}：' + (await res.text()));
+            }
         });
+       // 点赞评论
+        window.likeComment = async (commentId, target) => {
+            target.classList.add('like-animating');
+             window.parent.postMessage({ type: 'likeComment', commentId: commentId }, '*');
+           // 添加动画结束后的移除类名
+            setTimeout(()=> {
+                target.classList.remove('like-animating');
+            }, 100);
+
+        }
+        // 举报评论
+        window.reportComment = async (commentId) => {
+            const reason = prompt('${t.report_comment}:');
+            if (!reason) return;
+             const isEmbed = window.self !== window.top;
+            const baseUrl = isEmbed ? location.origin + '/embed' : '';
+            const formData = new FormData();
+            formData.append('reason', reason);
+           const res = await fetch(baseUrl + '/area/${areaKey}/comment/' + commentId + '/report', {
+                method: 'POST',
+                   body: formData
+            });
+            if (res.ok) {
+                 showNotification('${t.notification_report_success}');
+             } else {
+                  showNotification('${t.notification_report_failed}：' + (await res.text()));
+            }
+        }
+        // 处理点赞状态更新
+        window.addEventListener('message', (event) => {
+            if(event.data.type === 'updateLikeState'){
+                 const commentId = event.data.commentId;
+                 const liked = event.data.liked;
+                // 更新对应的 like-btn
+                const likeBtn = document.querySelector(`.like-btn[data-comment-id="${commentId}"]`);
+                if(likeBtn){
+                   if(liked){
+                      likeBtn.classList.add('liked');
+                      likeBtn.textContent = '${t.liked}' + (likeBtn.textContent.match(/(\(\d+\))/) ? likeBtn.textContent.match(/(\(\d+\))/)[0] :'') ;
+                    } else {
+                       likeBtn.classList.remove('liked');
+                         likeBtn.textContent = '${t.like}' + (likeBtn.textContent.match(/(\(\d+\))/) ? likeBtn.textContent.match(/(\(\d+\))/)[0] :'');
+                   }
+
+                 }
+            }
+        })
+      loadComments();
+      // 初始化主题和语言
+      document.documentElement.setAttribute('data-theme', '${theme}');
+      document.documentElement.lang = '${lang}';
+       // 切换主题
+const toggleThemeBtn = document.getElementById('toggleTheme');
+if(toggleThemeBtn){
+toggleThemeBtn.addEventListener('click', async () => {
+const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+const res = await fetch('/setTheme', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ theme: newTheme }) });
+if (res.ok) {
+document.documentElement.setAttribute('data-theme', newTheme);
+toggleThemeBtn.textContent = newTheme === 'light' ? '${t.dark}' : '${t.light}';
+} else {
+showNotification('${t.notification_toggle_failed}：' + (await res.text()));
+}
+});
+}
+
+// 切换语言
+const toggleLangBtn = document.getElementById('toggleLang');
+if(toggleLangBtn){
+toggleLangBtn.addEventListener('click', async () => {
+const currentLang = document.documentElement.lang || 'zh-CN';
+const newLang = currentLang === 'zh-CN' ? 'en' : 'zh-CN';
+const res = await fetch('/setLang', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ lang: newLang }) });
+if(res.ok){
+document.documentElement.lang = newLang;
+toggleLangBtn.textContent = newLang === 'zh-CN' ? 'EN' : '中文';
+    location.reload();
+}   else {
+showNotification('${t.notification_toggle_failed}：' + (await res.text()));
+}
+});
+}
     </script>
-     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </body>
-</html>
+  </html>
+  <script>
+  </script>
+    `;
+    return new Response(html, {
+        headers: { 'Content-Type': 'text/html;charset=UTF-8',
+            'Access-Control-Allow-Origin': '*', // Allow any origin
+            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type'
+        },
+    });
+}
