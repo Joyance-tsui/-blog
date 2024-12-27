@@ -82,6 +82,14 @@
              display: block;
              transition: height 0.3s ease-in-out;
          }
+       .like-btn.liked {
+            color: var(--link-color);
+           transition: transform 0.2s ease;
+        }
+       .like-btn:not(.liked):hover {
+           transform: scale(1.05);
+       }
+
     </style>
 </head>
 <body>
@@ -142,11 +150,6 @@
                const commentId = event.data.commentId;
                likeComment(commentId);
            }
-           // 监听 iframe 的 reloadComments 消息
-            if (event.data.type === 'reloadComments') {
-              updateCommentIframeTheme();
-            }
-
          });
 
         function updateCommentIframeTheme() {
@@ -158,15 +161,26 @@
         }
 
          // 在这里定义 likeComment 函数
-           async function likeComment(commentId) {
-              const res = await fetch(`https://comment.joyance.page/area/test-1/comment/${commentId}/like`, { method: 'POST' });
-                 if (res.ok) {
-                     //  成功点赞后，可以给iframe发消息，让其更新评论列表
-                     document.getElementById('commentFrame').contentWindow.postMessage({ type: 'reloadComments' }, '*');
-                 } else {
-                     console.error('点赞失败:', await res.text());
-                 }
+        async function likeComment(commentId) {
+          const res = await fetch(`https://comment.joyance.page/area/test-1/comment/${commentId}/like`, { method: 'POST' });
+          if (res.ok) {
+              const data = await res.json();
+              if (data.success) {
+                 //  给iframe发消息，更新点赞状态
+                    document.getElementById('commentFrame').contentWindow.postMessage({
+                      type: 'updateLikeUI',
+                     commentId: data.commentId,
+                    liked: data.liked,
+                   likes: data.likes,
+               }, '*');
+           } else {
+                   console.error('点赞失败:', await res.text());
+              }
+
+          } else {
+              console.error('点赞失败:', await res.text());
            }
+        }
         window.onload = function() {
             loadArticle();
             updateCommentIframeTheme();
