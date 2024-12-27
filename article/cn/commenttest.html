@@ -138,6 +138,10 @@
                iframe.style.height = event.data.height + 'px';
              }
            }
+           if (event.data.type === 'likeComment') {
+               const commentId = event.data.commentId;
+               likeComment(commentId);
+           }
          });
 
         function updateCommentIframeTheme() {
@@ -147,7 +151,17 @@
             const currentLang = document.documentElement.lang || 'zh-CN';
             commentFrame.src = `https://comment.joyance.page/embed/area/test-1?theme=${currentTheme}&lang=${currentLang}`;
         }
-          
+
+         // 在这里定义 likeComment 函数
+           async function likeComment(commentId) {
+              const res = await fetch(`https://comment.joyance.page/area/test-1/comment/${commentId}/like`, { method: 'POST' });
+                 if (res.ok) {
+                      //  成功点赞后，可以给iframe发消息，让其更新评论列表
+                       document.getElementById('commentFrame').contentWindow.postMessage({ type: 'reloadComments' }, '*');
+                 } else {
+                     console.error('点赞失败:', await res.text());
+                 }
+           }
         window.onload = function() {
             loadArticle();
             updateCommentIframeTheme();
