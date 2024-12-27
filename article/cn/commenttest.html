@@ -71,18 +71,11 @@
             font-size: 0.8em;
             vertical-align: super;
         }
-        .comment-container {
+       .comment-container {
             width: 100%;
             margin-top: 20px;
         }
-         .comment-iframe {
-            width: 100%;
-            border: none;
-             min-height: 600px; /* Set initial height */
-             display: block;
-             transition: height 0.3s ease-in-out;
-         }
-       /*点赞动画*/
+         /*点赞动画*/
         .like-btn.liked {
             color: var(--link-color);
           }
@@ -99,15 +92,8 @@
             <div id="article-content"></div>
         </div>
         <!-- 嵌入的评论区域 -->
-        <div class="comment-container">
-            <iframe
-                id="commentFrame"
-                class="comment-iframe"
-                src=""
-                frameborder="0"
-                allowtransparency="true"
-                onload="resizeIframe(this)">
-            </iframe>
+        <div class="comment-container" id="commentSection">
+            Loading comments...
         </div>
     </div>
     <button class="back-button" onclick="window.close()">返回</button>
@@ -134,58 +120,317 @@
             document.getElementById('article-title').textContent = article.title;
             document.getElementById('article-content').innerHTML = processContent(article.content);
         }
-        function resizeIframe(obj) {
-            // This function is now empty, as height is handled by postMessage.
-          }
 
-         // Attach event listener for postMessage
-         window.addEventListener('message', function (event) {
-           if (event.data.type === 'iframeHeight') {
-             const iframe = document.getElementById('commentFrame');
-             if (iframe) {
-               iframe.style.height = event.data.height + 'px';
-             }
-           }
-           if (event.data.type === 'likeComment') {
-               const commentId = event.data.commentId;
-               likeComment(commentId);
-           }
-         });
+        async function loadCommentSection() {
+            const commentSection = document.getElementById('commentSection');
+            try {
+                const response = await fetch('https://comment.joyance.page/embed/area/test-1');
+                if (!response.ok) {
+                    commentSection.textContent = 'Failed to load comments.';
+                    return;
+                }
+                const html = await response.text();
+                commentSection.innerHTML = html;
 
-        function updateCommentIframeTheme() {
-            const commentFrame = document.getElementById('commentFrame');
-             if (!commentFrame) return;
-            const currentTheme = document.documentElement.getAttribute('data-theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-            const currentLang = document.documentElement.lang || 'zh-CN';
-            commentFrame.src = `https://comment.joyance.page/embed/area/test-1?theme=${currentTheme}&lang=${currentLang}`;
+                // Re-attach event listeners for dynamic content (important!)
+                attachCommentEventListeners();
+
+            } catch (error) {
+                commentSection.textContent = 'Failed to load comments.';
+                console.error(error);
+            }
         }
 
-         // 在这里定义 likeComment 函数
-          async function likeComment(commentId) {
-                const res = await fetch(`https://comment.joyance.page/area/test-1/comment/${commentId}/like`, { method: 'POST' });
-                if(res.ok) {
-                    const data = await res.json();
-                     //  成功点赞后，更新 iframe 中对应的按钮状态
-                    document.getElementById('commentFrame').contentWindow.postMessage({ type: 'updateLikeState', commentId, liked: data.liked},'*')
-                  } else {
-                    console.error('点赞失败:', await res.text());
-                }
+        function attachCommentEventListeners() {
+             document.querySelectorAll('.reply-btn').forEach(button => {
+                button.addEventListener('click', handleReply);
+            });
+            document.querySelectorAll('.report-btn').forEach(button => {
+                button.addEventListener('click', handleReport);
+            });
+            document.querySelectorAll('.like-btn').forEach(button => {
+                 button.addEventListener('click', handleLike);
+            });
+          document.querySelectorAll('#showInputBtn').forEach(button => {
+              button.addEventListener('click', handleShowInput);
+          })
+           document.querySelectorAll('#submitBtn').forEach(button => {
+              button.addEventListener('click', handleSubmit);
+          })
+           document.querySelectorAll('.close-btn').forEach(button => {
+               button.addEventListener('click', handleCloseNotification);
+           })
+            // ... other event listeners for dynamically loaded content
+        }
+        function handleShowInput(event){
+            const showCommentInput = event.target.closest('.show-comment-input');
+           const commentForm = document.getElementById('commentForm');
+            if(showCommentInput) {
+                showCommentInput.style.display = 'none';
+                 commentForm.style.display = 'flex';
+                 // 初始化 Turnstile
+               const challengeDiv = document.querySelector('.cf-challenge');
+                challengeDiv.innerHTML = '';
+                   challengeDiv.style.display = 'block';
+               if (window.turnstile) {
+                    turnstile.render(challengeDiv, {
+                     sitekey: '1x00000000000000000000AA', // TODO: env.TURNSTILE_SITEKEY
+                          theme: 'auto',
+                   });
+              } else {
+                  document.addEventListener('turnstile-ready', () => {
+                    turnstile.render(challengeDiv, {
+                      sitekey: '1x00000000000000000000AA', // TODO: env.TURNSTILE_SITEKEY
+                        theme: 'auto',
+                       });
+                   });
+               }
+             }
+        }
+        function handleCloseNotification(event){
+           const notificationBar =  event.target.closest('.notification-bar');
+             if(notificationBar){
+                notificationBar.classList.add('hidden')
+             }
+        }
+        function handleSubmit(event){
+             const submitButton = event.target;
+            const commentForm = document.getElementById('commentForm');
+               const newCommentInput = document.getElementById('newComment');
+                const parentIdInput = document.getElementById('parentId');
+               const cfResponse = document.querySelector('[name="cf-turnstile-response"]')?.value;
 
+               const content = newCommentInput.value.trim();
+               const parentId = parentIdInput.value || '0';
+           if (!content) {
+            showNotification('Comment content cannot be empty');
+              return;
+          }
+           if(!cfResponse) {
+               showNotification('Please complete the verification');
+                return;
+            }
+            submitButton.disabled = true;
+              // Turnstile token
+           const formData = new FormData();
+           formData.append('content', content);
+           formData.append('parent_id', parentId);
+           formData.append('cf-turnstile-response', cfResponse);
+               
+            fetch(location.origin + `/area/test-1/comment`, {
+                method: 'POST', body: formData
+                }).then(res => {
+                if (res.ok) {
+                    newCommentInput.value = '';
+                    parentIdInput.value = '0';
+                   // 重新获取评论
+                   return fetch(location.origin + '/area/test-1/comments').then(res => {
+                            if (!res.ok) {
+                              showNotification('Failed to submit comment:' + res.text());
+                                return;
+                         }
+                          return res.json();
+                        }).then(comments => {
+                            const commentList = document.getElementById('commentList');
+                              commentList.innerHTML = '';
+                            renderComments(comments);
+                            
+                            // 隐藏并重置 Turnstile
+                             const challengeDiv = document.querySelector('.cf-challenge');
+                             challengeDiv.style.display = 'none';
+                            setTimeout(() => {
+                                challengeDiv.innerHTML = '';
+                                challengeDiv.style.display = 'block';
+                                 // 重新渲染 Turnstile
+                                   turnstile.render(challengeDiv, {
+                                       sitekey: '1x00000000000000000000AA',// TODO: env.TURNSTILE_SITEKEY,
+                                       theme: 'auto',
+                                   });
+                            }, 100);
+                         })
+                } else {
+                   showNotification('Failed to submit comment:' + res.text());
+                  }
+            }).catch(err => {
+                showNotification('Failed to submit comment:' + err);
+            }).finally(() => {
+             submitButton.disabled = false;
+            });
+        }
+          function showNotification(msg) {
+            const notificationBar = document.getElementById('notificationBar');
+            const notificationText = document.getElementById('notificationText');
+               notificationText.textContent = msg;
+               notificationBar.classList.remove('hidden');
+        }
+      function renderComments(comments) {
+       const commentList =  document.getElementById('commentList');
+           commentList.innerHTML = '';
+            if (comments.length === 0) {
+                   commentList.textContent = 'No comments yet';
+                return;
+            }
+          const tree = buildCommentTree(comments);
+            tree.forEach(comment => {
+                commentList.appendChild(renderCommentItem(comment));
+            });
+        }
+          // 将平面评论数据组装成树形结构
+        function buildCommentTree(list) {
+            const map = {};
+            list.forEach(c => { map[c.id] = { ...c, replies: [] }; });
+            const roots = [];
+            list.forEach(c => {
+                if (c.parent_id && c.parent_id !== 0) {
+                    map[c.parent_id]?.replies.push(map[c.id]);
+                } else {
+                    roots.push(map[c.id]);
+                }
+            });
+            return roots;
+        }
+        function renderCommentItem(comment) {
+           const div = document.createElement('div');
+           div.className = 'comment-item' + (comment.parent_id ? ' reply-item' : '');
+           // 如果评论被隐藏
+           if (comment.hidden === 1) {
+                // 管理员可直接查看原文，普通用户默认折叠
+                   // 普通用户: 仅显示「此评论已被隐藏」，点击「查看」再展开
+                div.innerHTML = `
+                <div class="hidden-comment-placeholder">
+                    This comment has been hidden
+                      <span class="show-btn" onclick="toggleHiddenContent(this, ${comment.id})">View</span>
+                  </div>
+               <div class="hidden-content" style="display:none;">
+                     <div class="markdown-content markdown-body">${comment.html_content}</div>
+                    <small style="color:#777;">${comment.created_at || ''}</small>
+                   <span class="reply-btn" data-comment-id="${comment.id}"  style="text-decoration: none;">Reply</span>
+                    <span class="report-btn" onclick="reportComment(${comment.id})" style="text-decoration: none;">Report</span>
+                 </div>
+                `;
+            } else {
+                // 未隐藏
+                   div.innerHTML = `
+                        <div class="markdown-content markdown-body">${comment.html_content}</div>
+                        <small style="color:#777;">${comment.created_at || ''}</small>
+                        <span class="reply-btn" data-comment-id="${comment.id}" style="text-decoration: none;">Reply</span>
+                      <span class="report-btn" onclick="reportComment(${comment.id})" style="text-decoration: none;">Report</span>
+                       <span class="like-btn" data-comment-id="${comment.id}" onclick="likeComment(${comment.id}, this)" style="text-decoration: none;">${comment.liked ? 'Liked': 'Like'}${comment.likes > 0 ? `(${comment.likes})`: ''}</span>
+                 `;
+            }
+            // 若有子回复
+          if (comment.replies && comment.replies.length > 0) {
+               comment.replies.forEach(r => {
+                       div.appendChild(renderCommentItem(r));
+               });
            }
+           return div;
+       }
+    // 前端切换「已隐藏」评论的显示/折叠
+   window.toggleHiddenContent = (trigger, commentId) => {
+       const wrapper = trigger.closest('.hidden-comment-placeholder').nextElementSibling;
+        if (!wrapper) return;
+       const isHidden = (wrapper.style.display === 'none');
+         wrapper.style.display = isHidden ? 'block' : 'none';
+           trigger.textContent = isHidden ? 'Collapse' : 'View';
+   };
+
+   function handleReply(event) {
+            // ... your reply handling logic (similar to what was in the iframe)
+             const commentId = event.target.dataset.commentId;
+               document.getElementById('parentId').value = commentId;
+             const commentForm = document.getElementById('commentForm');
+                const showCommentInput = document.querySelector('.show-comment-input');
+                 showCommentInput.style.display = 'none';
+                  commentForm.style.display = 'flex';
+                  document.getElementById('newComment').focus();
+                 // 初始化 Turnstile
+               const challengeDiv = document.querySelector('.cf-challenge');
+                challengeDiv.innerHTML = '';
+                   challengeDiv.style.display = 'block';
+               if (window.turnstile) {
+                    turnstile.render(challengeDiv, {
+                     sitekey: '1x00000000000000000000AA', // TODO: env.TURNSTILE_SITEKEY
+                          theme: 'auto',
+                   });
+              } else {
+                  document.addEventListener('turnstile-ready', () => {
+                    turnstile.render(challengeDiv, {
+                      sitekey: '1x00000000000000000000AA', // TODO: env.TURNSTILE_SITEKEY
+                        theme: 'auto',
+                       });
+                   });
+               }
+        }
+
+    function handleReport(event) {
+        // ... your report handling logic
+        const commentId = event.target.dataset.commentId;
+        reportComment(commentId); // Assuming reportComment is now in this scope
+    }
+
+   // Function to like a comment
+   async function likeComment(commentId, button) {
+       button.classList.add('like-animating'); // 添加动画 class
+
+       try {
+           const response = await fetch(location.origin + `/area/test-1/comment/${commentId}/like`, { method: 'POST' });
+           if (response.ok) {
+            // Optimistically update the like count and appearance
+            const likeCountSpan = button.textContent.match(/\((\d+)\)/);
+            let currentCount = likeCountSpan ? parseInt(likeCountSpan[1]) : 0;
+             const liked = !button.classList.contains('liked'); // Assuming 'liked' class toggles
+             if (liked) {
+                currentCount++;
+                 button.classList.add('liked');
+                   button.textContent = `Liked${currentCount > 0 ? `(${currentCount})` : ''}`;
+            } else {
+                   currentCount--;
+                   button.classList.remove('liked');
+                     button.textContent = `Like${currentCount > 0 ? `(${currentCount})` : ''}`;
+             }
+           } else {
+               console.error('Failed to like comment:', await response.text());
+               // Optionally show an error message
+           }
+       } catch (error) {
+           console.error('Error liking comment:', error);
+           // Optionally show an error message
+       } finally {
+           setTimeout(() => {
+               button.classList.remove('like-animating'); // 移除动画 class
+           }, 100); // 动画时长后移除
+       }
+   }
+
+    // Existing reportComment function (move it outside window.onload)
+    async function reportComment(commentId) {
+        const reason = prompt('Report comment:');
+        if (!reason) return;
+        const formData = new FormData();
+        formData.append('reason', reason);
+        try {
+            const res = await fetch(location.origin + `/area/test-1/comment/${commentId}/report`, {
+                method: 'POST',
+                body: formData
+            });
+            if (res.ok) {
+                alert('Reported successfully!');
+            } else {
+                alert('Failed to report: ' + await res.text());
+            }
+        } catch (error) {
+            console.error('Error reporting comment:', error);
+            alert('Failed to report comment.');
+        }
+    }
         window.onload = function() {
             loadArticle();
-            updateCommentIframeTheme();
-         };
-
+            loadCommentSection();
+          };
         // 监听 prefers-color-scheme 变化
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateCommentIframeTheme);
-
-        // 监听页面自身主题变化 (如果你的页面有切换主题的功能)
-        const toggleThemeBtn = document.querySelectorAll('#toggleTheme'); // 假设你的主题切换按钮有这个 ID
-        toggleThemeBtn.forEach(button => {
-            button.addEventListener('click', updateCommentIframeTheme);
-        });
+         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', loadCommentSection);
     </script>
-     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </body>
 </html>
