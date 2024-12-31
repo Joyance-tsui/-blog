@@ -87,7 +87,7 @@
         <div class="content">
             <h1 id="article-title"></h1>
             <div id="article-content"></div>
-        </div>
+                </div>
         <!-- 嵌入的评论区域 -->
         <div class="comment-container">
             <iframe
@@ -95,8 +95,7 @@
                 class="comment-iframe"
                 src="https://comment.joyance.page/embed/area/test-area"
                 frameborder="0"
-                allowtransparency="true"
-                onload="resizeIframe(this)">
+                allowtransparency="true">
             </iframe>
         </div>
     </div>
@@ -126,17 +125,22 @@
         }
 
         // 动态调整 iframe 高度
-        function resizeIframe(obj) {
-            setTimeout(() => {
-                obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px';
-            }, 200);
+        function resizeIframe(obj, height) {
+            obj.style.height = height + 'px';
         }
           function updateCommentIframeTheme() {
             const commentFrame = document.getElementById('commentFrame');
-            const currentTheme = document.documentElement.getAttribute('data-theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-             const currentLang = document.documentElement.lang || 'zh-CN';
+             const currentTheme = document.documentElement.getAttribute('data-theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            const currentLang = document.documentElement.lang || 'zh-CN';
             commentFrame.src = `https://comment.joyance.page/embed/area/test-area?theme=${currentTheme}&lang=${currentLang}`;
         }
+        window.addEventListener('message', function(event) {
+            if (event.data.type === 'iframe-resize' && event.origin === 'https://comment.joyance.page') {
+             const iframe = document.getElementById('commentFrame');
+            if (event.data.id === 'test-area')
+                resizeIframe(iframe, event.data.height);
+            }
+        });
 
         window.onload = function() {
             loadArticle();
