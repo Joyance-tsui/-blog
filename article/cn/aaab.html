@@ -93,7 +93,7 @@
             <iframe
                 id="commentFrame"
                 class="comment-iframe"
-                src="https://comment.joyance.page/embed/area/test-1"
+                src="https://comment.joyance.page/embed/area/aaab"
                 frameborder="0"
                 allowtransparency="true">
             </iframe>
@@ -102,7 +102,7 @@
     <button class="back-button" onclick="window.close()">返回</button>
 
     <script>
-        const article = { title: '开启我的个人博客', content: '这是我的第一个个人博客，没有买单独的域名，<e style="text-decoration: line-through;">功能也不齐全（换行的显示还不支持）</e>（2024/8/19 现已支持），而且文章是直接存在网页前端程序里<e style="text-decoration: line-through;">（太简陋了）</e>（2024/8/19 因为每个文章界面单独作为page页面，这个问题并不存在），但是目前应该够用了。 \n\n将来的打算是，这个平台作为我发布我文章的地方。<e style="text-decoration: line-through;">微信公众号和知乎我也会同步跟进。</e>（2024/8/19 现不打算同步更新） \n\n但是这个博客与公众号和知乎有什么不同的呢？……（文本）'};
+        const article = { title: '开启我的个人博客', content: '这是我的第一个个人博客，没有买单独的域名，<e style="text-decoration: line-through;">功能也不齐全（换行的显示还不支持）</e>（2024/8/19 现已支持），而且文章是直接存在网页前端程序里<e style="text-decoration: line-through;">（太简陋了）</e>（2024/8/19 因为每个文章界面单独作为page页面，这个问题并不存在），但是目前应该够用了。 \n\n将来的打算是，这个平台作为我发布我文章的地方。<e style="text-decoration: line-through;">微信公众号和知乎我也会同步跟进。</e>（2024/8/19 现不打算同步更新） \n\n但是这个博客与公众号和知乎有什么不同的呢？ \n\n主要是他是我根据我的审美设计的 这样的平台虽然小了，但是却很符合我目前写文章的状态 \n\n也是我的上一次总结里说的，凭借自己的爱好 我是没有盈利的 \n\n当然还有一个原因，有可能其他的平台上我说话有些限制 \n\n在这里就可以发一些我不会在知乎上和公众号上发送的内容 \n\n当然有一些的来源是微信朋友圈 \n\n但是微信朋友圈也有审查（虽然我用的是WeChat账号） 而且传播范围也有限 \n\n所以，博客的计划就这样了 \n\n如果你的编程水平（特别是写网页的）不错 愿意帮我完善这个网站 你可以在"联系"那一栏找到我的微信号和邮箱 \n\n如果你只是单纯的阅读，那也别忘了加个收藏 不然以后就找不到了 （以后肯定会挂域名的，到时候另作通知 \n\n2024/7/26'};
 
         function processContent(content) {
             return content
@@ -132,7 +132,7 @@
             const commentFrame = document.getElementById('commentFrame');
               const currentTheme = document.documentElement.getAttribute('data-theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
             const currentLang = document.documentElement.lang || 'zh-CN';
-            commentFrame.src = `https://comment.joyance.page/embed/area/test-1?theme=${currentTheme}&lang=${currentLang}`;
+            commentFrame.src = `https://comment.joyance.page/embed/area/aaab?theme=${currentTheme}&lang=${currentLang}`;
         }
         window.addEventListener('message', function(event) {
             console.log('Message Received:', event);
