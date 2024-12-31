@@ -93,7 +93,7 @@
             <iframe
                 id="commentFrame"
                 class="comment-iframe"
-                src="https://comment.joyance.page/embed/area/test-area"
+                src="https://comment.joyance.page/embed/area/test-1"
                 frameborder="0"
                 allowtransparency="true">
             </iframe>
@@ -135,7 +135,7 @@
             commentFrame.src = `https://comment.joyance.page/embed/area/test-area?theme=${currentTheme}&lang=${currentLang}`;
         }
         window.addEventListener('message', function(event) {
-            if (event.data.type === 'iframe-resize' && event.origin === 'https://comment.joyance.page/area/test-1') {
+            if (event.data.type === 'iframe-resize' && event.origin === 'https://comment.joyance.page') {
              const iframe = document.getElementById('commentFrame');
             if (event.data.id === 'test-area')
                 resizeIframe(iframe, event.data.height);
