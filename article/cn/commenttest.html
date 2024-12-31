@@ -135,7 +135,7 @@
             commentFrame.src = `https://comment.joyance.page/embed/area/test-area?theme=${currentTheme}&lang=${currentLang}`;
         }
         window.addEventListener('message', function(event) {
-            if (event.data.type === 'iframe-resize' && event.origin === 'https://comment.joyance.page') {
+            if (event.data.type === 'iframe-resize' && event.origin === 'https://comment.joyance.page/area/test-1') {
              const iframe = document.getElementById('commentFrame');
             if (event.data.id === 'test-area')
                 resizeIframe(iframe, event.data.height);
