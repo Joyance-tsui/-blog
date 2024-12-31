@@ -71,6 +71,15 @@
             font-size: 0.8em;
             vertical-align: super;
         }
+        .comment-container {
+            width: 100%;
+            margin-top: 20px;
+        }
+        .comment-iframe {
+            width: 100%;
+            border: none;
+            min-height: 600px; /* 调整高度以 adapt content */
+        }
     </style>
 </head>
 <body>
@@ -78,6 +87,16 @@
         <div class="content">
             <h1 id="article-title"></h1>
             <div id="article-content"></div>
+        </div>
+        <!-- 嵌入的评论区域 -->
+        <div class="comment-container">
+            <iframe
+                id="commentFrame"
+                class="comment-iframe"
+                src="https://comment.joyance.page/embed/area/test-1"
+                frameborder="0"
+                allowtransparency="true">
+            </iframe>
         </div>
     </div>
     <button class="back-button" onclick="window.close()">返回</button>
@@ -87,7 +106,7 @@
 
         function processContent(content) {
             return content
-                .replace(/\[link:(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>')
+                .replace(/\[link:(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>')
                 .replace(/\[copy-broad:(.*?)\]/g, '$1<span class="copy-button" onclick="copyText(\'$1\')">📋</span>');
         }
 
@@ -105,7 +124,31 @@
             document.getElementById('article-content').innerHTML = processContent(article.content);
         }
 
-        window.onload = loadArticle;
+        // 动态调整 iframe 高度
+        function resizeIframe(obj, height) {
+            obj.style.height = height + 'px';
+        }
+          function updateCommentIframeTheme() {
+            const commentFrame = document.getElementById('commentFrame');
+              const currentTheme = document.documentElement.getAttribute('data-theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            const currentLang = document.documentElement.lang || 'zh-CN';
+            commentFrame.src = `https://comment.joyance.page/embed/area/test-1?theme=${currentTheme}&lang=${currentLang}`;
+        }
+        window.addEventListener('message', function(event) {
+            console.log('Message Received:', event);
+            if (event.data.type === 'iframe-resize' && event.origin === 'https://comment.joyance.page') {
+             const iframe = document.getElementById('commentFrame');
+            if (event.data.id === 'test-1')
+                resizeIframe(iframe, event.data.height);
+            }
+        });
+
+        window.onload = function() {
+            loadArticle();
+             updateCommentIframeTheme();
+        };
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateCommentIframeTheme);
     </script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </body>
 </html>
