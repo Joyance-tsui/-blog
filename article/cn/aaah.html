@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog Post</title>
+    <title>博客文章</title>
     <style>
         :root {
             --background-color: #ffffff;
@@ -18,7 +18,7 @@
             }
         }
         body {
-            font-family: 'Roboto', Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             background-color: var(--background-color);
             color: var(--text-color);
             margin: 0;
@@ -40,7 +40,6 @@
         .content {
             line-height: 1.6;
             white-space: pre-wrap;
-            word-wrap: break-word;
         }
         .back-button {
             position: fixed;
@@ -72,8 +71,14 @@
             font-size: 0.8em;
             vertical-align: super;
         }
-        .hidden-text {
-            display: none;
+        .comment-container {
+            width: 100%;
+            margin-top: 20px;
+        }
+        .comment-iframe {
+            width: 100%;
+            border: none;
+            min-height: 600px; /* 调整高度以 adapt content */
         }
     </style>
 </head>
@@ -83,8 +88,18 @@
             <h1 id="article-title"></h1>
             <div id="article-content"></div>
         </div>
+        <!-- 嵌入的评论区域 -->
+        <div class="comment-container">
+            <iframe
+                id="commentFrame"
+                class="comment-iframe"
+                src="https://comment.joyance.page/embed/area/aaah"
+                frameborder="0"
+                allowtransparency="true">
+            </iframe>
+        </div>
     </div>
-    <button class="back-button" onclick="window.close()">关闭</button>
+    <button class="back-button" onclick="window.close()">返回</button>
 
     <script>
         const article = { title: '关于应试教育', content: '应试教育，又称填鸭教育，通常被视为一种以提升学生应试能力为主要目的，且十分看重于背诵、解题等机械化学习方法与考试成绩的教育制度，其课程主要侧重于让学生为标准化考试做好准备。应试教育起源于凯洛夫在总结苏联十月革命后至1930年代教学经验的基础上形成的课堂教学的一整套模式和规范。\n\n应试教育被中国大陆地区滥用，虽然进入二十一世纪此后高考改革、中考改革亦陆续启动，但由于升学率等利益原因，由于整个社会巨大的惯性，数万人的囚徒困境，中国的教育目前还是以应试教育为主。但仅仅如此吗？我在经过几年的思考后，还发现了其中更深层的原因，我们先一步步分析。\n\n应试教育的问题\n\n应试教育的发展是顺应对工业革命对统一质量的工人的需求而发展。在这个日新月异的属于人工智能和互联网的新时代，我们需要的能力是创造力和学习能力，而应试教育反而将其扼杀。\n\n创造力是源于创造性破坏的空间和自由，人类在婴幼儿时期表现了其天身的创造力。但经过应试的教育的人们却趋向于服从、刻板和机械。应试教育的过程是机械的，人们只需要跟随性的重复其他人的行为，服从教师的管理，就可以取得想要的效果。\n\n应试教育的过程是机械的。学生们在六七点准时上学，统一穿着校服，在教室里跟着教师大声朗读书本上的内容。接下来的课程里老师讲课学生举手或是其他的互动，课间十分钟才拥有自己的时间。到了初中会好一些，中午和晚上都有一个小时时间支配。\n\n当然一些学霸可能例外，部分的老师可能因为成绩给予特权，但这无碍于整体的机械性的风气，因为这也向其他没有特权的人传递着“学习好就都好”的教条。其他人看来，他们想要通往学霸那样自由的路径也就只有服从的艰苦记忆和背诵。\n\n人与简单机械的区别是人具有自己的思维，人可以有不同的想法，人可以提出抗议和拒绝。但是应试教育中，需要的是学生们统一的思想，和尽量完全的服从。此时人与简单的机械有何区别？人还是一个生命的存在吗？\n\n至于学习能力，相关的误区就更大了。我们提起应试教育，相关的词语也包含着误导，比如“学校”，“学业”，“学生”。但实际上，应试教育的环境下并不利于学习，而是机械的记忆。不可否认，其中有部分的广义的学习，比如使得学生学会了顺从。\n\n真正的学习能力也是人类天身具有的，是一个积累特定经验获得持久能力的过程。在人类的儿童时期，他们探索世界并学习，他们经历过一次次的跌倒，最终学会了站立。而相应的，适合学习的行为也应该是提供一个这样的环境，提供可以选择的知识，提供对探索的支持，并降低跌倒后损失。\n\n经过了上万年的演化，生命终于可以通过学习改变自己从而适应环境。人类的大脑将其发挥到了极致，但我们的教育并未发挥这一点。人类所擅长的是大脑自带的学习，而并非机器擅长的记忆。如上所述，学习是主动的探索的过程，而并非被动的接受。\n\n只有在经历过自己的跌倒和前行后，一个人才能走路，这并非是直接将人体结构以及行走方式的知识灌输给一个人，并让他记忆下来可以达到的效果。学习是主动的过程，而应试教育却主要是被动的接受。接受老师的教育，几乎没有反对的空间。当然真正的学习方法，主动探索，也是大部分的学霸所使用的方法，不过却非每一个普通人。\n\n在中国大陆的学校还成为了意识形态的宣传工具。统治者根据其需要对学生进行洗脑教育，稳固其统治根基。我的学校每周一都有朝会，每次都有“爱国故事分享”环节，内容要么是“舍己为人的奉献”，要么是“对党国的成就的赞扬”。在开学的誓师大会，校长也以“被美国制裁”激起大家的“斗志”。\n\n大学的校长被撤销，党委书记接替他们的工作。全世界罕见的一个政党直接控制高等院校。从小学开始，就有着无处不在的意识形态宣传。比如披着爱国名义的爱党，对收复台湾的意愿。我还记得我小学的时候，有个同学在上科学课时拿着“台湾省”的版图比对其他省说，“这么小一块也敢和我们斗？”。\n\n随着现在国内经济的转向，拥有高学历也不一定可以找到好工作，考上好大学就可以得到好人生的教条在崩塌。近日死在的西安出租屋里的女大学生也许可以体现这一点。更理论化的说，对于我们这一代正在就读初中的人，我们学成找工作时经济会好起来吗？\n\n去年最后一次真实公布的青年失业率已经达到20%以上，哪怕这个数据也极其可能经过粉饰。经过重新“调整计算方法”以后，现在的数据是14%左右。但这也高到足以警惕。中国的经济数据已经开始变得越来越难看，最新今年七月份的经济数据经济的情况糟糕，眼看经济下行远未触底。这是第一点，现在教育已经通不向好的人生。\n\n应试教育也促成了“内卷”，应试教育由于其目标的单一，路径的单一，导致在这一单一渠道人们产生的是越来越激化的竞争。这结果就是增加社会的总成本和每个个人的成本。人们被绑在了一条笔直向前的赛道上，拼命的向前奔跑。生命的辽阔在此时荡然无存。\n\n这是一个囚徒困境，作为囚徒的是千千万万的学生。他们有两个选择，正常努力，和再加把力。这些学生并不知道其他人到底是否更努力的“学习”，哪怕他们之间是可以交流的，但并没有信任的基础。他如果更努力“学习”，他就可以超过起码是不落后于他人。在这时，对每个人来说更努力学习都是必要的。\n\n这是一个循环，其中的猜忌会被加速的放大，永不停息。总结一下，应试教育的主要问题有，扼杀创造力、不培养学习能力、好散社会资源。可是这就是全部的问题吗？\n\n应试教育非最终问题\n\n让我们回到起点。我们为什么要努力的“学习”甚至于不择手段和身心？因为我们相信这是我们过上好生活的方式。应试教育的主要手段就是考试，考试可以对学生进行筛选，筛选出的学生可以有好的工作。听上去很不错。\n\n但问题是好的生活方式不是单一的，对于不同的人，他们适合的工作就是不同的。一些人可能就适合扫地。但是问题是，扫地的人和那些在办公室里工作的人，他们本质上其实没有区别，我们为什么不论一个人本身的特点，就一定地认为去办公室里工作要比去扫地要低贱？\n\n当然这只是简化的比较，实际上，我们对于每一个公众在心中都有大多相同的标准。我们会看不起那些体力劳动的人，羡慕那些脑力劳动的人。这就是奇怪之处，为什么不同的人明明有不同的长处，我们还拥有着一个类似的模版去评判工作的好坏？\n\n这样的存在实际有其根源，就是那些被我们看不起的工种没得到相应的的待遇和名声。这样的鄙视链的起源，一个苦苦工作一生的家长，对自己的孩子发出衷心的劝告：“你一定要好好学习，将来才能出人头地”。正是因为我们看到了这样的不公，这一鄙视链才得以存在。\n\n正是因为那些从事被我们鄙视的工作的人无法得到有效的保护，我们的社会还在发展的阶段，我们的政府对这些时间的重视程度不如其伟大理想和中国梦，甚至成为了帮凶和主犯。我们的社会福利体系不到位。上述种种原因，造就了现在的教育体系，也是一个筛选体系。而如果我们想要改变，需要被改变的并不是教育，而是根本的劳工权利。需要改变的不是一个表面的体系，而是其深层的制度和人心。\n\n而这样的改变，需要的是我们每一的人，是我们的整个社会。', pinned: false };
@@ -92,14 +107,14 @@
         function processContent(content) {
             return content
                 .replace(/\[link:(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>')
-                .replace(/\[copy-broad:(.*?)\]/g, '<span class="hidden-text" data-copy="$1"></span><span class="copy-button" onclick="copyText(\'$1\')">❐</span>');
+                .replace(/\[copy-broad:(.*?)\]/g, '$1<span class="copy-button" onclick="copyText(\'$1\')">📋</span>');
         }
 
         function copyText(text) {
             navigator.clipboard.writeText(text).then(() => {
-                alert('Text copied to clipboard');
+                alert('文本已复制到剪贴板');
             }).catch(err => {
-                console.error('Failed to copy text: ', err);
+                console.error('无法复制文本: ', err);
             });
         }
 
@@ -109,7 +124,31 @@
             document.getElementById('article-content').innerHTML = processContent(article.content);
         }
 
-        window.onload = loadArticle;
+        // 动态调整 iframe 高度
+        function resizeIframe(obj, height) {
+            obj.style.height = height + 'px';
+        }
+          function updateCommentIframeTheme() {
+            const commentFrame = document.getElementById('commentFrame');
+              const currentTheme = document.documentElement.getAttribute('data-theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            const currentLang = document.documentElement.lang || 'zh-CN';
+            commentFrame.src = `https://comment.joyance.page/embed/area/aaah?theme=${currentTheme}&lang=${currentLang}`;
+        }
+        window.addEventListener('message', function(event) {
+            console.log('Message Received:', event);
+            if (event.data.type === 'iframe-resize' && event.origin === 'https://comment.joyance.page') {
+             const iframe = document.getElementById('commentFrame');
+            if (event.data.id === 'test-1')
+                resizeIframe(iframe, event.data.height);
+            }
+        });
+
+        window.onload = function() {
+            loadArticle();
+             updateCommentIframeTheme();
+        };
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateCommentIframeTheme);
     </script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </body>
 </html>
