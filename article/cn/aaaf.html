@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog Post</title>
+    <title>博客文章</title>
     <style>
         :root {
             --background-color: #ffffff;
@@ -18,7 +18,7 @@
             }
         }
         body {
-            font-family: 'Roboto', Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             background-color: var(--background-color);
             color: var(--text-color);
             margin: 0;
@@ -40,7 +40,6 @@
         .content {
             line-height: 1.6;
             white-space: pre-wrap;
-            word-wrap: break-word;
         }
         .back-button {
             position: fixed;
@@ -72,8 +71,14 @@
             font-size: 0.8em;
             vertical-align: super;
         }
-        .hidden-text {
-            display: none;
+        .comment-container {
+            width: 100%;
+            margin-top: 20px;
+        }
+        .comment-iframe {
+            width: 100%;
+            border: none;
+            min-height: 600px; /* 调整高度以 adapt content */
         }
     </style>
 </head>
@@ -83,8 +88,18 @@
             <h1 id="article-title"></h1>
             <div id="article-content"></div>
         </div>
+        <!-- 嵌入的评论区域 -->
+        <div class="comment-container">
+            <iframe
+                id="commentFrame"
+                class="comment-iframe"
+                src="https://comment.joyance.page/embed/area/test-1"
+                frameborder="0"
+                allowtransparency="true">
+            </iframe>
+        </div>
     </div>
-    <button class="back-button" onclick="window.close()">Close</button>
+    <button class="back-button" onclick="window.close()">返回</button>
 
     <script>
         const article = { title: '如何保护隐私', content: '隐私权是每个人的基本权利，是我们每个人都可以去正当争取的。相关的详细描述详见[link:之前的文章](https://aaae-cn.pages.dev/)。知道了为什么要保护隐私，要保护那些隐私，相应的，也要了解如何去保护隐私，如何安全的使用互联网，隐私的使用互联网。\n\n互联网和隐私并非不可兼容，互联网上也有很多的项目帮助你保护隐私。对于网站访问，tor浏览器是最有名的。这是一个前美国军方的项目，本来的目的是军用的加密互联网。之后转为民用，由tor基金会运营。这个项目也被熟知为“暗网”。它通过三重的中继节点进行流量的传输。介绍tor项目的[link:维基百科](https://zhwp.blacktea67.us.kg/wiki/Tor)（镜像页面）。\n\n可以证明这一系统安全的直接证据就是暗网被人们熟知的各种非法网站的猖獗，但却又没有很好的方法进行抓捕。据称，tor网络上的被捕人员都是由于人为的错误泄露的隐私。不过请你在使用时不要相信其中的不道德的交易等，因为他们很可能是假的，并且也很不道德。\n\n对于身处于中国大陆的人，tor是一种很好的规避网络防火长城的方法。而由于tor要经过三重节点，其对于“现代”的网站的访问速度可能很慢，但是对于文本居多的速度也可以和vpn方式媲美。你可以访问[link:官方链接](http://tor.calyxinstitute.org/zh-CN/download/)下载tor浏览器（目前墙内可访问），不过苹果手机和iPad对于中国大陆网络基础的不推荐。\n\n对于身在墙的，tor的所有中继服务器都已经被防火长城拦截，而要使用tor的服务，你就需要网桥。找到连接设置里的网桥，选择添加一个自己的网桥，因为前几种自带网桥要么已被屏蔽，要么速度特别慢。而要获得你自己的obfs4网桥官方有[link:这些方式](https://tb-manual.torproject.org/zh-CN/bridges/)，多尝试几个就可以找到快速的网桥了。如果你身在墙内，请直接点击复制以下的网桥尝试，都是我亲自通过官方途径获取的。[copy-broad:obfs4 65.108.212.207:33490 E17B81ED1A6B785C9B4C97AB7120E853A512FDF1 cert=X6ewmpHSVWoklRrLiH82RkTjdhSscgsE1zsAs3MjnxTMtOT2geWMMe/kkQUIQ0U6gJvFYA iat-mode=0][copy-broad:obfs4 37.27.181.224:2757 BC072F38D63E65654E6F2BF654027E997A54E86D cert=Lwq0lcvFriVzSILypsM2ps2k5hjFfO2X74tZLYbDWJna6zlhlSILieGVXxZG5YB+tL8WDw iat-mode=0][copy-broad:obfs4 65.108.212.207:33490 E17B81ED1A6B785C9B4C97AB7120E853A512FDF1 cert=X6ewmpHSVWoklRrLiH82RkTjdhSscgsE1zsAs3MjnxTMtOT2geWMMe/kkQUIQ0U6gJvFYA iat-mode=0][copy-broad:obfs4 37.27.181.224:2757 BC072F38D63E65654E6F2BF654027E997A54E86D cert=Lwq0lcvFriVzSILypsM2ps2k5hjFfO2X74tZLYbDWJna6zlhlSILieGVXxZG5YB+tL8WDw iat-mode=0][copy-broad:obfs4 65.108.212.207:33490 E17B81ED1A6B785C9B4C97AB7120E853A512FDF1 cert=X6ewmpHSVWoklRrLiH82RkTjdhSscgsE1zsAs3MjnxTMtOT2geWMMe/kkQUIQ0U6gJvFYA iat-mode=0][copy-broad:obfs4 37.27.181.224:2757 BC072F38D63E65654E6F2BF654027E997A54E86D cert=Lwq0lcvFriVzSILypsM2ps2k5hjFfO2X74tZLYbDWJna6zlhlSILieGVXxZG5YB+tL8WDw iat-mode=0][copy-broad: obfs4 65.108.212.207:33490 E17B81ED1A6B785C9B4C97AB7120E853A512FDF1 cert=X6ewmpHSVWoklRrLiH82RkTjdhSscgsE1zsAs3MjnxTMtOT2geWMMe/kkQUIQ0U6gJvFYA iat-mode=0][copy-broad: obfs4 37.27.181.224:2757 BC072F38D63E65654E6F2BF654027E997A54E86D cert=Lwq0lcvFriVzSILypsM2ps2k5hjFfO2X74tZLYbDWJna6zlhlSILieGVXxZG5YB+tL8WDw iat-mode=0]\n\n对于通信，有两个推荐的网络的项目。如果你在墙外或有稳定的翻墙途径，推荐[link:signal](https://signal.org/#signal)这个项目。如果你对加密有更高的要求，或者你身处墙内且并未有稳定的翻墙途径，你可以使用[link:session](https://getsession.org/)，实测这款软件先翻墙添加好友后就可以在墙内网络环境使用。\n\nsignal是一款端到端加密的软件，缺点是要使用手机号注册，这就使得中国大陆这样的必须实名的手机号注册可能被（政府、好友）关联实名，但是也可以选择隐藏电话，这样就安全了。session也是一款端到端加密的应用，不过他的信息传输是通过tor网络结构的三个节点传输的，加密性更好，而且不用手机号直接注册。\n\n除了平台，你自己的隐私也需要你的保护。如果你不想要成为公众人物，请不要使用任何与现实有关的信息作为密码、用户名、和其他内容。不要向任何平台透露你的真实信息，特别是对于你需要保护隐私的账号。对于其他平台，你可以使用临时邮箱注册，可自行搜索。\n\n要保护你的隐私，就不要让网络上的身份可以关联上你的个人身份。更深的，你可以使用你不熟悉的语言访问网站，再用翻译查看。你可以使用完全与现实生活不同的用语习惯进行交流。更不要发送任何的与你个人相关的图片。特别是国内的网站。\n\n如果你有补充，可以到我的博客主页找到我的联系方式。\n2024/8/20\n\n\n', pinned: false };
@@ -92,14 +107,14 @@
         function processContent(content) {
             return content
                 .replace(/\[link:(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>')
-                .replace(/\[copy-broad:(.*?)\]/g, '<span class="hidden-text" data-copy="$1"></span><span class="copy-button" onclick="copyText(\'$1\')">❐</span>');
+                .replace(/\[copy-broad:(.*?)\]/g, '$1<span class="copy-button" onclick="copyText(\'$1\')">📋</span>');
         }
 
         function copyText(text) {
             navigator.clipboard.writeText(text).then(() => {
-                alert('Text copied to clipboard');
+                alert('文本已复制到剪贴板');
             }).catch(err => {
-                console.error('Failed to copy text: ', err);
+                console.error('无法复制文本: ', err);
             });
         }
 
@@ -109,7 +124,31 @@
             document.getElementById('article-content').innerHTML = processContent(article.content);
         }
 
-        window.onload = loadArticle;
+        // 动态调整 iframe 高度
+        function resizeIframe(obj, height) {
+            obj.style.height = height + 'px';
+        }
+          function updateCommentIframeTheme() {
+            const commentFrame = document.getElementById('commentFrame');
+              const currentTheme = document.documentElement.getAttribute('data-theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            const currentLang = document.documentElement.lang || 'zh-CN';
+            commentFrame.src = `https://comment.joyance.page/embed/area/test-1?theme=${currentTheme}&lang=${currentLang}`;
+        }
+        window.addEventListener('message', function(event) {
+            console.log('Message Received:', event);
+            if (event.data.type === 'iframe-resize' && event.origin === 'https://comment.joyance.page') {
+             const iframe = document.getElementById('commentFrame');
+            if (event.data.id === 'test-1')
+                resizeIframe(iframe, event.data.height);
+            }
+        });
+
+        window.onload = function() {
+            loadArticle();
+             updateCommentIframeTheme();
+        };
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateCommentIframeTheme);
     </script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </body>
 </html>
